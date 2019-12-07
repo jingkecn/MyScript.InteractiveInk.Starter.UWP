@@ -1,12 +1,42 @@
 using System;
+using System.IO;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using MyScript.Certificate;
+using MyScript.IInk;
 
 namespace MyScript.InteractiveInk
 {
+    /// <summary>
+    ///     Initializes MyScript engine.
+    /// </summary>
+    public sealed partial class App
+    {
+        private Engine _engine;
+
+        public Engine Engine => _engine ??= OnCreateEngine((byte[])(Array)MyCertificate.Bytes);
+
+        private static Engine OnCreateEngine(byte[] certificate)
+        {
+            var engine = Engine.Create(certificate);
+            var configuration = engine.Configuration;
+            configuration.SetStringArray("configuration-manager.search-path",
+                new[] {Path.Combine(Package.Current.InstalledLocation.Path, "Assets", "conf")});
+            configuration.SetString("content-package.temp-folder",
+                Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, "temp"));
+#if DEBUG
+            configuration.SetBoolean("renderer.debug.draw-arc-outlines", true);
+            configuration.SetBoolean("renderer.debug.draw-object-boxes", true);
+            configuration.SetBoolean("renderer.debug.draw-text-boxes", true);
+#endif
+            return engine;
+        }
+    }
+
     /// <summary>
     ///     Provides application-specific behavior to supplement the default Application class.
     /// </summary>
