@@ -6,21 +6,44 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:MyScript.InteractiveInk.Views.Controls"
     xmlns:winui="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:viewModels="using:MyScript.InteractiveInk.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <viewModels:MainViewModel x:Name="ViewModel" />
+    </Page.DataContext>
     <winui:HeaderedContentControl HorizontalContentAlignment="Stretch"
                                   VerticalContentAlignment="Stretch">
         <winui:HeaderedContentControl.Header>
             <Grid>
                 <controls:MainCommandBar x:Name="TopCommandBar"
                                          Background="Transparent"
+                                         DataContext="{x:Bind ViewModel}"
+                                         DefaultLabelPosition="Right"
                                          HorizontalAlignment="Stretch"
                                          Margin="{StaticResource SmallLeftMargin}"
                                          VerticalAlignment="Stretch"
                                          Visibility="Collapsed" />
                 <InkToolbar HorizontalAlignment="Center"
                             TargetInkCanvas="{x:Bind InkCanvas}"
-                            VerticalAlignment="Stretch" />
+                            VerticalAlignment="Stretch">
+                    <InkToolbarCustomToggleButton x:Uid="LassoSelectionButton"
+                                                  IsChecked="{x:Bind ViewModel.EnableLassoSelection, Mode=TwoWay}">
+                        <FontIcon Glyph="{StaticResource FontIconMarquee}" />
+                    </InkToolbarCustomToggleButton>
+                    <InkToolbarCustomToggleButton x:Uid="MouseInkingButton"
+                                                  IsChecked="{x:Bind ViewModel.EnableMouse, Mode=TwoWay}">
+                        <FontIcon Glyph="{StaticResource FontIconMouse}" />
+                    </InkToolbarCustomToggleButton>
+                    <InkToolbarCustomToggleButton x:Uid="PenInkingButton"
+                                                  IsChecked="{x:Bind ViewModel.EnablePen, Mode=TwoWay}">
+                        <FontIcon Glyph="{StaticResource FontIconPenWorkspace}" />
+                    </InkToolbarCustomToggleButton>
+                    <InkToolbarCustomToggleButton x:Uid="TouchInkingButton"
+                                                  IsChecked="{x:Bind ViewModel.EnableTouch, Mode=TwoWay}">
+                        <FontIcon Glyph="{StaticResource FontIconFingerInking}" />
+                    </InkToolbarCustomToggleButton>
+                </InkToolbar>
             </Grid>
         </winui:HeaderedContentControl.Header>
         <Grid Background="White">
@@ -55,6 +78,8 @@
     <Page.BottomAppBar>
         <controls:MainCommandBar x:Name="BottomCommandBar"
                                  Background="Transparent"
+                                 DataContext="{x:Bind ViewModel}"
+                                 DefaultLabelPosition="Right"
                                  HorizontalAlignment="Stretch"
                                  Margin="{StaticResource SmallLeftMargin}"
                                  VerticalAlignment="Stretch"

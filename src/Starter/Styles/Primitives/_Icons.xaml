@@ -1,5 +1,9 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <x:String x:Key="FontIconFingerInking">&#xED5F;</x:String>
     <x:String x:Key="FontIconLightBulb">&#xEA80;</x:String>
+    <x:String x:Key="FontIconMarquee">&#xEF20;</x:String>
+    <x:String x:Key="FontIconMouse">&#xE962;</x:String>
+    <x:String x:Key="FontIconPenWorkspace">&#xEDC6;</x:String>
 </ResourceDictionary>
