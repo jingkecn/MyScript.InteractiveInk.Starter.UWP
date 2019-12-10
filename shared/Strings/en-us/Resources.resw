@@ -123,4 +123,20 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>Interactive Ink Starter</value>
   </data>
+  <data name="ClearAllButton.Label" xml:space="preserve">
+    <value>Clear all</value>
+    <comment>Clear all button label property.</comment>
+  </data>
+  <data name="RedoButton.Label" xml:space="preserve">
+    <value>Redo</value>
+    <comment>Redo button label property</comment>
+  </data>
+  <data name="TypesetButton.Label" xml:space="preserve">
+    <value>Typeset</value>
+    <comment>Typeset button label property</comment>
+  </data>
+  <data name="UndoButton.Label" xml:space="preserve">
+    <value>Undo</value>
+    <comment>Undo button label property</comment>
+  </data>
 </root>
