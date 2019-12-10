@@ -30,4 +30,6 @@
     <PropertyGroup>
         <RootNamespace>$(Company).$(Product)</RootNamespace>
     </PropertyGroup>
+    <!-- Import shared strings. -->
+    <Import Project="$(RootDir)/shared/Strings/Strings.projitems" Label="Shared" />
 </Project>

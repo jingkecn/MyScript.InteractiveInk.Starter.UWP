@@ -14,10 +14,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{AAEFE6
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Properties", "shared\Properties\Properties.shproj", "{274F8C15-3E89-466C-AD0E-10E9AC5C13EF}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Strings", "shared\Strings\Strings.shproj", "{A9EA67C5-989D-4907-9463-F9CEF9E0D46E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		shared\Properties\Properties.projitems*{274f8c15-3e89-466c-ad0e-10e9ac5c13ef}*SharedItemsImports = 13
+		shared\Strings\Strings.projitems*{a9ea67c5-989d-4907-9463-f9cef9e0d46e}*SharedItemsImports = 13
 		shared\Properties\Properties.projitems*{bc09fe4d-87f9-4c54-9959-754e2807f191}*SharedItemsImports = 4
+		shared\Strings\Strings.projitems*{bc09fe4d-87f9-4c54-9959-754e2807f191}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -60,6 +64,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{274F8C15-3E89-466C-AD0E-10E9AC5C13EF} = {AAEFE6A4-64FF-4696-A79B-D384A8B3FCCE}
+		{A9EA67C5-989D-4907-9463-F9CEF9E0D46E} = {AAEFE6A4-64FF-4696-A79B-D384A8B3FCCE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E5D458F-3E4B-47AF-A1DE-D3BAA82C73E7}
