@@ -355,4 +355,12 @@ MigrationBackup/
 ## Local
 ## ################################################################################
 
+# Don't ignore custom build files.
 ![Dd]irectory.[Bb]uild.*
+
+# Temporary folders
+_[Tt]emp/
+
+# Resources and configuration files are automatically downloaded from remote server.
+*.conf
+*.res

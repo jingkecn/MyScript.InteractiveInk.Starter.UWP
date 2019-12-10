@@ -32,4 +32,6 @@
     </PropertyGroup>
     <!-- Import shared strings. -->
     <Import Project="$(RootDir)/shared/Strings/Strings.projitems" Label="Shared" />
+    <!-- Initialize recognition assets. -->
+    <Import Project="$(RootDir)/build/Resources.Build.targets" />
 </Project>

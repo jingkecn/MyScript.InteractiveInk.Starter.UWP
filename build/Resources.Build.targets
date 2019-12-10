@@ -1,0 +1,81 @@
+<!--
+~ INTRO:
+~ Directory.Build.targets is imported from Microsoft.Common.targets after importing .targets files from NuGet
+~ packages. So, it can override properties and targets defined in most of the build logic, but sometimes you may need
+~ to customize the project file after the final import.
+~ General GUIDELINES:
+~ - For many properties, it doesn't matter where they're defined, because they're not overwritten and will be read
+~   only at execution time.
+~ - For behavior that might be customized in an individual project, set defaults in .props files.
+~ - Avoid setting dependent properties in .props files by reading the value of a possibly customized property,
+~   because the customization won't happen until MSBuild reads the user's project.
+~ - Set dependent properties in .targets files, because they'll pick up customizations from individual projects.
+~ - If you need to override properties, do it in a .targets file, after all user-project customizations have had a
+~   chance to take effect. Be cautious when using derived properties; derived properties may need to be overridden
+~   as well.
+~ - Include items in .props files (conditioned on a property). All properties are considered before any item, so
+~   user-project property customizations get picked up, and this gives the user's project the opportunity to Remove
+~   or Update any item brought in by the import.
+~ - Define targets in .targets files. However, if the .targets file is imported by an SDK, remember that this
+~   scenario makes overriding the target more difficult because the user's project doesn't have a place to override
+~   it by default.
+~ - If possible, prefer customizing properties at evaluation time over changing properties inside a target. This
+~   guideline makes it easier to load a project and understand what it's doing.
+-->
+<!-- See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2017#import-order -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ResourceBaseName>myscript-iink-recognition</ResourceBaseName>
+        <ResourceBaseURL>https://s3-us-west-2.amazonaws.com/iink/assets</ResourceBaseURL>
+        <ResourceFileExtension>zip</ResourceFileExtension>
+        <ResourceVersion>1.3.0</ResourceVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ResourceVersionUrl>$(ResourceBaseURL)/$(ResourceVersion)</ResourceVersionUrl>
+        <ResourceTemporaryFolder>$(RootDir)/shared/Resources/_temp</ResourceTemporaryFolder>
+        <ResourceDestinationFolder>$(RootDir)/shared/Resources/Assets</ResourceDestinationFolder>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ResourceDiagram>$(ResourceBaseName)-diagram.$(ResourceFileExtension)</ResourceDiagram>
+        <ResourceMath>$(ResourceBaseName)-math.$(ResourceFileExtension)</ResourceMath>
+        <ResourceRawContent>$(ResourceBaseName)-raw-content.$(ResourceFileExtension)</ResourceRawContent>
+        <ResourceTextEnUs>$(ResourceBaseName)-text-en_US.$(ResourceFileExtension)</ResourceTextEnUs>
+    </PropertyGroup>
+    <Target Name="Download">
+        <DownloadFile DestinationFolder="$(ResourceTemporaryFolder)" SourceUrl="$(ResourceVersionUrl)/$(ResourceDiagram)" />
+        <DownloadFile DestinationFolder="$(ResourceTemporaryFolder)" SourceUrl="$(ResourceVersionUrl)/$(ResourceMath)" />
+        <DownloadFile DestinationFolder="$(ResourceTemporaryFolder)" SourceUrl="$(ResourceVersionUrl)/$(ResourceRawContent)" />
+        <DownloadFile DestinationFolder="$(ResourceTemporaryFolder)" SourceUrl="$(ResourceVersionUrl)/$(ResourceTextEnUs)" />
+    </Target>
+    <Target Name="Unzip" DependsOnTargets="Download">
+        <ItemGroup>
+            <ToUnZipItems Include="$(ResourceTemporaryFolder)/*.zip" />
+        </ItemGroup>
+        <Unzip ContinueOnError="true" DestinationFolder="$(ResourceTemporaryFolder)" SourceFiles="@(ToUnZipItems)" />
+    </Target>
+    <Target Name="Move" DependsOnTargets="Unzip">
+        <ItemGroup>
+            <ToMoveItems Include="$(ResourceTemporaryFolder)/recognition-assets/**/*.*" />
+        </ItemGroup>
+        <Move DestinationFiles="@(ToMoveItems->'$(ResourceDestinationFolder)/%(RecursiveDir)%(Filename)%(Extension)')" SourceFiles="@(ToMoveItems)" />
+    </Target>
+    <Target Name="Delete" DependsOnTargets="Move">
+        <RemoveDir Directories="$(ResourceTemporaryFolder)" />
+    </Target>
+    <Target Name="BeforeBuild" DependsOnTargets="Delete" />
+    <!-- Import shared configurations & resources. -->
+    <ItemGroup>
+        <!-- [WORKAROUND] Link configuration and resources files to maintain their relative structure. -->
+        <Content Include="$(ResourceDestinationFolder)/conf/diagram.conf" Link="Assets/conf/diagram.conf" />
+        <Content Include="$(ResourceDestinationFolder)/conf/en_US.conf" Link="Assets/conf/en_US.conf" />
+        <Content Include="$(ResourceDestinationFolder)/conf/math.conf" Link="Assets/conf/math.conf" />
+        <Content Include="$(ResourceDestinationFolder)/conf/raw-content.conf" Link="Assets/conf/raw-content.conf" />
+        <Content Include="$(ResourceDestinationFolder)/resources/analyzer/ank-diagram.res" Link="Assets/resources/analyzer/ank-diagram.res" />
+        <Content Include="$(ResourceDestinationFolder)/resources/analyzer/ank-raw-content.res" Link="Assets/resources/analyzer/ank-raw-content.res" />
+        <Content Include="$(ResourceDestinationFolder)/resources/en_US/en_US-ak-cur.res" Link="Assets/resources/en_US/en_US-ak-cur.res" />
+        <Content Include="$(ResourceDestinationFolder)/resources/en_US/en_US-lk-text.res" Link="Assets/resources/en_US/en_US-lk-text.res" />
+        <Content Include="$(ResourceDestinationFolder)/resources/math/math-ak.res" Link="Assets/resources/math/math-ak.res" />
+        <Content Include="$(ResourceDestinationFolder)/resources/math/math-grm-standard.res" Link="Assets/resources/math/math-grm-standard.res" />
+        <Content Include="$(ResourceDestinationFolder)/resources/shape/shk-diagram.res" Link="Assets/resources/shape/shk-diagram.res" />
+    </ItemGroup>
+</Project>
