@@ -120,11 +120,16 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Events\AddStrokeEventArgs.cs" />
+    <Compile Include="Events\MoveStrokesEventArgs.cs" />
+    <Compile Include="Events\RemoveStrokeEventArgs.cs" />
+    <Compile Include="Events\TransferStrokesEventArgs.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\InkStrokeService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\Observable.cs" />
     <Compile Include="Views\Controls\MainCommandBar.xaml.cs">

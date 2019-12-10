@@ -1,5 +1,7 @@
 using System.Windows.Input;
+using Windows.UI.Xaml.Controls;
 using MyScript.InteractiveInk.Common;
+using MyScript.InteractiveInk.Services;
 
 namespace MyScript.InteractiveInk.ViewModels
 {
@@ -32,6 +34,16 @@ namespace MyScript.InteractiveInk.ViewModels
         {
             get => _enableTouch;
             set => Set(ref _enableTouch, value, nameof(EnableTouch));
+        }
+    }
+
+    public partial class MainViewModel
+    {
+        private InkStrokeService InkStrokeService { get; set; }
+
+        public void Initialize(InkCanvas inkCanvas)
+        {
+            InkStrokeService = new InkStrokeService(inkCanvas);
         }
     }
 

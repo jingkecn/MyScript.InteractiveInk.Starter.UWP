@@ -1,3 +1,5 @@
+using Windows.UI.Xaml.Navigation;
+
 namespace MyScript.InteractiveInk
 {
     /// <summary>
@@ -8,6 +10,12 @@ namespace MyScript.InteractiveInk
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            ViewModel.Initialize(InkCanvas);
         }
     }
 }
