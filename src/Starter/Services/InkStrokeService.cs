@@ -33,6 +33,8 @@ namespace MyScript.InteractiveInk.Services
                 return rect;
             });
 
+        public IEnumerable<InkStroke> Strokes => _inkStrokeContainer.GetStrokes();
+
         #region Add, Move & Clear
 
         public InkStroke Add(InkStroke stroke)

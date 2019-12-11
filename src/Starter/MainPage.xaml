@@ -50,6 +50,9 @@
             <InkCanvas x:Name="InkCanvas"
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Stretch" />
+            <Canvas x:Name="DrawingCanvas"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
         </Grid>
         <!--#region Visual States-->
         <VisualStateManager.VisualStateGroups>

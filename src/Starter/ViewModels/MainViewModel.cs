@@ -40,10 +40,12 @@ namespace MyScript.InteractiveInk.ViewModels
     public partial class MainViewModel
     {
         private InkStrokeService InkStrokeService { get; set; }
+        private InkTransformService InkTransformService { get; set; }
 
-        public void Initialize(InkCanvas inkCanvas)
+        public void Initialize(InkCanvas inkCanvas, Canvas drawingCanvas)
         {
             InkStrokeService = new InkStrokeService(inkCanvas);
+            InkTransformService = new InkTransformService(drawingCanvas, InkStrokeService);
         }
     }
 
@@ -55,8 +57,10 @@ namespace MyScript.InteractiveInk.ViewModels
 
         public ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(OnExecuteTypesetCommand);
 
-        private void OnExecuteTypesetCommand()
+        private async void OnExecuteTypesetCommand()
         {
+            await InkTransformService.TransformAsync();
+            // TODO: Redo & Undo stacks.
         }
 
         #endregion
@@ -86,6 +90,8 @@ namespace MyScript.InteractiveInk.ViewModels
 
         private void OnExecuteClearAllCommand()
         {
+            InkStrokeService.Clear();
+            InkTransformService.Clear();
         }
 
         #endregion
