@@ -13,10 +13,27 @@ namespace MyScript.InteractiveInk.Services.Ink
         public InkInputDeviceService(InkCanvas inkCanvas)
         {
             _inkCanvas = inkCanvas;
-            var presenter = _inkCanvas.InkPresenter;
-            presenter.UnprocessedInput.PointerEntered += UnprocessedInput_PointerEntered;
+            _inkCanvas.InkPresenter.UnprocessedInput.PointerEntered += UnprocessedInput_PointerEntered;
         }
 
+        public void Enable(CoreInputDeviceTypes types, bool enabled)
+        {
+            var presenter = _inkCanvas.InkPresenter;
+            var current = presenter.InputDeviceTypes;
+            presenter.InputDeviceTypes = enabled ? current | types : current & ~types;
+        }
+    }
+
+    public partial class InkInputDeviceService : IDisposable
+    {
+        public void Dispose()
+        {
+            _inkCanvas.InkPresenter.UnprocessedInput.PointerEntered -= UnprocessedInput_PointerEntered;
+        }
+    }
+
+    public partial class InkInputDeviceService
+    {
         private void UnprocessedInput_PointerEntered(InkUnprocessedInput sender, PointerEventArgs args)
         {
             switch (args.CurrentPoint.PointerDevice.PointerDeviceType)
@@ -30,13 +47,6 @@ namespace MyScript.InteractiveInk.Services.Ink
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        public void Enable(CoreInputDeviceTypes types, bool enabled)
-        {
-            var presenter = _inkCanvas.InkPresenter;
-            var current = presenter.InputDeviceTypes;
-            presenter.InputDeviceTypes = enabled ? current | types : current & ~types;
         }
     }
 

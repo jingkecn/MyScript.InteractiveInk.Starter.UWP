@@ -17,5 +17,11 @@ namespace MyScript.InteractiveInk
             base.OnNavigatedTo(e);
             ViewModel.Initialize(InkCanvas, DrawingCanvas);
         }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            ViewModel.Dispose();
+            base.OnNavigatedFrom(e);
+        }
     }
 }

@@ -14,26 +14,28 @@ namespace MyScript.InteractiveInk.Services.Ink
 {
     public partial class InkStrokeService
     {
-        private readonly InkStrokeContainer _inkStrokeContainer;
+        private readonly InkCanvas _inkCanvas;
 
-        public InkStrokeService(InkCanvas canvas)
+        public InkStrokeService(InkCanvas inkCanvas)
         {
-            var presenter = canvas.InkPresenter;
+            _inkCanvas = inkCanvas;
+            var presenter = _inkCanvas.InkPresenter;
             presenter.StrokesErased += OnStrokesErased;
             presenter.StrokesCollected += OnStrokesCollected;
-            _inkStrokeContainer = presenter.StrokeContainer;
         }
+
+        private InkStrokeContainer StrokeContainer => _inkCanvas.InkPresenter.StrokeContainer;
 
         public IEnumerable<InkStroke> SelectedStrokes => Strokes.Where(stroke => stroke.Selected);
 
         private Rect SelectionRect =>
-            _inkStrokeContainer.GetStrokes().Where(stroke => stroke.Selected).Aggregate(Rect.Empty, (rect, stroke) =>
+            StrokeContainer.GetStrokes().Where(stroke => stroke.Selected).Aggregate(Rect.Empty, (rect, stroke) =>
             {
                 rect.Union(stroke.BoundingRect);
                 return rect;
             });
 
-        public IEnumerable<InkStroke> Strokes => _inkStrokeContainer.GetStrokes();
+        public IEnumerable<InkStroke> Strokes => StrokeContainer.GetStrokes();
 
         #region Add, Move & Clear
 
@@ -42,14 +44,14 @@ namespace MyScript.InteractiveInk.Services.Ink
             strokes.ToImmutableList().ForEach(stroke =>
             {
                 var strokeToAdd = stroke.Clone();
-                _inkStrokeContainer.AddStroke(strokeToAdd);
+                StrokeContainer.AddStroke(strokeToAdd);
                 OnAddStroke(this, new AddStrokeEventArgs {NewStroke = strokeToAdd, OldStroke = stroke});
             });
         }
 
         public void Clear()
         {
-            _inkStrokeContainer.Clear();
+            StrokeContainer.Clear();
             OnClearStrokes(this, EventArgs.Empty);
         }
 
@@ -83,7 +85,7 @@ namespace MyScript.InteractiveInk.Services.Ink
 
                 // Select the target strokes and remove it.
                 strokeToRemove.Selected = true;
-                _inkStrokeContainer.DeleteSelected();
+                StrokeContainer.DeleteSelected();
 
                 OnRemoveStroke(this, new RemoveStrokeEventArgs {RemovedStroke = strokeToRemove});
             });
@@ -92,9 +94,9 @@ namespace MyScript.InteractiveInk.Services.Ink
         public bool Remove(IEnumerable<uint> ids)
         {
             var enumerable = ids.ToImmutableList();
-            enumerable.Select(id => _inkStrokeContainer.GetStrokeById(id)).ToImmutableList()
+            enumerable.Select(id => StrokeContainer.GetStrokeById(id)).ToImmutableList()
                 .ForEach(item => Remove(item));
-            return _inkStrokeContainer.GetStrokes().Any(stroke => enumerable.Contains(stroke.Id));
+            return StrokeContainer.GetStrokes().Any(stroke => enumerable.Contains(stroke.Id));
         }
 
         #endregion
@@ -103,7 +105,7 @@ namespace MyScript.InteractiveInk.Services.Ink
 
         public void ClearSelection()
         {
-            _inkStrokeContainer.GetStrokes().ToImmutableList().ForEach(stroke => stroke.Selected = false);
+            StrokeContainer.GetStrokes().ToImmutableList().ForEach(stroke => stroke.Selected = false);
             OnSelectStrokes(this, EventArgs.Empty);
         }
 
@@ -121,14 +123,14 @@ namespace MyScript.InteractiveInk.Services.Ink
                       node.Children.FirstOrDefault()?.Kind == InkAnalysisNodeKind.ListItem
                 ? node.GetStrokeIds().ToHashSet().ToList()
                 : node.GetStrokeIds();
-            var strokes = ids.Select(id => _inkStrokeContainer.GetStrokeById(id));
+            var strokes = ids.Select(id => StrokeContainer.GetStrokeById(id));
             return Select(strokes.ToArray());
         }
 
         public Rect Select(PointCollection points)
         {
             ClearSelection();
-            var rect = _inkStrokeContainer.SelectWithPolyLine(points);
+            var rect = StrokeContainer.SelectWithPolyLine(points);
             OnSelectStrokes(this, EventArgs.Empty);
             return rect;
         }
@@ -139,12 +141,9 @@ namespace MyScript.InteractiveInk.Services.Ink
 
         public Rect Copy()
         {
-            _inkStrokeContainer.CopySelectedToClipboard();
+            StrokeContainer.CopySelectedToClipboard();
             OnCopyStrokes(this,
-                new TransferStrokesEventArgs
-                {
-                    Strokes = _inkStrokeContainer.GetStrokes().Where(stroke => stroke.Selected)
-                });
+                new TransferStrokesEventArgs {Strokes = StrokeContainer.GetStrokes().Where(stroke => stroke.Selected)});
             return SelectionRect;
         }
 
@@ -160,19 +159,29 @@ namespace MyScript.InteractiveInk.Services.Ink
         public Rect Paste(Point position)
         {
             var rect = Rect.Empty;
-            if (!_inkStrokeContainer.CanPasteFromClipboard())
+            if (!StrokeContainer.CanPasteFromClipboard())
             {
                 return rect;
             }
 
-            var preset = _inkStrokeContainer.GetStrokes().Select(stroke => stroke.Id);
-            rect = _inkStrokeContainer.PasteFromClipboard(position);
-            var strokes = _inkStrokeContainer.GetStrokes().Where(stroke => !preset.Contains(stroke.Id));
+            var preset = StrokeContainer.GetStrokes().Select(stroke => stroke.Id);
+            rect = StrokeContainer.PasteFromClipboard(position);
+            var strokes = StrokeContainer.GetStrokes().Where(stroke => !preset.Contains(stroke.Id));
             OnPasteStrokes(this, new TransferStrokesEventArgs {Strokes = strokes});
             return rect;
         }
 
         #endregion
+    }
+
+    public partial class InkStrokeService : IDisposable
+    {
+        public void Dispose()
+        {
+            var presenter = _inkCanvas.InkPresenter;
+            presenter.StrokesErased -= OnStrokesErased;
+            presenter.StrokesCollected -= OnStrokesCollected;
+        }
     }
 
     public partial class InkStrokeService

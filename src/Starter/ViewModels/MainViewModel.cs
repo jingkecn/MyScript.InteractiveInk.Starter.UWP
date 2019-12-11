@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Windows.Input;
@@ -103,12 +104,19 @@ namespace MyScript.InteractiveInk.ViewModels
         }
     }
 
-    public partial class MainViewModel
+    public partial class MainViewModel : IDisposable
     {
         private InkInputDeviceService InkInputDeviceService { get; set; }
         private InkStrokeService InkStrokeService { get; set; }
         private InkTransformService InkTransformService { get; set; }
         private InkUndoRedoService InkUndoRedoService { get; set; }
+
+        public void Dispose()
+        {
+            InkInputDeviceService?.Dispose();
+            InkStrokeService?.Dispose();
+            InkUndoRedoService?.Dispose();
+        }
 
         public void Initialize(InkCanvas inkCanvas, Canvas drawingCanvas)
         {
