@@ -129,9 +129,9 @@
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\InkStrokeService.cs" />
-    <Compile Include="Services\InkTransformService.cs" />
+    <Compile Include="Services\Ink\InkStrokeService.cs" />
     <Compile Include="Services\Ink\InkTransformResult.cs" />
+    <Compile Include="Services\Ink\InkTransformService.cs" />
     <Compile Include="Services\Ink\InkUndoRedoService.cs" />
     <Compile Include="Services\Ink\UndoRedo\AddStrokesUndoRedoOperation.cs" />
     <Compile Include="Services\Ink\UndoRedo\IUndoRedoOperation.cs" />

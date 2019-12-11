@@ -10,9 +10,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
-using MyScript.InteractiveInk.Services.Ink;
 
-namespace MyScript.InteractiveInk.Services
+namespace MyScript.InteractiveInk.Services.Ink
 {
     public class InkTransformService
     {

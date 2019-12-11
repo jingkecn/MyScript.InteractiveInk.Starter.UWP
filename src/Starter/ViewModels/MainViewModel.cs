@@ -2,7 +2,6 @@ using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using MyScript.InteractiveInk.Common;
-using MyScript.InteractiveInk.Services;
 using MyScript.InteractiveInk.Services.Ink;
 using MyScript.InteractiveInk.Services.Ink.UndoRedo;
 

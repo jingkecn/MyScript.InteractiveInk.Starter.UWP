@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using MyScript.InteractiveInk.Events;
 
-namespace MyScript.InteractiveInk.Services
+namespace MyScript.InteractiveInk.Services.Ink
 {
     public partial class InkStrokeService
     {
