@@ -132,12 +132,17 @@ namespace MyScript.InteractiveInk.ViewModels
         #region Ink Manipulation
 
         private ICommand _clearAllCommand;
+
         public ICommand ClearAllCommand => _clearAllCommand ??= new RelayCommand(OnExecuteClearAllCommand);
 
         private void OnExecuteClearAllCommand()
         {
+            var strokes = InkStrokeService.Strokes.ToImmutableList();
+            var elements = InkTransformService.Elements.ToImmutableList();
             InkStrokeService.Clear();
             InkTransformService.Clear();
+            InkUndoRedoService.Add(
+                new ClearAllUndoRedoOperation(InkStrokeService, strokes, InkTransformService, elements));
         }
 
         #endregion

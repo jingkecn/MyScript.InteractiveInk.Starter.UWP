@@ -135,6 +135,7 @@
     <Compile Include="Services\Ink\InkTransformService.cs" />
     <Compile Include="Services\Ink\InkUndoRedoService.cs" />
     <Compile Include="Services\Ink\UndoRedo\AddStrokesUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\ClearAllUndoRedoOperation.cs" />
     <Compile Include="Services\Ink\UndoRedo\IUndoRedoOperation.cs" />
     <Compile Include="Services\Ink\UndoRedo\MoveStrokesUndoRedoOperation.cs" />
     <Compile Include="Services\Ink\UndoRedo\RemoveStrokesUndoRedoOperation.cs" />
