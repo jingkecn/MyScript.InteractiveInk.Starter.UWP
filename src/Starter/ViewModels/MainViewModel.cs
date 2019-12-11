@@ -1,7 +1,10 @@
+using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using MyScript.InteractiveInk.Common;
 using MyScript.InteractiveInk.Services;
+using MyScript.InteractiveInk.Services.Ink;
+using MyScript.InteractiveInk.Services.Ink.UndoRedo;
 
 namespace MyScript.InteractiveInk.ViewModels
 {
@@ -41,11 +44,13 @@ namespace MyScript.InteractiveInk.ViewModels
     {
         private InkStrokeService InkStrokeService { get; set; }
         private InkTransformService InkTransformService { get; set; }
+        private InkUndoRedoService InkUndoRedoService { get; set; }
 
         public void Initialize(InkCanvas inkCanvas, Canvas drawingCanvas)
         {
             InkStrokeService = new InkStrokeService(inkCanvas);
             InkTransformService = new InkTransformService(drawingCanvas, InkStrokeService);
+            InkUndoRedoService = new InkUndoRedoService(InkStrokeService);
         }
     }
 
@@ -59,8 +64,11 @@ namespace MyScript.InteractiveInk.ViewModels
 
         private async void OnExecuteTypesetCommand()
         {
-            await InkTransformService.TransformAsync();
-            // TODO: Redo & Undo stacks.
+            var result = await InkTransformService.TransformAsync();
+            if (result.Elements.Any())
+            {
+                InkUndoRedoService.Add(new TransformUndoRedoOperation(InkStrokeService, result));
+            }
         }
 
         #endregion
@@ -75,10 +83,12 @@ namespace MyScript.InteractiveInk.ViewModels
 
         private void OnExecuteRedoCommand()
         {
+            InkUndoRedoService.Redo();
         }
 
         private void OnExecuteUndoCommand()
         {
+            InkUndoRedoService.Undo();
         }
 
         #endregion

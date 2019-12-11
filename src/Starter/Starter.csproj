@@ -132,6 +132,14 @@
     <Compile Include="Services\InkStrokeService.cs" />
     <Compile Include="Services\InkTransformService.cs" />
     <Compile Include="Services\Ink\InkTransformResult.cs" />
+    <Compile Include="Services\Ink\InkUndoRedoService.cs" />
+    <Compile Include="Services\Ink\UndoRedo\AddStrokesUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\IUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\MoveStrokesUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\RemoveStrokesUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\StrokesUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\TransformUndoRedoOperation.cs" />
+    <Compile Include="Services\Ink\UndoRedo\UndoRedoOperation.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\Observable.cs" />
     <Compile Include="Views\Controls\MainCommandBar.xaml.cs">

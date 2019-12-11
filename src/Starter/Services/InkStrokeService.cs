@@ -37,12 +37,14 @@ namespace MyScript.InteractiveInk.Services
 
         #region Add, Move & Clear
 
-        public InkStroke Add(InkStroke stroke)
+        public void Add(params InkStroke[] strokes)
         {
-            var strokeToAdd = stroke.Clone();
-            _inkStrokeContainer.AddStroke(strokeToAdd);
-            OnAddStroke(this, new AddStrokeEventArgs {NewStroke = strokeToAdd, OldStroke = stroke});
-            return strokeToAdd;
+            strokes.ToImmutableList().ForEach(stroke =>
+            {
+                var strokeToAdd = stroke.Clone();
+                _inkStrokeContainer.AddStroke(strokeToAdd);
+                OnAddStroke(this, new AddStrokeEventArgs {NewStroke = strokeToAdd, OldStroke = stroke});
+            });
         }
 
         public void Clear()
@@ -63,27 +65,28 @@ namespace MyScript.InteractiveInk.Services
 
             var strokesToMove = SelectedStrokes.ToImmutableList();
             strokesToMove.ForEach(stroke => stroke.PointTransform *= matrix);
-            OnMoveStrokes(this, new MoveStrokesEventArgs {From = from, To = to, Strokes = strokesToMove});
+            OnMoveStrokes(this,
+                new MoveStrokesEventArgs {FromPosition = from, ToPosition = to, Strokes = strokesToMove});
         }
 
-        public bool Remove(InkStroke stroke)
+        public void Remove(params InkStroke[] strokes)
         {
-            var strokes = _inkStrokeContainer.GetStrokes();
-            var strokeToRemove = strokes.SingleOrDefault(s => s.Id == stroke.Id);
-            if (strokeToRemove == null)
+            strokes.ToImmutableList().ForEach(stroke =>
             {
-                return false;
-            }
+                var strokeToRemove = Strokes.SingleOrDefault(s => s.Id == stroke.Id);
+                if (strokeToRemove == null)
+                {
+                    return;
+                }
 
-            ClearSelection();
+                ClearSelection();
 
-            // Select the target strokes and remove it.
-            strokeToRemove.Selected = true;
-            _inkStrokeContainer.DeleteSelected();
+                // Select the target strokes and remove it.
+                strokeToRemove.Selected = true;
+                _inkStrokeContainer.DeleteSelected();
 
-            OnRemoveStroke(this, new RemoveStrokeEventArgs {RemovedStroke = strokeToRemove});
-
-            return true;
+                OnRemoveStroke(this, new RemoveStrokeEventArgs {RemovedStroke = strokeToRemove});
+            });
         }
 
         public bool Remove(IEnumerable<uint> ids)
