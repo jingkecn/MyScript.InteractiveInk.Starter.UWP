@@ -37,7 +37,7 @@
         -->
         <NoWarn>NU1603;$(NoWarn)</NoWarn>
         <Prefer32Bit>false</Prefer32Bit>
-        <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+        <!-- <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain> -->
         <UseVSHostingProcess>false</UseVSHostingProcess>
     </PropertyGroup>
     <!-- Build (Debug) -->
@@ -48,12 +48,13 @@
         <!-- Enable .NET Native 2.0 Incremental Build Support
         ~ See: https://github.com/microsoft/dotnet/blob/master/releases/UWP/net-native2.0/incremental-compilation.md
         -->
-        <UseDotNetNativeIncremental>true</UseDotNetNativeIncremental>
+        <!-- <UseDotNetNativeIncremental>true</UseDotNetNativeIncremental> -->
     </PropertyGroup>
     <!-- Build (Release) -->
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
+        <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
     </PropertyGroup>
     <!-- Import shared properties for all projects. -->
     <Import Project="$(RootDir)/shared/Properties/Properties.projitems" Label="Shared" />
