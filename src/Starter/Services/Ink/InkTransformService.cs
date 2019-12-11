@@ -25,6 +25,8 @@ namespace MyScript.InteractiveInk.Services.Ink
             _inkStrokeService = inkStrokeService;
         }
 
+        public IEnumerable<UIElement> Elements => _drawingCanvas.Children;
+
         public async Task<InkTransformResult> TransformAsync()
         {
             var result = new InkTransformResult(_drawingCanvas);
@@ -78,9 +80,25 @@ namespace MyScript.InteractiveInk.Services.Ink
 
         #region UI Elements
 
+        public void Add(params UIElement[] elements)
+        {
+            elements.ToImmutableList().ForEach(element => _drawingCanvas.Children.Add(element));
+        }
+
         public void Clear()
         {
             _drawingCanvas.Children.Clear();
+        }
+
+        public void Remove(params UIElement[] elements)
+        {
+            elements.ToImmutableList().ForEach(element =>
+            {
+                if (_drawingCanvas.Children.Contains(element))
+                {
+                    _drawingCanvas.Children.Remove(element);
+                }
+            });
         }
 
         #endregion

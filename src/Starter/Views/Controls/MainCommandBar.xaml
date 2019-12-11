@@ -7,23 +7,26 @@
     mc:Ignorable="d"
     d:DesignHeight="48"
     d:DesignWidth="320">
+    <AppBarButton x:Uid="UndoButton"
+                  Command="{x:Bind ViewModel.UndoCommand}"
+                  Icon="Undo"
+                  IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
+    <AppBarButton x:Uid="RedoButton"
+                  Command="{x:Bind ViewModel.RedoCommand}"
+                  Icon="Redo"
+                  IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
     <AppBarButton x:Uid="TypesetButton"
-                  Command="{x:Bind ViewModel.TypesetCommand}">
+                  Command="{x:Bind ViewModel.TypesetCommand}"
+                  IsEnabled="{x:Bind ViewModel.CanTypeset, Mode=OneWay}">
         <AppBarButton.Icon>
             <FontIcon Glyph="{StaticResource FontIconLightBulb}" />
         </AppBarButton.Icon>
     </AppBarButton>
     <CommandBar.SecondaryCommands>
-        <AppBarButton x:Uid="UndoButton"
-                      Command="{x:Bind ViewModel.UndoCommand}"
-                      Icon="Undo" />
-        <AppBarButton x:Uid="RedoButton"
-                      Command="{x:Bind ViewModel.RedoCommand}"
-                      Icon="Redo" />
-        <AppBarSeparator />
         <AppBarButton x:Uid="ClearAllButton"
                       Command="{x:Bind ViewModel.ClearAllCommand}"
-                      Icon="Delete" />
+                      Icon="Delete"
+                      IsEnabled="{x:Bind ViewModel.CanClear, Mode=OneWay}" />
     </CommandBar.SecondaryCommands>
     <CommandBar.Content>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}"

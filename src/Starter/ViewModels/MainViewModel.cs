@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Core;
@@ -8,7 +9,39 @@ using MyScript.InteractiveInk.Services.Ink.UndoRedo;
 
 namespace MyScript.InteractiveInk.ViewModels
 {
-    public partial class MainViewModel : Observable
+    public partial class MainViewModel
+    {
+        private bool _canClear;
+        private bool _canRedo;
+        private bool _canTypeset;
+        private bool _canUndo;
+
+        public bool CanClear
+        {
+            get => _canClear;
+            set => Set(ref _canClear, value, nameof(CanClear));
+        }
+
+        public bool CanRedo
+        {
+            get => _canRedo;
+            set => Set(ref _canRedo, value, nameof(CanRedo));
+        }
+
+        public bool CanTypeset
+        {
+            get => _canTypeset;
+            set => Set(ref _canTypeset, value, nameof(CanTypeset));
+        }
+
+        public bool CanUndo
+        {
+            get => _canUndo;
+            set => Set(ref _canUndo, value, nameof(CanUndo));
+        }
+    }
+
+    public partial class MainViewModel
     {
         private bool _enableLassoSelection;
         private bool _enableMouse;
@@ -38,7 +71,10 @@ namespace MyScript.InteractiveInk.ViewModels
             get => _enableTouch;
             set => Set(ref _enableTouch, value, nameof(EnableTouch));
         }
+    }
 
+    public partial class MainViewModel : Observable
+    {
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
@@ -54,7 +90,7 @@ namespace MyScript.InteractiveInk.ViewModels
                 return;
             }
 
-            InkInputDeviceService.Enable(input, enabled);
+            InkInputDeviceService?.Enable(input, enabled);
         }
 
         private void Initialize(InkCanvas inkCanvas)
@@ -80,13 +116,35 @@ namespace MyScript.InteractiveInk.ViewModels
             InkStrokeService = new InkStrokeService(inkCanvas);
             InkTransformService = new InkTransformService(drawingCanvas, InkStrokeService);
             InkUndoRedoService = new InkUndoRedoService(InkStrokeService);
-            Initialize(inkCanvas);
             Initialize(InkInputDeviceService);
+            Initialize(InkStrokeService);
+            Initialize(InkUndoRedoService);
+            Initialize(inkCanvas);
         }
 
         private void Initialize(InkInputDeviceService service)
         {
             service.PenDetected += (sender, args) => EnableTouch = false;
+        }
+
+        private void Initialize(InkStrokeService service)
+        {
+            service.ClearStrokes += (sender, args) => InitializeCommands();
+        }
+
+        private void Initialize(InkUndoRedoService service)
+        {
+            service.AddOperation += (sender, args) => InitializeCommands();
+            service.ExecuteRedo += (sender, args) => InitializeCommands();
+            service.ExecuteUndo += (sender, args) => InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
+            CanClear = InkStrokeService?.Strokes?.Any() == true || InkTransformService?.Elements?.Any() == true;
+            CanRedo = InkUndoRedoService?.CanRedo == true;
+            CanTypeset = InkStrokeService?.Strokes?.Any() == true;
+            CanUndo = InkUndoRedoService?.CanUndo == true;
         }
     }
 
@@ -96,7 +154,8 @@ namespace MyScript.InteractiveInk.ViewModels
 
         private ICommand _typesetCommand;
 
-        public ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(OnExecuteTypesetCommand);
+        public ICommand TypesetCommand =>
+            _typesetCommand ??= new RelayCommand(OnExecuteTypesetCommand);
 
         private async void OnExecuteTypesetCommand()
         {
@@ -114,8 +173,11 @@ namespace MyScript.InteractiveInk.ViewModels
         private ICommand _redoCommand;
         private ICommand _undoCommand;
 
-        public ICommand RedoCommand => _redoCommand ??= new RelayCommand(OnExecuteRedoCommand);
-        public ICommand UndoCommand => _undoCommand ??= new RelayCommand(OnExecuteUndoCommand);
+        public ICommand RedoCommand =>
+            _redoCommand ??= new RelayCommand(OnExecuteRedoCommand);
+
+        public ICommand UndoCommand =>
+            _undoCommand ??= new RelayCommand(OnExecuteUndoCommand);
 
         private void OnExecuteRedoCommand()
         {
