@@ -177,7 +177,7 @@ namespace MyScript.InteractiveInk.Services.Ink
             transform.Children.Add(translation);
             // Rotation
             var angle = Math.Atan2(right.Y - left.Y, right.X - left.X);
-            var rotation = new RotateTransform {Angle = angle * 180 / Math.PI};
+            var rotation = new RotateTransform {Angle = (angle * 180) / Math.PI};
             transform.Children.Add(rotation);
             // Rendering
             ellipse.RenderTransform = transform;
