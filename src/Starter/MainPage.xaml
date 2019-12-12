@@ -27,10 +27,10 @@
                 <InkToolbar HorizontalAlignment="Center"
                             TargetInkCanvas="{x:Bind InkCanvas}"
                             VerticalAlignment="Stretch">
-                    <InkToolbarCustomToggleButton x:Uid="LassoSelectionButton"
-                                                  IsChecked="{x:Bind ViewModel.EnableLassoSelection, Mode=TwoWay}">
+                    <InkToolbarCustomToolButton x:Uid="LassoSelectionButton"
+                                                IsChecked="{x:Bind ViewModel.EnableLassoSelection, Mode=TwoWay}">
                         <FontIcon Glyph="{StaticResource FontIconMarquee}" />
-                    </InkToolbarCustomToggleButton>
+                    </InkToolbarCustomToolButton>
                     <InkToolbarCustomToggleButton x:Uid="MouseInkingButton"
                                                   IsChecked="{x:Bind ViewModel.EnableMouse, Mode=TwoWay}">
                         <FontIcon Glyph="{StaticResource FontIconMouse}" />
@@ -51,6 +51,9 @@
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Stretch" />
             <Canvas x:Name="DrawingCanvas"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
+            <Canvas x:Name="SelectionCanvas"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch" />
         </Grid>

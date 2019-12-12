@@ -15,7 +15,7 @@ namespace MyScript.InteractiveInk
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            ViewModel.Initialize(InkCanvas, DrawingCanvas);
+            ViewModel.Initialize(InkCanvas, DrawingCanvas, SelectionCanvas);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

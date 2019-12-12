@@ -79,6 +79,12 @@ namespace MyScript.InteractiveInk.ViewModels
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
+            Configure(InkInputDeviceService, propertyName);
+            Configure(InkLassoSelectionService, propertyName);
+        }
+
+        private void Configure(InkInputDeviceService service, string propertyName)
+        {
             var (input, enabled) = propertyName switch
             {
                 nameof(EnableMouse) => (CoreInputDeviceTypes.Mouse, EnableMouse),
@@ -91,22 +97,31 @@ namespace MyScript.InteractiveInk.ViewModels
                 return;
             }
 
-            InkInputDeviceService?.Enable(input, enabled);
+            service?.Enable(input, enabled);
         }
 
-        private void Initialize(InkCanvas inkCanvas)
+        private void Configure(InkLassoSelectionService service, string propertyName)
         {
-            var presenter = inkCanvas.InkPresenter;
-            var input = presenter.InputDeviceTypes;
-            EnableMouse = (input & CoreInputDeviceTypes.Mouse) != 0;
-            EnablePen = (input & CoreInputDeviceTypes.Pen) != 0;
-            EnableTouch = (input & CoreInputDeviceTypes.Touch) != 0;
+            if (propertyName != nameof(EnableLassoSelection))
+            {
+                return;
+            }
+
+            if (EnableLassoSelection)
+            {
+                service.Start();
+            }
+            else
+            {
+                service.Stop();
+            }
         }
     }
 
     public partial class MainViewModel : IDisposable
     {
         private InkInputDeviceService InkInputDeviceService { get; set; }
+        private InkLassoSelectionService InkLassoSelectionService { get; set; }
         private InkStrokeService InkStrokeService { get; set; }
         private InkTransformService InkTransformService { get; set; }
         private InkUndoRedoService InkUndoRedoService { get; set; }
@@ -118,15 +133,15 @@ namespace MyScript.InteractiveInk.ViewModels
             InkUndoRedoService?.Dispose();
         }
 
-        public void Initialize(InkCanvas inkCanvas, Canvas drawingCanvas)
+        public void Initialize(InkCanvas inkCanvas, Canvas drawingCanvas, Canvas selectionCanvas)
         {
-            InkInputDeviceService = new InkInputDeviceService(inkCanvas);
-            InkStrokeService = new InkStrokeService(inkCanvas);
+            // Prerequisites
+            Initialize(InkInputDeviceService = new InkInputDeviceService(inkCanvas));
+            Initialize(InkStrokeService = new InkStrokeService(inkCanvas));
+            // Initializations
+            InkLassoSelectionService = new InkLassoSelectionService(InkStrokeService, inkCanvas, selectionCanvas);
             InkTransformService = new InkTransformService(drawingCanvas, InkStrokeService);
-            InkUndoRedoService = new InkUndoRedoService(InkStrokeService);
-            Initialize(InkInputDeviceService);
-            Initialize(InkStrokeService);
-            Initialize(InkUndoRedoService);
+            Initialize(InkUndoRedoService = new InkUndoRedoService(InkStrokeService));
             Initialize(inkCanvas);
         }
 
@@ -147,6 +162,15 @@ namespace MyScript.InteractiveInk.ViewModels
             service.ExecuteUndo += (sender, args) => InitializeCommands();
         }
 
+        private void Initialize(InkCanvas inkCanvas)
+        {
+            var presenter = inkCanvas.InkPresenter;
+            var input = presenter.InputDeviceTypes;
+            EnableMouse = (input & CoreInputDeviceTypes.Mouse) != 0;
+            EnablePen = (input & CoreInputDeviceTypes.Pen) != 0;
+            EnableTouch = (input & CoreInputDeviceTypes.Touch) != 0;
+        }
+
         private void InitializeCommands()
         {
             CanClear = InkStrokeService?.Strokes?.Any() == true || InkTransformService?.Elements?.Any() == true;
@@ -158,6 +182,11 @@ namespace MyScript.InteractiveInk.ViewModels
 
     public partial class MainViewModel
     {
+        private void ClearSelection()
+        {
+            InkLassoSelectionService.ClearSelection();
+        }
+
         #region Typeset
 
         private ICommand _typesetCommand;
@@ -168,10 +197,13 @@ namespace MyScript.InteractiveInk.ViewModels
         private async void OnExecuteTypesetCommand()
         {
             var result = await InkTransformService.TransformAsync();
-            if (result.Elements.Any())
+            if (!result.Elements.Any())
             {
-                InkUndoRedoService.Add(new TransformUndoRedoOperation(InkStrokeService, result));
+                return;
             }
+
+            ClearSelection();
+            InkUndoRedoService.Add(new TransformUndoRedoOperation(InkStrokeService, result));
         }
 
         #endregion
@@ -189,11 +221,13 @@ namespace MyScript.InteractiveInk.ViewModels
 
         private void OnExecuteRedoCommand()
         {
+            ClearSelection();
             InkUndoRedoService.Redo();
         }
 
         private void OnExecuteUndoCommand()
         {
+            ClearSelection();
             InkUndoRedoService.Undo();
         }
 
@@ -209,6 +243,7 @@ namespace MyScript.InteractiveInk.ViewModels
         {
             var strokes = InkStrokeService.Strokes.ToImmutableList();
             var elements = InkTransformService.Elements.ToImmutableList();
+            ClearSelection();
             InkStrokeService.Clear();
             InkTransformService.Clear();
             InkUndoRedoService.Add(

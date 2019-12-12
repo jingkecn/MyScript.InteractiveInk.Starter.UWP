@@ -130,6 +130,8 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Ink\InkInputDeviceService.cs" />
+    <Compile Include="Services\Ink\InkLassoSelectionService.cs" />
+    <Compile Include="Services\Ink\InkSelectionService.cs" />
     <Compile Include="Services\Ink\InkStrokeService.cs" />
     <Compile Include="Services\Ink\InkTransformResult.cs" />
     <Compile Include="Services\Ink\InkTransformService.cs" />
