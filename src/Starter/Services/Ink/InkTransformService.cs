@@ -37,26 +37,28 @@ namespace MyScript.InteractiveInk.Services.Ink
                 strokes = selected;
             }
 
-            if (strokes.Any())
+            if (!strokes.Any())
             {
-                _inkAnalyzer.ClearDataForAllStrokes();
-                _inkAnalyzer.AddDataForStrokes(strokes);
-                var analysis = await _inkAnalyzer.AnalyzeAsync();
-                switch (analysis.Status)
-                {
-                    case InkAnalysisStatus.Updated:
-                        var words = AnalyzeWords();
-                        var shapes = AnalyzeShapes();
-                        // Generate result
-                        result.Strokes.AddRange(strokes);
-                        result.Elements.AddRange(words);
-                        result.Elements.AddRange(shapes);
-                        break;
-                    case InkAnalysisStatus.Unchanged:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                return result;
+            }
+
+            _inkAnalyzer.ClearDataForAllStrokes();
+            _inkAnalyzer.AddDataForStrokes(strokes);
+            var analysis = await _inkAnalyzer.AnalyzeAsync();
+            switch (analysis.Status)
+            {
+                case InkAnalysisStatus.Updated:
+                    var words = AnalyzeWords();
+                    var shapes = AnalyzeShapes();
+                    // Generate result
+                    result.Strokes.AddRange(strokes);
+                    result.Elements.AddRange(words);
+                    result.Elements.AddRange(shapes);
+                    break;
+                case InkAnalysisStatus.Unchanged:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return result;
@@ -132,6 +134,7 @@ namespace MyScript.InteractiveInk.Services.Ink
                     case InkAnalysisDrawingKind.Circle:
                     case InkAnalysisDrawingKind.Ellipse:
                         yield return DrawEllipse(node);
+                        _inkStrokeService.Remove(ids);
                         break;
                     case InkAnalysisDrawingKind.Triangle:
                     case InkAnalysisDrawingKind.IsoscelesTriangle:
@@ -173,11 +176,17 @@ namespace MyScript.InteractiveInk.Services.Ink
             // Transformation
             var transform = new TransformGroup();
             // Translation
-            var translation = new TranslateTransform {X = shape.Center.X, Y = shape.Center.Y};
+            var translation = new TranslateTransform
+            {
+                X = shape.Center.X - (ellipse.Width / 2.0), Y = shape.Center.Y - (ellipse.Height / 2.0)
+            };
             transform.Children.Add(translation);
             // Rotation
             var angle = Math.Atan2(right.Y - left.Y, right.X - left.X);
-            var rotation = new RotateTransform {Angle = (angle * 180) / Math.PI};
+            var rotation = new RotateTransform
+            {
+                Angle = (angle * 180) / Math.PI, CenterX = shape.Center.X, CenterY = shape.Center.Y
+            };
             transform.Children.Add(rotation);
             // Rendering
             ellipse.RenderTransform = transform;
