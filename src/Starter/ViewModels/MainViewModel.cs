@@ -120,8 +120,11 @@ namespace MyScript.InteractiveInk.ViewModels
 
     public partial class MainViewModel : IDisposable
     {
+        private InkAnalyzerService InkAnalyzerService { get; set; }
         private InkInputDeviceService InkInputDeviceService { get; set; }
         private InkLassoSelectionService InkLassoSelectionService { get; set; }
+        private InkNodeSelectionService InkNodeSelectionService { get; set; }
+        private InkSelectionService InkSelectionService { get; set; }
         private InkStrokeService InkStrokeService { get; set; }
         private InkTransformService InkTransformService { get; set; }
         private InkUndoRedoService InkUndoRedoService { get; set; }
@@ -139,7 +142,12 @@ namespace MyScript.InteractiveInk.ViewModels
             Initialize(InkInputDeviceService = new InkInputDeviceService(inkCanvas));
             Initialize(InkStrokeService = new InkStrokeService(inkCanvas));
             // Initializations
-            InkLassoSelectionService = new InkLassoSelectionService(InkStrokeService, inkCanvas, selectionCanvas);
+            InkAnalyzerService = new InkAnalyzerService(inkCanvas, InkStrokeService);
+            InkSelectionService = new InkSelectionService(inkCanvas, selectionCanvas, InkStrokeService);
+            InkLassoSelectionService =
+                new InkLassoSelectionService(inkCanvas, selectionCanvas, InkStrokeService, InkSelectionService);
+            InkNodeSelectionService =
+                new InkNodeSelectionService(inkCanvas, InkStrokeService, InkSelectionService, InkAnalyzerService);
             InkTransformService = new InkTransformService(drawingCanvas, InkStrokeService);
             Initialize(InkUndoRedoService = new InkUndoRedoService(InkStrokeService));
             Initialize(inkCanvas);
@@ -184,6 +192,7 @@ namespace MyScript.InteractiveInk.ViewModels
     {
         private void ClearSelection()
         {
+            InkNodeSelectionService.ClearSelection();
             InkLassoSelectionService.ClearSelection();
         }
 

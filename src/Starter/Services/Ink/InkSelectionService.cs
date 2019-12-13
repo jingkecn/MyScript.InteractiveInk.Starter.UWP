@@ -17,11 +17,11 @@ namespace MyScript.InteractiveInk.Services.Ink
         private readonly InkStrokeService _strokeService;
         private Rect _selectionRect = Rect.Empty;
 
-        public InkSelectionService(InkStrokeService strokeService, InkCanvas inkCanvas, Canvas selectionCanvas)
+        public InkSelectionService(InkCanvas inkCanvas, Canvas selectionCanvas, InkStrokeService strokeService)
         {
-            _strokeService = strokeService;
-            _selectionCanvas = selectionCanvas;
             Initialize(_inkCanvas = inkCanvas);
+            _selectionCanvas = selectionCanvas;
+            _strokeService = strokeService;
         }
 
         private Rectangle SelectionRectangle
@@ -73,9 +73,14 @@ namespace MyScript.InteractiveInk.Services.Ink
 
         public void Dispose()
         {
-            _inkCanvas.ManipulationStarted += Canvas_ManipulationStarted;
-            _inkCanvas.ManipulationDelta += Canvas_ManipulationDelta;
-            _inkCanvas.ManipulationCompleted += Canvas_ManipulationCompleted;
+            Dispose(_inkCanvas);
+        }
+
+        private void Dispose(InkCanvas canvas)
+        {
+            canvas.ManipulationStarted += Canvas_ManipulationStarted;
+            canvas.ManipulationDelta += Canvas_ManipulationDelta;
+            canvas.ManipulationCompleted += Canvas_ManipulationCompleted;
         }
 
         private void Initialize(InkCanvas canvas)

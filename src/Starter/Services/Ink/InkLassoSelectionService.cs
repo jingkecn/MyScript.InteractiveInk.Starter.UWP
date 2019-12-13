@@ -16,12 +16,13 @@ namespace MyScript.InteractiveInk.Services.Ink
         private readonly InkSelectionService _selectionService;
         private readonly InkStrokeService _strokeService;
 
-        public InkLassoSelectionService(InkStrokeService strokeService, InkCanvas inkCanvas, Canvas selectionCanvas)
+        public InkLassoSelectionService(InkCanvas inkCanvas, Canvas selectionCanvas, InkStrokeService strokeService,
+            InkSelectionService selectionService)
         {
-            _strokeService = strokeService;
             Initialize(_inkCanvas = inkCanvas);
             _selectionCanvas = selectionCanvas;
-            _selectionService = new InkSelectionService(_strokeService, _inkCanvas, _selectionCanvas);
+            _strokeService = strokeService;
+            _selectionService = selectionService;
         }
 
         public void Start()
