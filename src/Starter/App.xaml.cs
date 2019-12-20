@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using MyScript.Certificate;
 using MyScript.IInk;
+using MyScript.InteractiveInk.Views;
 
 namespace MyScript.InteractiveInk
 {
