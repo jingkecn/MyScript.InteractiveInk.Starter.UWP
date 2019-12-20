@@ -17,6 +17,7 @@
         <winui:HeaderedContentControl.Header>
             <Grid>
                 <controls:MainCommandBar x:Name="TopCommandBar"
+                                         DataContext="{x:Bind ViewModel}"
                                          Margin="{StaticResource SmallLeftMargin}"
                                          Visibility="Collapsed" />
                 <InkToolbar HorizontalAlignment="Center"
@@ -25,7 +26,10 @@
             </Grid>
         </winui:HeaderedContentControl.Header>
         <Grid Background="White">
-            <InkCanvas x:Name="InkCanvas" />
+            <InkCanvas x:Name="InkCanvas"
+                       Visibility="Collapsed" />
+            <controls:InteractiveInkCanvas x:Name="InteractiveInkCanvas"
+                                           Editor="{x:Bind ViewModel.Editor, Mode=OneWay}" />
         </Grid>
         <!--#region Visual States-->
         <VisualStateManager.VisualStateGroups>
@@ -53,6 +57,7 @@
     </winui:HeaderedContentControl>
     <Page.BottomAppBar>
         <controls:MainCommandBar x:Name="BottomCommandBar"
+                                 DataContext="{x:Bind ViewModel}"
                                  Margin="{StaticResource SmallLeftMargin}"
                                  Visibility="Visible" />
     </Page.BottomAppBar>
