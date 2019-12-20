@@ -123,4 +123,16 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>Interactive Ink Starter</value>
   </data>
+  <data name="ClearAllCommand.Label" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="RedoCommand.Label" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="TypesetCommand.Label" xml:space="preserve">
+    <value>Typeset</value>
+  </data>
+  <data name="UndoCommand.Label" xml:space="preserve">
+    <value>Undo</value>
+  </data>
 </root>

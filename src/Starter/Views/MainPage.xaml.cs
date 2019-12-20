@@ -1,3 +1,5 @@
+using Windows.UI.Xaml.Navigation;
+
 namespace MyScript.InteractiveInk.Views
 {
     /// <summary>
@@ -8,6 +10,18 @@ namespace MyScript.InteractiveInk.Views
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            ViewModel.Dispose();
+            base.OnNavigatedFrom(e);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            ViewModel.Initialize();
         }
     }
 }
