@@ -43,9 +43,11 @@
         </XamlUICommand>
     </CommandBar.Resources>
     <AppBarButton x:Uid="UndoButton"
-                  Command="{x:Bind UndoCommand}" />
+                  Command="{x:Bind UndoCommand}"
+                  IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
     <AppBarButton x:Uid="RedoButton"
-                  Command="{x:Bind RedoCommand}" />
+                  Command="{x:Bind RedoCommand}"
+                  IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
     <AppBarButton x:Uid="TypesetButton"
                   Command="{x:Bind TypesetCommand}" />
     <CommandBar.SecondaryCommands>

@@ -121,19 +121,18 @@
     </Compile>
     <Compile Include="Common\IObservable.cs" />
     <Compile Include="Common\Observable.cs" />
+    <Compile Include="Extensions\CanvasTextLayoutExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\EditorExtensions.cs" />
-    <Compile Include="Extensions\EngineExtensions.cs" />
+    <Compile Include="Extensions\PrimitiveExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="Extensions\RendererExtensions.cs" />
+    <Compile Include="Extensions\StyleExtensions.cs" />
     <Compile Include="Extensions\TransformExtensions.cs" />
-    <Compile Include="Extensions\UiExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\DisplayInformationService.cs" />
     <Compile Include="Services\FontMetricsService.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\Controls\DrawingCanvas.xaml.cs">
-      <DependentUpon>DrawingCanvas.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\InteractiveInkCanvas.xaml.cs">
       <DependentUpon>InteractiveInkCanvas.xaml</DependentUpon>
     </Compile>
@@ -144,9 +143,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Shapes\Path.xaml.cs">
-      <DependentUpon>Path.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -180,10 +176,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\DrawingCanvas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\InteractiveInkCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -195,10 +187,6 @@
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Shapes\Path.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

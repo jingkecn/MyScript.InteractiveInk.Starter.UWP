@@ -22,7 +22,8 @@
                                          Visibility="Collapsed" />
                 <InkToolbar HorizontalAlignment="Center"
                             TargetInkCanvas="{x:Bind InkCanvas}"
-                            VerticalAlignment="Stretch" />
+                            VerticalAlignment="Stretch"
+                            Visibility="Collapsed" />
             </Grid>
         </winui:HeaderedContentControl.Header>
         <Grid Background="White">

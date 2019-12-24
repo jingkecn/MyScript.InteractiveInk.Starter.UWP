@@ -1,12 +1,12 @@
 using System;
+using System.Numerics;
 using Windows.Graphics.Display;
-using MyScript.IInk;
 
-namespace MyScript.InteractiveInk.Extensions
+namespace MyScript.InteractiveInk.Services
 {
-    public static class EngineExtensions
+    public static class DisplayInformationService
     {
-        public static Renderer CreateRenderer(this Engine source, IRenderTarget target)
+        public static Vector2 GetDpi2()
         {
             var info = DisplayInformation.GetForCurrentView();
             var (dpiX, dpiY, scale) = (info.RawDpiX, info.RawDpiY, (float)info.RawPixelsPerViewPixel);
@@ -27,7 +27,13 @@ namespace MyScript.InteractiveInk.Extensions
                 dpiX = dpiY = 96;
             }
 
-            return source.CreateRenderer(dpiX, dpiY, target);
+            return new Vector2(dpiX, dpiY);
+        }
+
+        public static float GetDpi()
+        {
+            var dpi = GetDpi2();
+            return (dpi.X + dpi.Y) / 2;
         }
     }
 }

@@ -1,19 +1,23 @@
-using Windows.UI.Xaml.Media;
-using Transform = MyScript.IInk.Graphics.Transform;
+using System.Numerics;
+using MyScript.IInk.Graphics;
 
 namespace MyScript.InteractiveInk.Extensions
 {
     public static class TransformExtensions
     {
-        public static MatrixTransform ToPlatformTransform(this Transform source)
+        public static Transform ToNativeTransform(this Matrix3x2 source)
         {
-            return new MatrixTransform
-            {
-                Matrix = new Matrix(
-                    source.XX, source.XY,
-                    source.YX, source.YY,
-                    source.TX, source.TY)
-            };
+            return new Transform(
+                source.M11, source.M21, source.M31,
+                source.M12, source.M22, source.M32);
+        }
+
+        public static Matrix3x2 ToPlatformTransform(this Transform source)
+        {
+            return new Matrix3x2(
+                (float)source.XX, (float)source.XY,
+                (float)source.YX, (float)source.YY,
+                (float)source.TX, (float)source.TY);
         }
     }
 }
