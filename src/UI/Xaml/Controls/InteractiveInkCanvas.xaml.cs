@@ -17,10 +17,10 @@ using Microsoft.Toolkit.Helpers;
 using MyScript.IInk;
 using MyScript.IInk.Graphics;
 using MyScript.InteractiveInk.Annotations;
-using MyScript.InteractiveInk.Extensions;
+using MyScript.InteractiveInk.UI.Extensions;
 using Color = Windows.UI.Color;
 
-namespace MyScript.InteractiveInk.Views.Controls
+namespace MyScript.InteractiveInk.UI.Xaml.Controls
 {
     public sealed partial class InteractiveInkCanvas
     {
@@ -297,7 +297,7 @@ namespace MyScript.InteractiveInk.Views.Controls
 
         public uint UnsupportedOperations => (uint)PathOperation.ARC_OPS;
 
-        [NotNull]
+        [CanBeNull]
         private static CanvasGeometry CreateGeometry(IPath path)
         {
             if (!(path is InteractiveInkCanvas canvas))

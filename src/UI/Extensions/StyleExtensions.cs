@@ -3,7 +3,7 @@ using Windows.UI.Text;
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.IInk.Graphics;
 
-namespace MyScript.InteractiveInk.Extensions
+namespace MyScript.InteractiveInk.UI.Extensions
 {
     public static class StyleExtensions
     {

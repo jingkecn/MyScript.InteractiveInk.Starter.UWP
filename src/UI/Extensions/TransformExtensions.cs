@@ -1,7 +1,7 @@
 using System.Numerics;
 using MyScript.IInk.Graphics;
 
-namespace MyScript.InteractiveInk.Extensions
+namespace MyScript.InteractiveInk.UI.Extensions
 {
     public static class TransformExtensions
     {

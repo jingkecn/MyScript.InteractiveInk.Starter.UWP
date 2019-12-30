@@ -6,9 +6,9 @@ using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Toolkit.Helpers;
 using MyScript.IInk.Graphics;
 using MyScript.IInk.Text;
-using MyScript.InteractiveInk.Extensions;
+using MyScript.InteractiveInk.UI.Extensions;
 
-namespace MyScript.InteractiveInk.Services
+namespace MyScript.InteractiveInk.UI.Services
 {
     public partial class FontMetricsService
     {

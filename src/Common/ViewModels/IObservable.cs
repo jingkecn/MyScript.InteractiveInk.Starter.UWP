@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace MyScript.InteractiveInk.Common
+namespace MyScript.InteractiveInk.Common.ViewModels
 {
     public interface IObservable
     {

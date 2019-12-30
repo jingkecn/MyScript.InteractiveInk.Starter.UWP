@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using Windows.Graphics.Display;
 
-namespace MyScript.InteractiveInk.Services
+namespace MyScript.InteractiveInk.UI.Services
 {
     public static class DisplayInformationService
     {

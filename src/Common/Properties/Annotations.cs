@@ -1,4 +1,4 @@
-﻿/* MIT License
+/* MIT License
 
 Copyright (c) 2016 JetBrains http://www.jetbrains.com
 
@@ -22,6 +22,7 @@ SOFTWARE. */
 
 using System;
 
+// ReSharper disable CheckNamespace
 // ReSharper disable InheritdocConsiderUsage
 
 #pragma warning disable 1591

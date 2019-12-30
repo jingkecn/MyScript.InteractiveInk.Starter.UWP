@@ -8,8 +8,8 @@ using Windows.UI.Xaml;
 using Microsoft.Toolkit.Helpers;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
-using MyScript.InteractiveInk.Common;
-using MyScript.InteractiveInk.Services;
+using MyScript.InteractiveInk.Common.ViewModels;
+using MyScript.InteractiveInk.UI.Services;
 
 namespace MyScript.InteractiveInk.ViewModels
 {

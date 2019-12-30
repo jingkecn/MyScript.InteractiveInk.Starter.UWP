@@ -1,7 +1,7 @@
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.InteractiveInk.Annotations;
 
-namespace MyScript.InteractiveInk.Extensions
+namespace MyScript.InteractiveInk.UI.Extensions
 {
     public static class CanvasTextLayoutExtensions
     {

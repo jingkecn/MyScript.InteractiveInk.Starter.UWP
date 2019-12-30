@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using MyScript.InteractiveInk.Annotations;
 
-namespace MyScript.InteractiveInk.Common
+namespace MyScript.InteractiveInk.Common.ViewModels
 {
     public abstract partial class Observable : IObservable
     {

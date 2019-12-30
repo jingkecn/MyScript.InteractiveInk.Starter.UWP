@@ -1,6 +1,6 @@
 using Windows.UI.Xaml.Input;
 using MyScript.IInk;
-using MyScript.InteractiveInk.Extensions;
+using MyScript.InteractiveInk.UI.Extensions;
 using MyScript.InteractiveInk.ViewModels;
 
 namespace MyScript.InteractiveInk.Views.Controls

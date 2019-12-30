@@ -5,7 +5,7 @@ using Windows.Devices.Input;
 using Windows.UI.Input;
 using MyScript.IInk;
 
-namespace MyScript.InteractiveInk.Extensions
+namespace MyScript.InteractiveInk.UI.Extensions
 {
     public static partial class EditorExtensions
     {

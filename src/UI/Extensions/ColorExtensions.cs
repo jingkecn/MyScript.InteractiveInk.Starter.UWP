@@ -1,7 +1,7 @@
 using System;
 using Windows.UI;
 
-namespace MyScript.InteractiveInk.Extensions
+namespace MyScript.InteractiveInk.UI.Extensions
 {
     public static class ColorExtensions
     {

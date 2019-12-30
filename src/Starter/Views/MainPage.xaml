@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="using:MyScript.InteractiveInk.ViewModels"
     xmlns:winui="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:iink="using:MyScript.InteractiveInk.UI.Xaml.Controls"
     xmlns:controls="using:MyScript.InteractiveInk.Views.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -29,8 +30,8 @@
         <Grid Background="White">
             <InkCanvas x:Name="InkCanvas"
                        Visibility="Collapsed" />
-            <controls:InteractiveInkCanvas x:Name="InteractiveInkCanvas"
-                                           Editor="{x:Bind ViewModel.Editor, Mode=OneWay}" />
+            <iink:InteractiveInkCanvas x:Name="InteractiveInkCanvas"
+                                       Editor="{x:Bind ViewModel.Editor, Mode=OneWay}" />
         </Grid>
         <!--#region Visual States-->
         <VisualStateManager.VisualStateGroups>
