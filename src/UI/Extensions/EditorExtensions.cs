@@ -2,22 +2,34 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Windows.Devices.Input;
+using Windows.Foundation;
 using Windows.UI.Input;
 using MyScript.IInk;
+using MyScript.InteractiveInk.Annotations;
 
 namespace MyScript.InteractiveInk.UI.Extensions
 {
     public static partial class EditorExtensions
     {
-        public static void Typeset(this Editor source)
+        public static void Typeset(this Editor source, [CanBeNull] ContentBlock block = null)
         {
-            var states = source.GetSupportedTargetConversionStates(null);
+            var states = source.GetSupportedTargetConversionStates(block);
             if (!states.Any())
             {
                 return;
             }
 
-            source.Convert(null, states.First());
+            source.Convert(block, states.First());
+        }
+
+        public static void Typeset(this Editor source, float x, float y)
+        {
+            source.Typeset(source.HitBlock(x, y));
+        }
+
+        public static void Typeset(this Editor source, Point position)
+        {
+            source.Typeset((float)position.X, (float)position.Y);
         }
     }
 

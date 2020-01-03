@@ -363,6 +363,17 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
     /// <summary>Handles pointer events on canvas.</summary>
     public sealed partial class InteractiveInkCanvas
     {
+        private void OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            if (!(sender is UIElement element))
+            {
+                return;
+            }
+
+            Editor.Typeset(e.GetPosition(element));
+            e.Handled = true;
+        }
+
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
         {
             if (!(sender is UIElement element))

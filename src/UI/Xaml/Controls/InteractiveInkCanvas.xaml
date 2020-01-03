@@ -19,6 +19,7 @@
         <canvas:CanvasVirtualControl x:Name="TemporaryLayer"
                                      RegionsInvalidated="OnRegionsInvalidated" />
         <canvas:CanvasVirtualControl x:Name="CaptureLayer"
+                                     DoubleTapped="OnDoubleTapped"
                                      PointerCanceled="OnPointerCanceled"
                                      PointerMoved="OnPointerMoved"
                                      PointerPressed="OnPointerPressed"
