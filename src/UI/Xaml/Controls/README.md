@@ -175,16 +175,16 @@ private void OnRegionsInvalidated(CanvasVirtualControl sender, CanvasRegionsInva
             switch(sender.Name)
             {
                 case "BackgroundLayer":
-                    Editor.Renderer.DrawBackground(x, y, width, height, this /* ICanvas */);
+                    Editor.Renderer.DrawBackground(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
                     break;
                 case "CaptureLayer":
-                    Editor.Renderer.DrawCaptureStrokes(x, y, width, height, this /* ICanvas */);
+                    Editor.Renderer.DrawCaptureStrokes(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
                     break;
                 case "ModelLayer":
-                    Editor.Renderer.DrawModel(x, y, width, height, this /* ICanvas */);
+                    Editor.Renderer.DrawModel(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
                     break;
                 case "TemporaryLayer":
-                    Editor.Renderer.DrawTemporaryItems(x, y, width, height, this /* ICanvas */);
+                    Editor.Renderer.DrawTemporaryItems(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
                     break;
                 default:
                     break;
@@ -211,8 +211,8 @@ Within the implementation of `ICanvas`, two path drawing commands are required t
 ```csharp
 public IPath CreatePath()
 {
-    // Returns an IPath instance.
-    // See source code for more details.
+    // Initialization...
+    return this; /* InteractiveInkCanvas implements IPath */
 }
 
 public void DrawPath(IPath path)
@@ -222,7 +222,7 @@ public void DrawPath(IPath path)
 }
 ```
 
-So an implementation of an `IPath` is required, and it is quite easy to draw platform paths according to the SDK drawing commands. See the source code for more details.
+So an implementation of an `IPath` is required, and it is quite easy to draw platform paths according to the SDK drawing commands. See the [source code](InteractiveInkCanvas.xaml.cs#L253) for more details.
 
 > See [more information](https://developer.myscript.com/docs/interactive-ink/1.3/windows/fundamentals/rendering/) about how MyScript Interactive Ink SDK manages the rendering.
 

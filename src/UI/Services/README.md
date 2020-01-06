@@ -214,7 +214,7 @@ for (var index = 0; index < text.GlyphCount; index++)
 }
 ```
 
-> MyScript Interactive Ink SDK compute rendering units in millimeter.
+> MyScript Interactive Ink SDK computes rendering units in millimeter.
 
 Step 3 - **return computed glyph metrics in an array**:
 

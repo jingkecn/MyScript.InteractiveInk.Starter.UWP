@@ -37,7 +37,7 @@ Corresponding to the project structure, classes/types are grouped into the follo
 - `Common` -> `MyScript.InteractiveInk.Common.*`;
 - `UI` -> `MyScript.InteractiveInk.UI.*`
 
-The entry point is [`App`](src/Starter/App.xaml.cs), which creates and holds a [`Engine`](src/Starter/App.xaml.cs#L22) instance from `MyCertificate`.
+The entry point is [`App`](src/Starter/App.xaml.cs), which creates and holds a [`Engine`](src/Starter/App.xaml.cs#L22) instance with `MyCertificate`.
 Then the `App` launches [`MainPage`](src/starter/Views/MainPage.xaml), which creates and holds a corresponding [`MainViewModel`](src/Starter/ViewModels/MainViewModel.cs) to hold an [`Editor`](src/Starter/ViewModels/MainViewModel.cs#L34) instance.
 The `Editor` is supposed to be attached to the UI control [`InteractiveInkCanvas`](src/UI/Xaml/Controls/InteractiveInkCanvas.xaml), which handles the most of rendering commands and exposes interactivity from Interactive Ink SDK to the application layer.
 
