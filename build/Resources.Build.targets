@@ -46,19 +46,4 @@
         <RemoveDir Directories="$(ResourceTemporaryFolder)" />
     </Target>
     <Target Name="BeforeBuild" DependsOnTargets="Delete" />
-    <!-- Import shared configurations & resources. -->
-    <ItemGroup>
-        <!-- [WORKAROUND] Link configuration and resources files to maintain their relative structure. -->
-        <Content Include="$(ResourceDestinationFolder)/conf/diagram.conf" Link="Assets/conf/diagram.conf" />
-        <Content Include="$(ResourceDestinationFolder)/conf/en_US.conf" Link="Assets/conf/en_US.conf" />
-        <Content Include="$(ResourceDestinationFolder)/conf/math.conf" Link="Assets/conf/math.conf" />
-        <Content Include="$(ResourceDestinationFolder)/conf/raw-content.conf" Link="Assets/conf/raw-content.conf" />
-        <Content Include="$(ResourceDestinationFolder)/resources/analyzer/ank-diagram.res" Link="Assets/resources/analyzer/ank-diagram.res" />
-        <Content Include="$(ResourceDestinationFolder)/resources/analyzer/ank-raw-content.res" Link="Assets/resources/analyzer/ank-raw-content.res" />
-        <Content Include="$(ResourceDestinationFolder)/resources/en_US/en_US-ak-cur.res" Link="Assets/resources/en_US/en_US-ak-cur.res" />
-        <Content Include="$(ResourceDestinationFolder)/resources/en_US/en_US-lk-text.res" Link="Assets/resources/en_US/en_US-lk-text.res" />
-        <Content Include="$(ResourceDestinationFolder)/resources/math/math-ak.res" Link="Assets/resources/math/math-ak.res" />
-        <Content Include="$(ResourceDestinationFolder)/resources/math/math-grm-standard.res" Link="Assets/resources/math/math-grm-standard.res" />
-        <Content Include="$(ResourceDestinationFolder)/resources/shape/shk-diagram.res" Link="Assets/resources/shape/shk-diagram.res" />
-    </ItemGroup>
 </Project>

@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter", "src\App\Starter.csproj", "{BC09FE4D-87F9-4C54-9959-754E2807F191}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Resources", "shared\Resources\Resources.shproj", "{FB6177AD-FCB4-4838-9793-E74A0A132976}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		shared\Properties\Properties.projitems*{274f8c15-3e89-466c-ad0e-10e9ac5c13ef}*SharedItemsImports = 13
@@ -32,8 +34,10 @@ Global
 		shared\Strings\Strings.projitems*{a9ea67c5-989d-4907-9463-f9cef9e0d46e}*SharedItemsImports = 13
 		shared\Certificate\Certificate.projitems*{bc09fe4d-87f9-4c54-9959-754e2807f191}*SharedItemsImports = 4
 		shared\Properties\Properties.projitems*{bc09fe4d-87f9-4c54-9959-754e2807f191}*SharedItemsImports = 4
+		shared\Resources\Resources.projitems*{bc09fe4d-87f9-4c54-9959-754e2807f191}*SharedItemsImports = 4
 		shared\Strings\Strings.projitems*{bc09fe4d-87f9-4c54-9959-754e2807f191}*SharedItemsImports = 4
 		shared\Properties\Properties.projitems*{e7a6d473-cf65-4044-b795-809a4bce6cbc}*SharedItemsImports = 4
+		shared\Resources\Resources.projitems*{fb6177ad-fcb4-4838-9793-e74a0a132976}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +128,7 @@ Global
 		{51B8F2BE-E7F9-4864-A519-05CAEB8B3DEC} = {AAEFE6A4-64FF-4696-A79B-D384A8B3FCCE}
 		{91ED54FD-2705-4979-B719-5E8876D7A3B1} = {37A486ED-72D0-41CD-8A10-498A6CCBF653}
 		{E7A6D473-CF65-4044-B795-809A4BCE6CBC} = {37A486ED-72D0-41CD-8A10-498A6CCBF653}
+		{FB6177AD-FCB4-4838-9793-E74A0A132976} = {AAEFE6A4-64FF-4696-A79B-D384A8B3FCCE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E5D458F-3E4B-47AF-A1DE-D3BAA82C73E7}
