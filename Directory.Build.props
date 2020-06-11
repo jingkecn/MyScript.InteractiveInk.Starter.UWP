@@ -37,14 +37,9 @@
     <PropertyGroup>
         <Authors>$(Company)</Authors>
         <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year). All rights reserved.</Copyright>
-        <RootDir>$(MSBuildThisFileDirectory.TrimEnd('\\/'))</RootDir>
         <Trademark>$(Product)™</Trademark>
     </PropertyGroup>
-    <!-- Include RID to path if necessary.
-    ~ See: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-    -->
     <PropertyGroup>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <RepositoryDirectory>$(MSBuildThisFileDirectory.TrimEnd('\\/'))</RepositoryDirectory>
     </PropertyGroup>
 </Project>

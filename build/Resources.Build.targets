@@ -11,8 +11,8 @@
     </PropertyGroup>
     <PropertyGroup>
         <ResourceVersionUrl>$(ResourceBaseURL)/$(ResourceVersion)</ResourceVersionUrl>
-        <ResourceTemporaryFolder>$(RootDir)/shared/Resources/_temp</ResourceTemporaryFolder>
-        <ResourceDestinationFolder>$(RootDir)/shared/Resources/Assets</ResourceDestinationFolder>
+        <ResourceTemporaryFolder>$(RepositoryDirectory)/shared/Resources/_temp</ResourceTemporaryFolder>
+        <ResourceDestinationFolder>$(RepositoryDirectory)/shared/Resources/Assets</ResourceDestinationFolder>
     </PropertyGroup>
     <PropertyGroup>
         <ResourceDiagram>$(ResourceBaseName)-diagram.$(ResourceFileExtension)</ResourceDiagram>

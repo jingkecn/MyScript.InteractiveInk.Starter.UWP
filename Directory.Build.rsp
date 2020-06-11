@@ -17,7 +17,7 @@
 
 # Set or override the specified project-level properties, where name is the property name and value is the property value.
 # Specify each property separately, or use a semicolon or comma to separate multiple properties.
--p:Platform=x64
+-p:Configuration=Debug
 
 # Runs the Restore target prior to building the actual targets.
 -restore

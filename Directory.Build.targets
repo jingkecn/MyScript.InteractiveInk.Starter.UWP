@@ -28,34 +28,6 @@
     <PropertyGroup>
         <RootNamespace>$(Company).$(Product).$(ProjectName)</RootNamespace>
     </PropertyGroup>
-    <!-- Build -->
-    <PropertyGroup>
-        <ErrorReport>prompt</ErrorReport>
-        <!--
-        ~ Workaround for NuGet issue.
-        ~ See: https://github.com/NuGet/Home/wiki/%5BSpec%5D-Transitive-Warning-Properties
-        -->
-        <NoWarn>NU1603;$(NoWarn)</NoWarn>
-        <Prefer32Bit>false</Prefer32Bit>
-        <!-- <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain> -->
-        <UseVSHostingProcess>false</UseVSHostingProcess>
-    </PropertyGroup>
-    <!-- Build (Debug) -->
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <DefineConstants>DEBUG;$(DefineConstants)</DefineConstants>
-        <!-- Enable .NET Native 2.0 Incremental Build Support
-        ~ See: https://github.com/microsoft/dotnet/blob/master/releases/UWP/net-native2.0/incremental-compilation.md
-        -->
-        <!-- <UseDotNetNativeIncremental>true</UseDotNetNativeIncremental> -->
-    </PropertyGroup>
-    <!-- Build (Release) -->
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
-    </PropertyGroup>
     <!-- Import shared properties for all projects. -->
-    <Import Project="$(RootDir)/shared/Properties/Properties.projitems" Label="Shared" />
+    <Import Project="$(RepositoryDirectory)/shared/Properties/Properties.projitems" Label="Shared" />
 </Project>

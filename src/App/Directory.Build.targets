@@ -31,9 +31,9 @@
         <RootNamespace>$(Company).$(Product)</RootNamespace>
     </PropertyGroup>
     <!-- Initialize recognition assets. -->
-    <Import Project="$(RootDir)/build/Resources.Build.targets" />
+    <Import Project="$(RepositoryDirectory)/build/Resources.Build.targets" />
     <!-- Import shared strings. -->
-    <Import Project="$(RootDir)/shared/Strings/Strings.projitems" Label="Shared" />
+    <Import Project="$(RepositoryDirectory)/shared/Strings/Strings.projitems" Label="Shared" />
     <!-- Import certificate. -->
-    <Import Project="$(RootDir)/shared/Certificate/Certificate.projitems" Label="Shared" />
+    <Import Project="$(RepositoryDirectory)/shared/Certificate/Certificate.projitems" Label="Shared" />
 </Project>
