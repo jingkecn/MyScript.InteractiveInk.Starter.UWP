@@ -20,7 +20,7 @@ This project consists of 3 groups:
   - Library `Common`;
   - Library [`UI`](src/UI/README.md);
 - The shared sources, including:
-  - The shared assembly info `Properties`;
+  - The shared recognition resources `Resources`;
   - The shared localization `Strings`;
   - The shared `Certificate` from [MyScript Developer](https://developer.myscript.com), which is required to integrate Interactive Ink SDK.
 
