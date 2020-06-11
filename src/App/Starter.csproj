@@ -182,6 +182,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\..\shared\Certificate\Certificate.projitems" Label="Shared" />
+  <Import Project="..\..\shared\Resources\Resources.projitems" Label="Shared" />
+  <Import Project="..\..\shared\Strings\Strings.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

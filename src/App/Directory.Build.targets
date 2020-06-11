@@ -32,10 +32,4 @@
     </PropertyGroup>
     <!-- Initialize recognition assets. -->
     <Import Project="$(RepositoryDirectory)/build/Resources.Build.targets" />
-    <!-- Import certificate. -->
-    <Import Project="$(RepositoryDirectory)/shared/Certificate/Certificate.projitems" Label="Shared" />
-    <!-- Import resources. -->
-    <Import Project="$(RepositoryDirectory)/shared/Resources/Resources.projitems" Label="Shared" />
-    <!-- Import shared strings. -->
-    <Import Project="$(RepositoryDirectory)/shared/Strings/Strings.projitems" Label="Shared" />
 </Project>
