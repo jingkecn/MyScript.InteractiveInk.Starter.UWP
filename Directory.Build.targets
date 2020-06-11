@@ -28,6 +28,4 @@
     <PropertyGroup>
         <RootNamespace>$(Company).$(Product).$(ProjectName)</RootNamespace>
     </PropertyGroup>
-    <!-- Import shared properties for all projects. -->
-    <Import Project="$(RepositoryDirectory)/shared/Properties/Properties.projitems" Label="Shared" />
 </Project>
