@@ -167,24 +167,38 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
         public void SetStrokeLineCap(LineCap lineCap)
         {
-            StrokeStyle.DashCap = StrokeStyle.EndCap = StrokeStyle.StartCap = lineCap switch
+            switch (lineCap)
             {
-                LineCap.BUTT => CanvasCapStyle.Flat,
-                LineCap.ROUND => CanvasCapStyle.Round,
-                LineCap.SQUARE => CanvasCapStyle.Square,
-                _ => throw new ArgumentOutOfRangeException(nameof(lineCap), lineCap, null)
-            };
+                case LineCap.BUTT:
+                    StrokeStyle.DashCap = StrokeStyle.EndCap = StrokeStyle.StartCap = CanvasCapStyle.Flat;
+                    break;
+                case LineCap.ROUND:
+                    StrokeStyle.DashCap = StrokeStyle.EndCap = StrokeStyle.StartCap = CanvasCapStyle.Round;
+                    break;
+                case LineCap.SQUARE:
+                    StrokeStyle.DashCap = StrokeStyle.EndCap = StrokeStyle.StartCap = CanvasCapStyle.Square;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lineCap), lineCap, null);
+            }
         }
 
         public void SetStrokeLineJoin(LineJoin lineJoin)
         {
-            StrokeStyle.LineJoin = lineJoin switch
+            switch (lineJoin)
             {
-                LineJoin.MITER => CanvasLineJoin.Miter,
-                LineJoin.ROUND => CanvasLineJoin.Round,
-                LineJoin.BEVEL => CanvasLineJoin.Bevel,
-                _ => throw new ArgumentOutOfRangeException(nameof(lineJoin), lineJoin, null)
-            };
+                case LineJoin.MITER:
+                    StrokeStyle.LineJoin = CanvasLineJoin.Miter;
+                    break;
+                case LineJoin.ROUND:
+                    StrokeStyle.LineJoin = CanvasLineJoin.Round;
+                    break;
+                case LineJoin.BEVEL:
+                    StrokeStyle.LineJoin = CanvasLineJoin.Bevel;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(lineJoin), lineJoin, null);
+            }
         }
 
         public void SetStrokeMiterLimit(float limit)
@@ -218,15 +232,13 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
             TextFormat.FontFamily = family;
             TextFormat.FontSize = size;
             TextFormat.FontStyle = Enum.Parse<FontStyle>(style, true);
-            TextFormat.FontWeight = weight switch
+            TextFormat.FontWeight =
+                weight >= 700 ? FontWeights.Bold : weight < 400 ? FontWeights.Light : FontWeights.Normal;
+            using (var layout =
+                new CanvasTextLayout(Session?.Device, "k", TextFormat, float.MaxValue, float.MaxValue))
             {
-                var value when value >= 700 => FontWeights.Bold,
-                var value when value < 400 => FontWeights.Light,
-                _ => FontWeights.Normal
-            };
-            using var layout =
-                new CanvasTextLayout(Session?.Device, "k", TextFormat, float.MaxValue, float.MaxValue);
-            TextBaseLine = layout.LineMetrics.FirstOrDefault().Baseline;
+                TextBaseLine = layout.LineMetrics.FirstOrDefault().Baseline;
+            }
         }
 
         #endregion
@@ -425,14 +437,23 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
         {
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var layer = sender.Name switch
+                var layer = LayerType.LayerType_ALL;
+                switch (sender.Name)
                 {
-                    nameof(BackgroundLayer) => LayerType.BACKGROUND,
-                    nameof(CaptureLayer) => LayerType.CAPTURE,
-                    nameof(ModelLayer) => LayerType.MODEL,
-                    nameof(TemporaryLayer) => LayerType.TEMPORARY,
-                    _ => LayerType.LayerType_ALL
-                };
+                    case "BackgroundLayer":
+                        layer = LayerType.BACKGROUND;
+                        break;
+                    case "CaptureLayer":
+                        layer = LayerType.CAPTURE;
+                        break;
+                    case "ModelLayer":
+                        layer = LayerType.MODEL;
+                        break;
+                    case "TemporaryLayer":
+                        layer = LayerType.TEMPORARY;
+                        break;
+                }
+
                 foreach (var region in args.InvalidatedRegions)
                 {
                     if (region.Width <= 0 || region.Height <= 0)
@@ -441,11 +462,13 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
                     }
 
                     var clamped = region.Clamp(sender);
-                    using var session = Session = sender.CreateDrawingSession(clamped);
-                    session.Antialiasing = CanvasAntialiasing.Antialiased;
-                    session.TextAntialiasing = CanvasTextAntialiasing.Auto;
-                    Editor.Renderer.Draw(clamped, layer, this);
-                    session.Flush();
+                    using (var session = Session = sender.CreateDrawingSession(clamped))
+                    {
+                        session.Antialiasing = CanvasAntialiasing.Antialiased;
+                        session.TextAntialiasing = CanvasTextAntialiasing.Auto;
+                        Editor.Renderer.Draw(clamped, layer, this);
+                        session.Flush();
+                    }
                 }
             }).AsTask();
         }

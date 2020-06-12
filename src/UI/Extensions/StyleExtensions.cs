@@ -14,12 +14,8 @@ namespace MyScript.InteractiveInk.UI.Extensions
                 FontFamily = source.FontFamily,
                 FontSize = source.FontSize.FromMillimeterToPixel(dpi),
                 FontStyle = Enum.Parse<FontStyle>(source.FontStyle, true),
-                FontWeight = source.FontWeight switch
-                {
-                    var value when value >= 700 => FontWeights.Bold,
-                    var value when value < 400 => FontWeights.Light,
-                    _ => FontWeights.Normal
-                }
+                FontWeight = source.FontWeight >= 700 ? FontWeights.Bold :
+                    source.FontWeight <= 400 ? FontWeights.Light : FontWeights.Normal
             };
         }
     }

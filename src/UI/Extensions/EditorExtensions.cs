@@ -160,13 +160,17 @@ namespace MyScript.InteractiveInk.UI.Extensions
     {
         public static PointerType ToNative(this PointerDeviceType source)
         {
-            return source switch
+            switch (source)
             {
-                PointerDeviceType.Touch => PointerType.TOUCH,
-                PointerDeviceType.Pen => PointerType.PEN,
-                PointerDeviceType.Mouse => PointerType.TOUCH,
-                _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
-            };
+                case PointerDeviceType.Touch:
+                    return PointerType.TOUCH;
+                case PointerDeviceType.Pen:
+                    return PointerType.PEN;
+                case PointerDeviceType.Mouse:
+                    return PointerType.TOUCH;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(source), source, null);
+            }
         }
     }
 }

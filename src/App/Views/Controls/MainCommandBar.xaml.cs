@@ -16,7 +16,7 @@ namespace MyScript.InteractiveInk.Views.Controls
         }
 
         private Editor Editor => ViewModel.Editor;
-        private MainViewModel ViewModel => _viewModel ??= DataContext as MainViewModel;
+        private MainViewModel ViewModel => _viewModel ?? (_viewModel = DataContext as MainViewModel);
 
         #region Commands
 
@@ -25,10 +25,17 @@ namespace MyScript.InteractiveInk.Views.Controls
         private ICommand _typesetCommand;
         private ICommand _undoCommand;
 
-        private ICommand ClearAllCommand => _clearAllCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndClear());
-        private ICommand RedoCommand => _redoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndRedo());
-        private ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndTypeset());
-        private ICommand UndoCommand => _undoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndUndo());
+        private ICommand ClearAllCommand =>
+            _clearAllCommand ?? (_clearAllCommand = new RelayCommand(_ => Editor.WaitForIdleAndClear()));
+
+        private ICommand RedoCommand =>
+            _redoCommand ?? (_redoCommand = new RelayCommand(_ => Editor.WaitForIdleAndRedo()));
+
+        private ICommand TypesetCommand =>
+            _typesetCommand ?? (_typesetCommand = new RelayCommand(_ => Editor.WaitForIdleAndTypeset()));
+
+        private ICommand UndoCommand =>
+            _undoCommand ?? (_undoCommand = new RelayCommand(_ => Editor.WaitForIdleAndUndo()));
 
         #endregion
     }
