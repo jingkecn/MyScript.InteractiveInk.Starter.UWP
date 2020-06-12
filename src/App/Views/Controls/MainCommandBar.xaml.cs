@@ -1,5 +1,6 @@
-using Windows.UI.Xaml.Input;
+using System.Windows.Input;
 using MyScript.IInk;
+using MyScript.InteractiveInk.Common.Helpers;
 using MyScript.InteractiveInk.UI.Extensions;
 using MyScript.InteractiveInk.ViewModels;
 
@@ -17,44 +18,18 @@ namespace MyScript.InteractiveInk.Views.Controls
         private Editor Editor => ViewModel.Editor;
         private MainViewModel ViewModel => _viewModel ??= DataContext as MainViewModel;
 
-        private void ClearAllCommand_OnExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
-        {
-            if (!Editor.IsIdle())
-            {
-                Editor.WaitForIdle();
-            }
+        #region Commands
 
-            Editor.Clear();
-        }
+        private ICommand _clearAllCommand;
+        private ICommand _redoCommand;
+        private ICommand _typesetCommand;
+        private ICommand _undoCommand;
 
-        private void RedoCommand_OnExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
-        {
-            if (!Editor.IsIdle())
-            {
-                Editor.WaitForIdle();
-            }
+        private ICommand ClearAllCommand => _clearAllCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndClear());
+        private ICommand RedoCommand => _redoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndRedo());
+        private ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndTypeset());
+        private ICommand UndoCommand => _undoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndUndo());
 
-            Editor.Redo();
-        }
-
-        private void TypesetCommand_OnExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
-        {
-            if (!Editor.IsIdle())
-            {
-                Editor.WaitForIdle();
-            }
-
-            Editor.Typeset();
-        }
-
-        private void UndoCommand_OnExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
-        {
-            if (!Editor.IsIdle())
-            {
-                Editor.WaitForIdle();
-            }
-
-            Editor.Undo();
-        }
+        #endregion
     }
 }

@@ -33,6 +33,69 @@ namespace MyScript.InteractiveInk.UI.Extensions
         }
     }
 
+    public static partial class EditorExtensions
+    {
+        public static void WaitForIdleAndClear(this Editor source)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Clear();
+        }
+
+        public static void WaitForIdleAndRedo(this Editor source)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Redo();
+        }
+
+        public static void WaitForIdleAndTypeset(this Editor source, [CanBeNull] ContentBlock block = null)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Typeset(block);
+        }
+
+        public static void WaitForIdleAndTypeset(this Editor source, float x, float y)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Typeset(x, y);
+        }
+
+        public static void WaitForIdleAndTypeset(this Editor source, Point position)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Typeset(position);
+        }
+
+        public static void WaitForIdleAndUndo(this Editor source)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Undo();
+        }
+    }
+
     /// <summary>
     ///     Sends pointer events.
     ///     Please be careful with the timestamp: the editor accepts the pointer timestamp in milliseconds, whereas the UWP
@@ -47,7 +110,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
     {
         public static void PointerCancel(this Editor source, PointerPoint point)
         {
-            Debug.WriteLine($"---------- {typeof(EditorExtensions).Name}.{nameof(PointerCancel)} ----------");
+            Debug.WriteLine($"---------- {nameof(EditorExtensions)}.{nameof(PointerCancel)} ----------");
             Debug.WriteLine($"{nameof(point)}: ({nameof(point.PointerId)}={point.PointerId};" +
                             $"{nameof(point.Position)}={point.Position};" +
                             $"{nameof(point.Timestamp)}={point.Timestamp.FromMicrosecondsToMilliseconds()})");
@@ -56,7 +119,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
 
         public static void PointerDown(this Editor source, PointerPoint point)
         {
-            Debug.WriteLine($"---------- {typeof(EditorExtensions).Name}.{nameof(PointerDown)} ----------");
+            Debug.WriteLine($"---------- {nameof(EditorExtensions)}.{nameof(PointerDown)} ----------");
             Debug.WriteLine($"{nameof(point)}: ({nameof(point.PointerId)}={point.PointerId};" +
                             $"{nameof(point.Position)}={point.Position};" +
                             $"{nameof(point.Timestamp)}={point.Timestamp.FromMicrosecondsToMilliseconds()})");
@@ -72,7 +135,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
                 return;
             }
 
-            Debug.WriteLine($"---------- {typeof(EditorExtensions).Name}.{nameof(PointerMove)} ----------");
+            Debug.WriteLine($"---------- {nameof(EditorExtensions)}.{nameof(PointerMove)} ----------");
             Debug.WriteLine($"{nameof(point)}: ({nameof(point.PointerId)}={point.PointerId};" +
                             $"{nameof(point.Position)}={point.Position};" +
                             $"{nameof(point.Timestamp)}={point.Timestamp.FromMicrosecondsToMilliseconds()})");
@@ -83,7 +146,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
 
         public static void PointerUp(this Editor source, PointerPoint point)
         {
-            Debug.WriteLine($"---------- {typeof(EditorExtensions).Name}.{nameof(PointerUp)} ----------");
+            Debug.WriteLine($"---------- {nameof(EditorExtensions)}.{nameof(PointerUp)} ----------");
             Debug.WriteLine($"{nameof(point)}: ({nameof(point.PointerId)}={point.PointerId};" +
                             $"{nameof(point.Position)}={point.Position};" +
                             $"{nameof(point.Timestamp)}={point.Timestamp.FromMicrosecondsToMilliseconds()})");

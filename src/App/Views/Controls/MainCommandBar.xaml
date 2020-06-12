@@ -9,50 +9,24 @@
     d:DesignWidth="320"
     Background="Transparent"
     DefaultLabelPosition="Right">
-    <CommandBar.Resources>
-        <StandardUICommand x:Name="ClearAllCommand"
-                           x:Uid="ClearAllCommand"
-                           Kind="Delete"
-                           ExecuteRequested="ClearAllCommand_OnExecuteRequested">
-            <StandardUICommand.IconSource>
-                <SymbolIconSource Symbol="Delete" />
-            </StandardUICommand.IconSource>
-        </StandardUICommand>
-        <StandardUICommand x:Name="RedoCommand"
-                           x:Uid="RedoCommand"
-                           Kind="Redo"
-                           ExecuteRequested="RedoCommand_OnExecuteRequested">
-            <StandardUICommand.IconSource>
-                <SymbolIconSource Symbol="Redo" />
-            </StandardUICommand.IconSource>
-        </StandardUICommand>
-        <StandardUICommand x:Name="UndoCommand"
-                           x:Uid="UndoCommand"
-                           Kind="Undo"
-                           ExecuteRequested="UndoCommand_OnExecuteRequested">
-            <StandardUICommand.IconSource>
-                <SymbolIconSource Symbol="Undo" />
-            </StandardUICommand.IconSource>
-        </StandardUICommand>
-        <XamlUICommand x:Name="TypesetCommand"
-                       x:Uid="TypesetCommand"
-                       ExecuteRequested="TypesetCommand_OnExecuteRequested">
-            <XamlUICommand.IconSource>
-                <FontIconSource Glyph="{StaticResource FontIconLightBulb}" />
-            </XamlUICommand.IconSource>
-        </XamlUICommand>
-    </CommandBar.Resources>
-    <AppBarButton x:Uid="UndoButton"
+    <AppBarButton x:Uid="UndoCommand"
                   Command="{x:Bind UndoCommand}"
+                  Icon="Undo"
                   IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
-    <AppBarButton x:Uid="RedoButton"
+    <AppBarButton x:Uid="RedoCommand"
                   Command="{x:Bind RedoCommand}"
+                  Icon="Redo"
                   IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
-    <AppBarButton x:Uid="TypesetButton"
-                  Command="{x:Bind TypesetCommand}" />
+    <AppBarButton x:Uid="TypesetCommand"
+                  Command="{x:Bind TypesetCommand}">
+        <AppBarButton.Icon>
+            <FontIcon Glyph="{StaticResource FontIconLightBulb}" />
+        </AppBarButton.Icon>
+    </AppBarButton>
     <CommandBar.SecondaryCommands>
-        <AppBarButton x:Uid="ClearAllButton"
-                      Command="{StaticResource ClearAllCommand}" />
+        <AppBarButton x:Uid="ClearAllCommand"
+                      Command="{x:Bind ClearAllCommand}"
+                      Icon="Delete" />
     </CommandBar.SecondaryCommands>
     <CommandBar.Content>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}"
