@@ -6,7 +6,11 @@ namespace MyScript.InteractiveInk.UI.Services
 {
     public static class DisplayInformationService
     {
-        public static Vector2 GetDpi2()
+        private static Vector2? _dpi2;
+        public static float Dpi => _dpi2.HasValue ? (_dpi2.Value.X + _dpi2.Value.Y) / 2.0f : 96;
+        public static Vector2 Dpi2 => _dpi2 ??= GetDpi();
+
+        private static Vector2 GetDpi()
         {
             var info = DisplayInformation.GetForCurrentView();
             var (dpiX, dpiY, scale) = (info.RawDpiX, info.RawDpiY, (float)info.RawPixelsPerViewPixel);
@@ -28,12 +32,6 @@ namespace MyScript.InteractiveInk.UI.Services
             }
 
             return new Vector2(dpiX, dpiY);
-        }
-
-        public static float GetDpi()
-        {
-            var dpi = GetDpi2();
-            return (dpi.X + dpi.Y) / 2;
         }
     }
 }

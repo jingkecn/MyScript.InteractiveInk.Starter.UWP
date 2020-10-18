@@ -7,7 +7,7 @@
         <ResourceBaseName>myscript-iink-recognition</ResourceBaseName>
         <ResourceBaseURL>https://s3-us-west-2.amazonaws.com/iink/assets</ResourceBaseURL>
         <ResourceFileExtension>zip</ResourceFileExtension>
-        <ResourceVersion>1.3.0</ResourceVersion>
+        <ResourceVersion>1.4.0</ResourceVersion>
     </PropertyGroup>
     <PropertyGroup>
         <ResourceVersionUrl>$(ResourceBaseURL)/$(ResourceVersion)</ResourceVersionUrl>
@@ -20,7 +20,7 @@
         <ResourceRawContent>$(ResourceBaseName)-raw-content.$(ResourceFileExtension)</ResourceRawContent>
         <ResourceTextEnUs>$(ResourceBaseName)-text-en_US.$(ResourceFileExtension)</ResourceTextEnUs>
     </PropertyGroup>
-    <Target Name="Download">
+    <Target Name="Download" Condition="!Exists('$(ResourceTemporaryFolder)')">
         <!-- See: https://docs.microsoft.com/en-us/visualstudio/msbuild/downloadfile-task -->
         <DownloadFile DestinationFolder="$(ResourceTemporaryFolder)" SourceUrl="$(ResourceVersionUrl)/$(ResourceDiagram)" />
         <DownloadFile DestinationFolder="$(ResourceTemporaryFolder)" SourceUrl="$(ResourceVersionUrl)/$(ResourceMath)" />
@@ -41,9 +41,5 @@
         <!-- See: https://docs.microsoft.com/en-us/visualstudio/msbuild/move-task -->
         <Move DestinationFiles="@(ToMoveItems->'$(ResourceDestinationFolder)/%(RecursiveDir)%(Filename)%(Extension)')" SourceFiles="@(ToMoveItems)" />
     </Target>
-    <Target Name="Delete" DependsOnTargets="Move">
-        <!-- See: https://docs.microsoft.com/en-us/visualstudio/msbuild/removedir-task -->
-        <RemoveDir Directories="$(ResourceTemporaryFolder)" />
-    </Target>
-    <Target Name="BeforeBuild" DependsOnTargets="Delete" />
+    <Target Name="BeforeBuild" DependsOnTargets="Move" />
 </Project>

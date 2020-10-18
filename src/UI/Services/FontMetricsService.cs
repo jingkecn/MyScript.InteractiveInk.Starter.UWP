@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Text;
-using Microsoft.Toolkit.Helpers;
 using MyScript.IInk.Graphics;
 using MyScript.IInk.Text;
 using MyScript.InteractiveInk.UI.Extensions;
@@ -12,7 +10,8 @@ namespace MyScript.InteractiveInk.UI.Services
 {
     public partial class FontMetricsService
     {
-        private static Vector2 Dpi => DisplayInformationService.GetDpi2();
+        public static FontMetricsService Instance { get; } = new FontMetricsService();
+        private static float Dpi => DisplayInformationService.Dpi;
     }
 
     // ReSharper disable once RedundantExtendsListEntry
@@ -60,44 +59,40 @@ namespace MyScript.InteractiveInk.UI.Services
 
             // Create a virtual text layout for all glyphs.
             var device = CanvasDevice.GetSharedDevice();
-            using (var labelLayout = new CanvasTextLayout(device, text.Label, Singleton<CanvasTextFormat>.Instance,
-                VirtualSize, VirtualSize))
+            using var labelLayout =
+                new CanvasTextLayout(device, text.Label, new CanvasTextFormat(), VirtualSize, VirtualSize);
+            // For each span, apply span style to the text layout.
+            foreach (var span in spans)
             {
-                // For each span, apply span style to the text layout.
-                foreach (var span in spans)
-                {
-                    var index = span.BeginPosition;
-                    var count = span.EndPosition - span.BeginPosition;
-                    var format = span.Style.ToCanvasTextFormat(Dpi.Y);
-                    labelLayout.SetTextFormat(index, count, format);
-                }
+                var index = span.BeginPosition;
+                var count = span.EndPosition - span.BeginPosition;
+                var format = span.Style.ToCanvasTextFormat(Dpi);
+                labelLayout.SetTextFormat(index, count, format);
+            }
 
-                // For each glyph, calculate its metrics.
-                for (var index = 0; index < text.GlyphCount; index++)
-                {
-                    // Create a virtual text layout for the single glyph.
-                    var glyph = text.GetGlyphLabelAt(index);
-                    var format = labelLayout.GetTextFormat(index);
-                    using (var glyphLayout = new CanvasTextLayout(device, glyph, format, VirtualSize, VirtualSize))
-                    {
-                        // TODO: explain why we choose draw bounds over layout bounds.
-                        // See: https://microsoft.github.io/Win2D/html/P_Microsoft_Graphics_Canvas_Text_CanvasTextLayout_DrawBounds.htm
-                        var drawBounds = glyphLayout.DrawBounds;
-                        // Calculate horizontal spacing (for horizontal side bearing).
-                        var leftSpacing = drawBounds.Left;
-                        var caret = glyphLayout.GetCaretPosition(0, false);
-                        var rightSpacing = drawBounds.Right - caret.X;
-                        // Translation
-                        var position = labelLayout.GetCaretPosition(index, false);
-                        drawBounds.X += position.X;
-                        drawBounds.Y -= glyphLayout.LineMetrics.First().Baseline;
-                        // Add metrics into the metrics collection.
-                        var boundingBox = drawBounds.FromPixelToMillimeter(Dpi).ToNativeRect();
-                        var leftSideBearing = -leftSpacing.FromPixelToMillimeter(Dpi.X);
-                        var rightSideBearing = -rightSpacing.FromPixelToMillimeter(Dpi.X);
-                        metrics.Add(new GlyphMetrics(boundingBox, leftSideBearing, rightSideBearing));
-                    }
-                }
+            // For each glyph, calculate its metrics.
+            for (var index = 0; index < text.GlyphCount; index++)
+            {
+                // Create a virtual text layout for the single glyph.
+                var glyph = text.GetGlyphLabelAt(index);
+                var format = labelLayout.GetTextFormat(index);
+                using var glyphLayout = new CanvasTextLayout(device, glyph, format, VirtualSize, VirtualSize);
+                // TODO: explain why we choose draw bounds over layout bounds.
+                // See: https://microsoft.github.io/Win2D/html/P_Microsoft_Graphics_Canvas_Text_CanvasTextLayout_DrawBounds.htm
+                var drawBounds = glyphLayout.DrawBounds;
+                // Calculate horizontal spacing (for horizontal side bearing).
+                var leftSpacing = drawBounds.Left;
+                var caret = glyphLayout.GetCaretPosition(0, false);
+                var rightSpacing = drawBounds.Right - caret.X;
+                // Translation
+                var position = labelLayout.GetCaretPosition(index, false);
+                drawBounds.X += position.X;
+                drawBounds.Y -= glyphLayout.LineMetrics.First().Baseline;
+                // Add metrics into the metrics collection.
+                var boundingBox = drawBounds.FromPixelToMillimeter(Dpi).ToNative();
+                var leftSideBearing = -leftSpacing.FromPixelToMillimeter(Dpi);
+                var rightSideBearing = -rightSpacing.FromPixelToMillimeter(Dpi);
+                metrics.Add(new GlyphMetrics(boundingBox, leftSideBearing, rightSideBearing));
             }
 
 

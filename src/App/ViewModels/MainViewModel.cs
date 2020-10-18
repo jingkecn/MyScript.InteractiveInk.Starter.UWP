@@ -1,11 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Numerics;
 using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
-using Microsoft.Toolkit.Helpers;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
 using MyScript.InteractiveInk.Common.ViewModels;
@@ -40,7 +40,7 @@ namespace MyScript.InteractiveInk.ViewModels
 
     public sealed partial class MainViewModel : IDisposable
     {
-        private static Vector2 Dpi => DisplayInformationService.GetDpi2();
+        private static Vector2 Dpi => DisplayInformationService.Dpi2;
 
         public void Dispose()
         {
@@ -59,14 +59,15 @@ namespace MyScript.InteractiveInk.ViewModels
 
         public void Initialize([NotNull] Editor editor)
         {
-            editor.SetFontMetricsProvider(Singleton<FontMetricsService>.Instance);
+            editor.SetFontMetricsProvider(FontMetricsService.Instance);
             var path = Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{Path.GetRandomFileName()}.iink");
             editor.Part = editor.Engine.CreatePackage(path).CreatePart("Text Document");
             editor.AddListener(this);
         }
     }
 
-    // ReSharper disable once RedundantExtendsListEntry
+
+    [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
     public sealed partial class MainViewModel : IEditorListener
     {
         private CoreDispatcher Dispatcher { get; set; }

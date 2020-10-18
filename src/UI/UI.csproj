@@ -120,14 +120,15 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Extensions\CanvasTextLayoutExtensions.cs" />
-    <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Commands\Canvas.cs" />
+    <Compile Include="Commands\Path.cs" />
     <Compile Include="Extensions\EditorExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PrimitiveExtensions.cs" />
-    <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="Extensions\RendererExtensions.cs" />
+    <Compile Include="Extensions\ShapeExtensions.cs" />
+    <Compile Include="Extensions\StructExtensions.cs" />
     <Compile Include="Extensions\StyleExtensions.cs" />
-    <Compile Include="Extensions\TransformExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DisplayInformationService.cs" />
     <Compile Include="Services\FontMetricsService.cs" />
@@ -141,13 +142,13 @@
       <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>6.0.0</Version>
+      <Version>6.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.4.2</Version>
+      <Version>2.4.3</Version>
     </PackageReference>
     <PackageReference Include="MyScript.InteractiveInk.Uwp">
-      <Version>1.3.1</Version>
+      <Version>1.4.1</Version>
     </PackageReference>
     <PackageReference Include="Win2D.uwp">
       <Version>1.25.0</Version>

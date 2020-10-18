@@ -19,7 +19,7 @@ namespace MyScript.InteractiveInk
     {
         private Engine _engine;
 
-        public Engine Engine => _engine ?? (_engine = OnCreateEngine((byte[])(Array)MyCertificate.Bytes));
+        public Engine Engine => _engine ??= OnCreateEngine((byte[])(Array)MyCertificate.Bytes);
 
         private static Engine OnCreateEngine(byte[] certificate)
         {
