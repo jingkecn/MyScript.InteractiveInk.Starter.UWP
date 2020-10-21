@@ -16,14 +16,15 @@ using MyScript.InteractiveInk.UI.Extensions;
 
 namespace MyScript.InteractiveInk.UI.Xaml.Controls
 {
-    /// <summary>
-    ///     <inheritdoc cref="IRenderTarget" />
-    /// </summary>
     public sealed partial class InteractiveInkCanvas
     {
         public static readonly DependencyProperty EditorProperty =
             DependencyProperty.Register("Editor", typeof(Editor), typeof(InteractiveInkCanvas),
                 new PropertyMetadata(default(Editor)));
+
+        public static readonly DependencyProperty PredominantInputProperty =
+            DependencyProperty.Register("PredominantInput", typeof(PointerType), typeof(InteractiveInkCanvas),
+                new PropertyMetadata(default(PointerType)));
 
         public InteractiveInkCanvas()
         {
@@ -41,172 +42,25 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
         }
 
         /// <summary>
+        ///     <inheritdoc cref="PointerType" />
+        /// </summary>
+        public PointerType PredominantInput
+        {
+            get => (PointerType)GetValue(PredominantInputProperty);
+            set => SetValue(PredominantInputProperty, value);
+        }
+
+        /// <summary>
         ///     <inheritdoc cref="Renderer" />
         /// </summary>
         [CanBeNull]
         public Renderer Renderer => Editor?.Renderer;
     }
 
-    /// <summary>Handles gestures.</summary>
-    public sealed partial class InteractiveInkCanvas
-    {
-        private void OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
-        {
-            if (!(sender is UIElement element))
-            {
-                return;
-            }
-
-            var position = e.GetPosition(element);
-            Editor?.Typeset(position);
-        }
-    }
-
-    /// <summary>Handles manipulations.</summary>
-    public sealed partial class InteractiveInkCanvas
-    {
-        private const GestureSettings DefaultSettings =
-            GestureSettings.ManipulationTranslateInertia |
-            GestureSettings.ManipulationTranslateY;
-
-        private GestureRecognizer _gestureRecognizer;
-
-        private GestureRecognizer GestureRecognizer =>
-            _gestureRecognizer ??= new GestureRecognizer {GestureSettings = DefaultSettings};
-
-        private void OnManipulationUpdated(GestureRecognizer sender, ManipulationUpdatedEventArgs args)
-        {
-            if (args.PointerDeviceType == PointerDeviceType.Pen)
-            {
-                return;
-            }
-
-            Debug.WriteLine($"{nameof(InteractiveInkCanvas)}.{nameof(OnManipulationUpdated)}");
-            Renderer?.ChangeViewAt(args.Position.ToNative(), args.Delta.Translation.ToNative(), args.Delta.Scale, this,
-                offset => Editor?.ClampViewOffset(offset));
-        }
-    }
-
-    /// <summary>Handles pointer events.</summary>
-    public sealed partial class InteractiveInkCanvas
-    {
-        private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            if (!(sender is UIElement element))
-            {
-                return;
-            }
-
-            element.CapturePointer(e.Pointer);
-            var point = e.GetCurrentPoint(element);
-            GestureRecognizer.ProcessDownEvent(point);
-            Editor?.PointerDown(point);
-            e.Handled = true;
-        }
-
-        private void OnPointerMoved(object sender, PointerRoutedEventArgs e)
-        {
-            if (!(sender is UIElement element))
-            {
-                return;
-            }
-
-            var point = e.GetCurrentPoint(element);
-            var points = e.GetIntermediatePoints(element);
-            GestureRecognizer.ProcessMoveEvents(points);
-            Editor?.PointerMove(point);
-            e.Handled = true;
-        }
-
-        private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            if (!(sender is UIElement element))
-            {
-                return;
-            }
-
-            var point = e.GetCurrentPoint(element);
-            GestureRecognizer.ProcessUpEvent(point);
-            Editor?.PointerUp(point);
-            element.ReleasePointerCapture(e.Pointer);
-            e.Handled = true;
-        }
-
-        private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
-        {
-            if (!(sender is UIElement element))
-            {
-                return;
-            }
-
-            GestureRecognizer.CompleteGesture();
-            var point = e.GetCurrentPoint(element);
-            Editor?.PointerCancel(point);
-            element.ReleasePointerCapture(e.Pointer);
-            e.Handled = true;
-        }
-    }
-
-    /// <summary>Handles regional invalidation events.</summary>
-    public sealed partial class InteractiveInkCanvas
-    {
-        private void OnRegionsInvalidated(CanvasVirtualControl sender, CanvasRegionsInvalidatedEventArgs args)
-        {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                var layer = sender.Name switch
-                {
-                    "BackgroundLayer" => LayerType.BACKGROUND,
-                    "CaptureLayer" => LayerType.CAPTURE,
-                    "ModelLayer" => LayerType.MODEL,
-                    "TemporaryLayer" => LayerType.TEMPORARY,
-                    _ => LayerType.LayerType_ALL
-                };
-
-                foreach (var region in args.InvalidatedRegions)
-                {
-                    if (region.IsEmpty)
-                    {
-                        continue;
-                    }
-
-                    var clamped = region.Clamp(sender);
-                    using var session = sender.CreateDrawingSession(clamped);
-                    session.Antialiasing = CanvasAntialiasing.Antialiased;
-                    session.TextAntialiasing = CanvasTextAntialiasing.Auto;
-                    using var canvas = new Canvas {DrawingSession = session};
-                    Renderer?.Draw(clamped, layer, canvas);
-                }
-            }).AsTask();
-        }
-    }
-
-    /// <summary>Handles lifecycle events.</summary>
-    public sealed partial class InteractiveInkCanvas
-    {
-        private void OnLoaded(object sender, RoutedEventArgs _)
-        {
-            Editor?.SetViewSize((int)ActualWidth, (int)ActualHeight);
-            GestureRecognizer.ManipulationUpdated += OnManipulationUpdated;
-        }
-
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Editor?.SetViewSize((int)e.NewSize.Width, (int)e.NewSize.Height);
-        }
-
-        private void OnUnloaded(object sender, RoutedEventArgs _)
-        {
-            GestureRecognizer.CompleteGesture();
-            GestureRecognizer.ManipulationUpdated -= OnManipulationUpdated;
-            BackgroundLayer.RemoveFromVisualTree();
-            CaptureLayer.RemoveFromVisualTree();
-            ModelLayer.RemoveFromVisualTree();
-            TemporaryLayer.RemoveFromVisualTree();
-        }
-    }
-
-    /// <summary>Implements <see cref="IRenderTarget" />.</summary>
+    /// <summary>
+    ///     Implements <see cref="IRenderTarget" />.
+    ///     <inheritdoc cref="IRenderTarget" />
+    /// </summary>
     public sealed partial class InteractiveInkCanvas : IRenderTarget
     {
         public void Invalidate(Renderer renderer, int x, int y, int width, int height, LayerType layers)
@@ -251,6 +105,175 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
             {
                 TemporaryLayer.Invalidate(region.Clamp(TemporaryLayer));
             }
+        }
+    }
+
+    /// <summary>
+    ///     Handles gestures.
+    /// </summary>
+    public sealed partial class InteractiveInkCanvas
+    {
+        private void OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            if (!(sender is UIElement element) || e.PointerDeviceType == PointerDeviceType.Pen)
+            {
+                return;
+            }
+
+            var position = e.GetPosition(element);
+            Editor?.Typeset(position);
+        }
+    }
+
+    /// <summary>
+    ///     Handles manipulations.
+    /// </summary>
+    public sealed partial class InteractiveInkCanvas
+    {
+        private const GestureSettings DefaultSettings =
+            GestureSettings.ManipulationTranslateInertia |
+            GestureSettings.ManipulationTranslateY;
+
+        private GestureRecognizer _gestureRecognizer;
+
+        private GestureRecognizer GestureRecognizer =>
+            _gestureRecognizer ??= new GestureRecognizer {GestureSettings = DefaultSettings};
+
+        private void OnManipulationUpdated(GestureRecognizer sender, ManipulationUpdatedEventArgs args)
+        {
+            if (args.PointerDeviceType == PointerDeviceType.Pen)
+            {
+                return;
+            }
+
+            Debug.WriteLine($"{nameof(InteractiveInkCanvas)}.{nameof(OnManipulationUpdated)}");
+            Renderer?.ChangeViewAt(args.Position.ToNative(), args.Delta.Translation.ToNative(), args.Delta.Scale, this,
+                offset => Editor?.ClampViewOffset(offset));
+        }
+    }
+
+    /// <summary>
+    ///     Handles pointer events.
+    /// </summary>
+    public sealed partial class InteractiveInkCanvas
+    {
+        private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (!(sender is UIElement element))
+            {
+                return;
+            }
+
+            element.CapturePointer(e.Pointer);
+            var point = e.GetCurrentPoint(element);
+            GestureRecognizer.ProcessDownEvent(point);
+            Editor?.PointerDown(point, PredominantInput);
+            e.Handled = true;
+        }
+
+        private void OnPointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            if (!(sender is UIElement element))
+            {
+                return;
+            }
+
+            var point = e.GetCurrentPoint(element);
+            var points = e.GetIntermediatePoints(element);
+            GestureRecognizer.ProcessMoveEvents(points);
+            Editor?.PointerMove(point, PredominantInput);
+            e.Handled = true;
+        }
+
+        private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            if (!(sender is UIElement element))
+            {
+                return;
+            }
+
+            var point = e.GetCurrentPoint(element);
+            GestureRecognizer.ProcessUpEvent(point);
+            Editor?.PointerUp(point, PredominantInput);
+            element.ReleasePointerCapture(e.Pointer);
+            e.Handled = true;
+        }
+
+        private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
+        {
+            if (!(sender is UIElement element))
+            {
+                return;
+            }
+
+            GestureRecognizer.CompleteGesture();
+            var point = e.GetCurrentPoint(element);
+            Editor?.PointerCancel(point);
+            element.ReleasePointerCapture(e.Pointer);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    ///     Handles regional invalidation events.
+    /// </summary>
+    public sealed partial class InteractiveInkCanvas
+    {
+        private void OnRegionsInvalidated(CanvasVirtualControl sender, CanvasRegionsInvalidatedEventArgs args)
+        {
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var layer = sender.Name switch
+                {
+                    "BackgroundLayer" => LayerType.BACKGROUND,
+                    "CaptureLayer" => LayerType.CAPTURE,
+                    "ModelLayer" => LayerType.MODEL,
+                    "TemporaryLayer" => LayerType.TEMPORARY,
+                    _ => LayerType.LayerType_ALL
+                };
+
+                foreach (var region in args.InvalidatedRegions)
+                {
+                    if (region.IsEmpty)
+                    {
+                        continue;
+                    }
+
+                    var clamped = region.Clamp(sender);
+                    using var session = sender.CreateDrawingSession(clamped);
+                    session.Antialiasing = CanvasAntialiasing.Antialiased;
+                    session.TextAntialiasing = CanvasTextAntialiasing.Auto;
+                    using var canvas = new Canvas {DrawingSession = session};
+                    Renderer?.Draw(clamped, layer, canvas);
+                }
+            }).AsTask();
+        }
+    }
+
+    /// <summary>
+    ///     Handles lifecycle events.
+    /// </summary>
+    public sealed partial class InteractiveInkCanvas
+    {
+        private void OnLoaded(object sender, RoutedEventArgs _)
+        {
+            Editor?.SetViewSize((int)ActualWidth, (int)ActualHeight);
+            GestureRecognizer.ManipulationUpdated += OnManipulationUpdated;
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Editor?.SetViewSize((int)e.NewSize.Width, (int)e.NewSize.Height);
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs _)
+        {
+            GestureRecognizer.CompleteGesture();
+            GestureRecognizer.ManipulationUpdated -= OnManipulationUpdated;
+            BackgroundLayer.RemoveFromVisualTree();
+            CaptureLayer.RemoveFromVisualTree();
+            ModelLayer.RemoveFromVisualTree();
+            TemporaryLayer.RemoveFromVisualTree();
         }
     }
 }

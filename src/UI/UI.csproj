@@ -135,6 +135,9 @@
     <Compile Include="Xaml\Controls\InteractiveInkCanvas.xaml.cs">
       <DependentUpon>InteractiveInkCanvas.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Xaml\Controls\InteractiveInkToolbar.xaml.cs">
+      <DependentUpon>InteractiveInkToolbar.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\UI.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +181,10 @@
     <Page Include="Xaml\Controls\InteractiveInkCanvas.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Xaml\Controls\InteractiveInkToolbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

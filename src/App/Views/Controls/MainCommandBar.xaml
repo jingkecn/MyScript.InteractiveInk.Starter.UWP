@@ -23,11 +23,6 @@
             <FontIcon Glyph="{StaticResource FontIconLightBulb}" />
         </AppBarButton.Icon>
     </AppBarButton>
-    <CommandBar.SecondaryCommands>
-        <AppBarButton x:Uid="ClearAllCommand"
-                      Command="{x:Bind ClearAllCommand}"
-                      Icon="Delete" />
-    </CommandBar.SecondaryCommands>
     <CommandBar.Content>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}"
                    Text="Main" />

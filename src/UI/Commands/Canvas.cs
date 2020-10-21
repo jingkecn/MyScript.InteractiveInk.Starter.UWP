@@ -15,26 +15,15 @@ using Color = Windows.UI.Color;
 
 namespace MyScript.InteractiveInk.UI.Commands
 {
-    /// <summary>
-    ///     Implements <see cref="ICanvas" />.
-    ///     <inheritdoc cref="ICanvas" />.
-    /// </summary>
     public sealed partial class Canvas
     {
         public CanvasDrawingSession DrawingSession { get; set; }
     }
 
-    public sealed partial class Canvas : IDisposable
-    {
-        public void Dispose()
-        {
-            DrawingSession?.Flush();
-            ActiveLayer?.Dispose();
-            DrawingSession?.Dispose();
-            DrawingSession = null;
-        }
-    }
-
+    /// <summary>
+    ///     Implements <see cref="ICanvas" />.
+    ///     <inheritdoc cref="ICanvas" />
+    /// </summary>
     [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
     public sealed partial class Canvas : ICanvas
     {
@@ -221,5 +210,20 @@ namespace MyScript.InteractiveInk.UI.Commands
         }
 
         #endregion
+    }
+
+    /// <summary>
+    ///     Implements <see cref="IDisposable" />.
+    ///     <inheritdoc cref="IDisposable" />
+    /// </summary>
+    public sealed partial class Canvas : IDisposable
+    {
+        public void Dispose()
+        {
+            DrawingSession?.Flush();
+            ActiveLayer?.Dispose();
+            DrawingSession?.Dispose();
+            DrawingSession = null;
+        }
     }
 }

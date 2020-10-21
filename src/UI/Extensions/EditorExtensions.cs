@@ -39,7 +39,9 @@ namespace MyScript.InteractiveInk.UI.Extensions
         /// </summary>
         /// <param name="source">The source <see cref="Editor" />.</param>
         /// <param name="point">The <see cref="PointerPoint" />.</param>
-        public static void PointerDown([NotNull] this Editor source, PointerPoint point)
+        /// <param name="predominance">The predominant <see cref="PointerType" />.</param>
+        public static void PointerDown([NotNull] this Editor source, PointerPoint point,
+            [CanBeNull] PointerType? predominance = null)
         {
             if (!point.Properties.IsPrimary)
             {
@@ -50,7 +52,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
             var y = point.Position.Y;
             var timestamp = point.Timestamp.FromMicrosecondsToMilliseconds();
             var pressure = point.Properties.Pressure;
-            var type = point.PointerDevice.PointerDeviceType.ToNative();
+            var type = point.PointerDevice.PointerDeviceType.ToNative(predominance);
             var id = point.PointerId;
             source.PointerDown((float)x, (float)y, (long)timestamp, pressure, type, (int)id);
         }
@@ -60,7 +62,9 @@ namespace MyScript.InteractiveInk.UI.Extensions
         /// </summary>
         /// <param name="source">The source <see cref="Editor" />.</param>
         /// <param name="point">The <see cref="PointerPoint" />.</param>
-        public static void PointerMove([NotNull] this Editor source, PointerPoint point)
+        /// <param name="predominance">The predominant <see cref="PointerType" />.</param>
+        public static void PointerMove([NotNull] this Editor source, PointerPoint point,
+            [CanBeNull] PointerType? predominance = null)
         {
             if (!point.IsInContact || !point.Properties.IsPrimary)
             {
@@ -71,7 +75,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
             var y = point.Position.Y;
             var timestamp = point.Timestamp.FromMicrosecondsToMilliseconds();
             var pressure = point.Properties.Pressure;
-            var type = point.PointerDevice.PointerDeviceType.ToNative();
+            var type = point.PointerDevice.PointerDeviceType.ToNative(predominance);
             var id = point.PointerId;
             source.PointerMove((float)x, (float)y, (long)timestamp, pressure, type, (int)id);
         }
@@ -81,7 +85,9 @@ namespace MyScript.InteractiveInk.UI.Extensions
         /// </summary>
         /// <param name="source">The source <see cref="Editor" />.</param>
         /// <param name="point">The <see cref="PointerPoint" />.</param>
-        public static void PointerUp([NotNull] this Editor source, PointerPoint point)
+        /// <param name="predominance">The predominant <see cref="PointerType" />.</param>
+        public static void PointerUp([NotNull] this Editor source, PointerPoint point,
+            [CanBeNull] PointerType? predominance = null)
         {
             if (!point.Properties.IsPrimary)
             {
@@ -92,7 +98,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
             var y = point.Position.Y;
             var timestamp = point.Timestamp.FromMicrosecondsToMilliseconds();
             var pressure = point.Properties.Pressure;
-            var type = point.PointerDevice.PointerDeviceType.ToNative();
+            var type = point.PointerDevice.PointerDeviceType.ToNative(predominance);
             var id = point.PointerId;
             source.PointerUp((float)x, (float)y, (long)timestamp, pressure, type, (int)id);
         }

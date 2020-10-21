@@ -6,10 +6,6 @@ using MyScript.InteractiveInk.Annotations;
 
 namespace MyScript.InteractiveInk.UI.Commands
 {
-    /// <summary>
-    ///     Implements <see cref="IPath" />.
-    ///     <inheritdoc cref="IPath" />.
-    /// </summary>
     public sealed partial class Path
     {
         [CanBeNull] public CanvasPathBuilder PathBuilder { get; set; }
@@ -40,6 +36,10 @@ namespace MyScript.InteractiveInk.UI.Commands
         private bool IsInitialized { get; set; }
     }
 
+    /// <summary>
+    ///     Implements <see cref="IPath" />.
+    ///     <inheritdoc cref="IPath" />
+    /// </summary>
     public sealed partial class Path : IPath
     {
         public void MoveTo(float x, float y)

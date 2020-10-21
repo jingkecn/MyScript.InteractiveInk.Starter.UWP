@@ -44,6 +44,7 @@ namespace MyScript.InteractiveInk.ViewModels
 
         public void Dispose()
         {
+            Editor.Dispose();
         }
 
         public void Initialize([NotNull] CoreDispatcher dispatcher)
@@ -94,17 +95,6 @@ namespace MyScript.InteractiveInk.ViewModels
         {
             Dispatcher?.RunAsync(CoreDispatcherPriority.Normal,
                 async () => await new MessageDialog(message, blockId).ShowAsync())?.AsTask();
-        }
-    }
-
-    public sealed partial class MainViewModel : IEditorListener2
-    {
-        public void SelectionChanged(Editor editor, string[] blockIds)
-        {
-        }
-
-        public void ActiveBlockChanged(Editor editor, string blockId)
-        {
         }
     }
 }

@@ -11,8 +11,21 @@ namespace MyScript.InteractiveInk.UI.Extensions
     {
         public static Color ToPlatform(this IInk.Graphics.Color source)
         {
-            return Color.FromArgb(Convert.ToByte(source.A), Convert.ToByte(source.R), Convert.ToByte(source.G),
+            return Color.FromArgb(
+                Convert.ToByte(source.A),
+                Convert.ToByte(source.R),
+                Convert.ToByte(source.G),
                 Convert.ToByte(source.B));
+        }
+
+        public static string ToHex(this IInk.Graphics.Color source)
+        {
+            return $"#{source.R:X2}{source.G:X2}{source.B:X2}{source.A:X2}";
+        }
+
+        public static IInk.Graphics.Color ToNative(this Color source)
+        {
+            return new IInk.Graphics.Color(source.R, source.G, source.B, source.A);
         }
     }
 

@@ -21,15 +21,11 @@
                                          DataContext="{x:Bind ViewModel}"
                                          Margin="{StaticResource SmallLeftMargin}"
                                          Visibility="Collapsed" />
-                <InkToolbar HorizontalAlignment="Center"
-                            TargetInkCanvas="{x:Bind InkCanvas}"
-                            VerticalAlignment="Stretch"
-                            Visibility="Collapsed" />
+                <iink:InteractiveInkToolbar HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                                            TargetInkCanvas="{x:Bind InteractiveInkCanvas}" />
             </Grid>
         </winui:HeaderedContentControl.Header>
         <Grid Background="White">
-            <InkCanvas x:Name="InkCanvas"
-                       Visibility="Collapsed" />
             <iink:InteractiveInkCanvas x:Name="InteractiveInkCanvas"
                                        Editor="{x:Bind ViewModel.Editor, Mode=OneWay}" />
         </Grid>
