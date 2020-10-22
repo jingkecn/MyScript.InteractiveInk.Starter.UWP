@@ -3,16 +3,13 @@ MyScript Interactive Ink | `InteractiveInkCanvas`
 
 The `InteractiveInkCanvas` control demonstrates how to implement the rendering commands with MyScript Interactive Ink SDK, using **Win2D** rendering.
 
-1. [Input | Pointer Events](#input--pointer-events)
-2. [Output: The Entry Point | IRenderTarget](#output-the-entry-point--irendertarget)
-3. [Output: Drawing Commands | ICanvas and IPath](#output-drawing-commands--icanvas-and-ipath)
-4. [Disclaimer](#disclaimer)
+- [MyScript Interactive Ink | `InteractiveInkCanvas`](#myscript-interactive-ink--interactiveinkcanvas)
+  - [Input | Pointer Events](#input--pointer-events)
+  - [Output: The Entry Point | `IRenderTarget`](#output-the-entry-point--irendertarget)
+  - [Output: Drawing Commands | `ICanvas` and `IPath`](#output-drawing-commands--icanvas-and-ipath)
+  - [Disclaimer](#disclaimer)
 
-This control basically implements the following interfaces:
-
-- `IRenderTarget`: triggers the rendering commands;
-- `ICanvas`: applies rendering styles from the SDK and implements the platform drawings (shapes & texts);
-- `IPath`: groups and implements the platform path builder.
+This control basically implements `IRenderTarget` to trigger the rendering commands.
 
 Furthermore, this control also contains the layers to compromise the structure of the SDK rendering system:
 
@@ -175,16 +172,16 @@ private void OnRegionsInvalidated(CanvasVirtualControl sender, CanvasRegionsInva
             switch(sender.Name)
             {
                 case "BackgroundLayer":
-                    Editor.Renderer.DrawBackground(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
+                    Editor.Renderer.DrawBackground(x, y, width, height, /* A canvas implementing ICanvas */);
                     break;
                 case "CaptureLayer":
-                    Editor.Renderer.DrawCaptureStrokes(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
+                    Editor.Renderer.DrawCaptureStrokes(x, y, width, height, /* A canvas implementing ICanvas */);
                     break;
                 case "ModelLayer":
-                    Editor.Renderer.DrawModel(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
+                    Editor.Renderer.DrawModel(x, y, width, height, /* A canvas implementing ICanvas */);
                     break;
                 case "TemporaryLayer":
-                    Editor.Renderer.DrawTemporaryItems(x, y, width, height, this /* InteractiveInkCanvas implements ICanvas */);
+                    Editor.Renderer.DrawTemporaryItems(x, y, width, height, /* A canvas implementing ICanvas */);
                     break;
                 default:
                     break;
@@ -206,13 +203,12 @@ A bunch of drawing commands are defined in the interface `ICanvas`:
 - **Rendering**: the `Renderer` tells the `ICanvas` instance to draw shapes (lines, rectangles and paths), text and images;
 - **Groupings**: the `Renderer` tells the `ICanvas` instance to draw a group box if necessary, this is basically supposed for content clipping.
 
-Within the implementation of `ICanvas`, two path drawing commands are required to draw paths using an `IPath` object:
+Within the [implementation](../../Commands/Canvas.cs) of `ICanvas`, two path drawing commands are required to draw paths using an `IPath` object:
 
 ```csharp
 public IPath CreatePath()
 {
-    // Initialization...
-    return this; /* InteractiveInkCanvas implements IPath */
+    // returns an IPath implementator.
 }
 
 public void DrawPath(IPath path)
@@ -222,9 +218,9 @@ public void DrawPath(IPath path)
 }
 ```
 
-So an implementation of an `IPath` is required, and it is quite easy to draw platform paths according to the SDK drawing commands. See the [source code](InteractiveInkCanvas.xaml.cs#L253) for more details.
+So an implementation of an `IPath` is required, and it is quite easy to draw platform paths according to the SDK drawing commands. See the [source code](../../Commands/Path.cs) for more details.
 
-> See [more information](https://developer.myscript.com/docs/interactive-ink/1.3/windows/fundamentals/rendering/) about how MyScript Interactive Ink SDK manages the rendering.
+> See [more information](https://developer.myscript.com/docs/interactive-ink/1.4/windows/fundamentals/rendering/) about how MyScript Interactive Ink SDK manages the rendering.
 
 Disclaimer
 ----------

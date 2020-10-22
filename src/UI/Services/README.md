@@ -1,11 +1,11 @@
 MyScript Interactive Ink | `IFontMetricsProvider`
 =================================================
 
-1. [IFontMetricsProvider | Definitions](#ifontmetricsprovider--definitions)
-2. [IFontMetricsProvider | Solution](#ifontmetricsprovider--solution)
+1. [`IFontMetricsProvider` | Definitions](#ifontmetricsprovider--definitions)
+2. [`IFontMetricsProvider` | Solution](#ifontmetricsprovider--solution)
 3. [Disclaimer](#disclaimer)
 
-According to the SDK [documentations](https://developer.myscript.com/docs/interactive-ink/1.3/windows/fundamentals/conversion/#computing-font-metrics), the computed font metrics for each glyph is required to convert the text content between handwritten strokes and typeset/digital text.
+According to the SDK [documentations](https://developer.myscript.com/docs/interactive-ink/1.4/windows/fundamentals/conversion/#computing-font-metrics), the computed font metrics for each glyph is required to convert the text content between handwritten strokes and typeset/digital text.
 
 `IFontMetricsProvider` | Definitions
 ------------------------------------

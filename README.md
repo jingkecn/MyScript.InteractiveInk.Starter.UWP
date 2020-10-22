@@ -1,7 +1,7 @@
 MyScript Interactive Ink SDK | Starter | UWP
 ============================================
 
-This project demonstrates a simple way to integrate [MyScript Interactive Ink SDK](https://developer.myscript.com/docs/interactive-ink/1.3/overview/about/) into your UWP app.
+This project demonstrates a simple way to integrate [MyScript Interactive Ink SDK](https://developer.myscript.com/docs/interactive-ink/1.4/overview/about/) into your UWP app.
 
 1. [Project Structure](#project-structure)
 2. [Class/Type Structure](#classtype-structure)
@@ -80,7 +80,7 @@ Therefore, the following are the points that you have to implement to integrate 
   - Implement `IRenderTarget`;
   - Implement shape drawing commands `ICanvas` & `IPath`;
 
-> See [more information](https://developer.myscript.com/docs/interactive-ink/1.3/windows/fundamentals/) about MyScript Interactive Ink SDK.
+> See [more information](https://developer.myscript.com/docs/interactive-ink/1.4/windows/fundamentals/) about MyScript Interactive Ink SDK.
 
 Disclaimer
 ----------
