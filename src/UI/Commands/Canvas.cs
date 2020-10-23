@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -28,7 +27,6 @@ namespace MyScript.InteractiveInk.UI.Commands
     public sealed partial class Canvas : ICanvas
     {
         private CanvasActiveLayer ActiveLayer { get; set; }
-        private Dictionary<string, Rect> Layers { get; } = new Dictionary<string, Rect>();
 
         public void StartGroup(string id, float x, float y, float width, float height, bool clipContent)
         {
@@ -37,25 +35,13 @@ namespace MyScript.InteractiveInk.UI.Commands
                 return;
             }
 
-            ActiveLayer?.Dispose();
-            ActiveLayer = DrawingSession?.CreateLayer(1, Layers[id] = new Rect(x, y, width, height));
+            ActiveLayer = DrawingSession?.CreateLayer(1, new Rect(x, y, width, height));
         }
 
         public void EndGroup(string id)
         {
-            if (!Layers.ContainsKey(id))
-            {
-                return;
-            }
-
-            Layers.Remove(id, out var rect);
-            if (rect.Width <= 0 || rect.Height <= 0)
-            {
-                return;
-            }
-
+            DrawingSession?.Flush();
             ActiveLayer?.Dispose();
-            ActiveLayer = DrawingSession?.CreateLayer(1, rect);
         }
 
         public void StartItem(string id)
@@ -79,6 +65,7 @@ namespace MyScript.InteractiveInk.UI.Commands
             {
                 return;
             }
+
 
             DrawingSession?.DrawGeometry(geometry, StrokeColor, StrokeThickness, StrokeStyle);
             DrawingSession?.FillGeometry(geometry, FillColor);
@@ -200,6 +187,45 @@ namespace MyScript.InteractiveInk.UI.Commands
     }
 
     /// <summary>
+    ///     Implements <see cref="ICanvas2" />.
+    ///     <inheritdoc cref="ICanvas2" />
+    /// </summary>
+    public sealed partial class Canvas : ICanvas2
+    {
+        private CanvasActiveLayer DrawingLayer { get; set; }
+
+        public void StartDraw(int x, int y, int width, int height)
+        {
+            var style = new Style();
+            style.SetChangeFlags((uint)StyleFlag.StyleFlag_ALL);
+            style.ApplyTo(this);
+            if (DrawingSession != null)
+            {
+                DrawingSession.Antialiasing = CanvasAntialiasing.Antialiased;
+                DrawingSession.TextAntialiasing = CanvasTextAntialiasing.Auto;
+            }
+
+            DrawingLayer = DrawingSession?.CreateLayer(1, new Rect(x, y, width, height));
+            DrawingSession?.Clear(Colors.Transparent);
+        }
+
+        public void EndDraw()
+        {
+            DrawingSession?.Flush();
+            ActiveLayer?.Dispose();
+            DrawingLayer?.Dispose();
+        }
+
+        public void BlendOffscreen(uint id,
+            float srcX, float srcY, float srcWidth, float srcHeight,
+            float destX, float destY, float destWidth, float destHeight,
+            IInk.Graphics.Color color)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    /// <summary>
     ///     Implements <see cref="IDisposable" />.
     ///     <inheritdoc cref="IDisposable" />
     /// </summary>
@@ -209,8 +235,8 @@ namespace MyScript.InteractiveInk.UI.Commands
         {
             DrawingSession?.Flush();
             ActiveLayer?.Dispose();
+            DrawingLayer?.Dispose();
             DrawingSession?.Dispose();
-            DrawingSession = null;
         }
     }
 }

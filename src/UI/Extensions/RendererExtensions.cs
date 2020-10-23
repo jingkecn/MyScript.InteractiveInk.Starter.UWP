@@ -14,10 +14,6 @@ namespace MyScript.InteractiveInk.UI.Extensions
         {
             var (x, y, width, height) = ((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
 
-            var style = new Style();
-            style.SetChangeFlags((uint)StyleFlag.StyleFlag_ALL);
-            style.ApplyTo(canvas);
-
             if (layers.HasFlag(LayerType.BACKGROUND))
             {
                 source.DrawBackground(x, y, width, height, canvas);

@@ -6,8 +6,6 @@ using Windows.UI.Core;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
-using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
@@ -141,7 +139,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
         private void OnManipulationUpdated(GestureRecognizer sender, ManipulationUpdatedEventArgs args)
         {
-            if (args.PointerDeviceType == PointerDeviceType.Pen)
+            if (args.PointerDeviceType == PointerDeviceType.Pen || !Editor.IsScrollAllowed())
             {
                 return;
             }
@@ -239,8 +237,6 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
                 var clamped = region.Clamp(sender);
                 using var session = sender.CreateDrawingSession(clamped);
-                session.Antialiasing = CanvasAntialiasing.Antialiased;
-                session.TextAntialiasing = CanvasTextAntialiasing.Auto;
                 using var canvas = new Canvas {DrawingSession = session};
                 Renderer?.Draw(clamped, layer, canvas);
             }
