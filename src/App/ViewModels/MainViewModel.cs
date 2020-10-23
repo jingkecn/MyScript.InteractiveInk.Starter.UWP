@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Numerics;
+using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -9,6 +10,7 @@ using Windows.UI.Xaml;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
 using MyScript.InteractiveInk.Common.ViewModels;
+using MyScript.InteractiveInk.UI.Extensions;
 using MyScript.InteractiveInk.UI.Services;
 
 namespace MyScript.InteractiveInk.ViewModels
@@ -40,7 +42,8 @@ namespace MyScript.InteractiveInk.ViewModels
 
     public sealed partial class MainViewModel : IDisposable
     {
-        private static Vector2 Dpi => DisplayInformationService.Dpi2;
+        private static DisplayInformation Display => DisplayInformation.GetForCurrentView();
+        private static Vector2 Dpi => Display.GetDpi();
 
         public void Dispose()
         {
@@ -60,7 +63,7 @@ namespace MyScript.InteractiveInk.ViewModels
 
         public void Initialize([NotNull] Editor editor)
         {
-            editor.SetFontMetricsProvider(FontMetricsService.Instance);
+            editor.SetFontMetricsProvider(new FontMetricsService(Dpi));
             var path = Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{Path.GetRandomFileName()}.iink");
             editor.Part = editor.Engine.CreatePackage(path).CreatePart("Text Document");
             editor.AddListener(this);

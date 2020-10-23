@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Commands\Canvas.cs" />
     <Compile Include="Commands\Path.cs" />
+    <Compile Include="Extensions\DisplayExtensions.cs" />
     <Compile Include="Extensions\EditorExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PrimitiveExtensions.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Extensions\StructExtensions.cs" />
     <Compile Include="Extensions\StyleExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DisplayInformationService.cs" />
     <Compile Include="Services\FontMetricsService.cs" />
     <Compile Include="Xaml\Controls\InteractiveInkCanvas.xaml.cs">
       <DependentUpon>InteractiveInkCanvas.xaml</DependentUpon>

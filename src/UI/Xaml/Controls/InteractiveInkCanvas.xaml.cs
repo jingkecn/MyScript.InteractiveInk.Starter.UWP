@@ -167,7 +167,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
             element.CapturePointer(e.Pointer);
             var point = e.GetCurrentPoint(element);
             GestureRecognizer.ProcessDownEvent(point);
-            Editor?.PointerDown(point, PredominantInput);
+            Editor?.PointerDown(point);
             e.Handled = true;
         }
 
@@ -181,7 +181,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
             var point = e.GetCurrentPoint(element);
             var points = e.GetIntermediatePoints(element);
             GestureRecognizer.ProcessMoveEvents(points);
-            Editor?.PointerMove(point, PredominantInput);
+            Editor?.PointerMove(point);
             e.Handled = true;
         }
 
@@ -194,7 +194,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
             var point = e.GetCurrentPoint(element);
             GestureRecognizer.ProcessUpEvent(point);
-            Editor?.PointerUp(point, PredominantInput);
+            Editor?.PointerUp(point);
             element.ReleasePointerCapture(e.Pointer);
             e.Handled = true;
         }
@@ -221,32 +221,29 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
     {
         private void OnRegionsInvalidated(CanvasVirtualControl sender, CanvasRegionsInvalidatedEventArgs args)
         {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            var layer = sender.Name switch
             {
-                var layer = sender.Name switch
-                {
-                    "BackgroundLayer" => LayerType.BACKGROUND,
-                    "CaptureLayer" => LayerType.CAPTURE,
-                    "ModelLayer" => LayerType.MODEL,
-                    "TemporaryLayer" => LayerType.TEMPORARY,
-                    _ => LayerType.LayerType_ALL
-                };
+                nameof(BackgroundLayer) => LayerType.BACKGROUND,
+                nameof(CaptureLayer) => LayerType.CAPTURE,
+                nameof(ModelLayer) => LayerType.MODEL,
+                nameof(TemporaryLayer) => LayerType.TEMPORARY,
+                _ => LayerType.LayerType_ALL
+            };
 
-                foreach (var region in args.InvalidatedRegions)
+            foreach (var region in args.InvalidatedRegions)
+            {
+                if (region.IsEmpty)
                 {
-                    if (region.IsEmpty)
-                    {
-                        continue;
-                    }
-
-                    var clamped = region.Clamp(sender);
-                    using var session = sender.CreateDrawingSession(clamped);
-                    session.Antialiasing = CanvasAntialiasing.Antialiased;
-                    session.TextAntialiasing = CanvasTextAntialiasing.Auto;
-                    using var canvas = new Canvas {DrawingSession = session};
-                    Renderer?.Draw(clamped, layer, canvas);
+                    continue;
                 }
-            }).AsTask();
+
+                var clamped = region.Clamp(sender);
+                using var session = sender.CreateDrawingSession(clamped);
+                session.Antialiasing = CanvasAntialiasing.Antialiased;
+                session.TextAntialiasing = CanvasTextAntialiasing.Auto;
+                using var canvas = new Canvas {DrawingSession = session};
+                Renderer?.Draw(clamped, layer, canvas);
+            }
         }
     }
 

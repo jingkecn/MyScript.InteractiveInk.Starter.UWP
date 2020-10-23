@@ -128,7 +128,7 @@ namespace MyScript.InteractiveInk.UI.Commands
         #region Styles
 
         private Color FillColor { get; set; } = Colors.Black;
-        private Color StrokeColor { get; set; } = Colors.Black;
+        private Color StrokeColor { get; set; } = Colors.Transparent;
         private CanvasStrokeStyle StrokeStyle { get; } = new CanvasStrokeStyle();
         private float StrokeThickness { get; set; } = 1;
         private float TextBaseLine { get; set; } = 1;
@@ -146,24 +146,12 @@ namespace MyScript.InteractiveInk.UI.Commands
 
         public void SetStrokeLineCap(LineCap lineCap)
         {
-            StrokeStyle.DashCap = lineCap switch
-            {
-                LineCap.BUTT => StrokeStyle.EndCap = StrokeStyle.StartCap = CanvasCapStyle.Flat,
-                LineCap.ROUND => StrokeStyle.EndCap = StrokeStyle.StartCap = CanvasCapStyle.Round,
-                LineCap.SQUARE => StrokeStyle.EndCap = StrokeStyle.StartCap = CanvasCapStyle.Square,
-                _ => throw new ArgumentOutOfRangeException(nameof(lineCap), lineCap, null)
-            };
+            StrokeStyle.DashCap = StrokeStyle.EndCap = StrokeStyle.StartCap = lineCap.ToPlatform();
         }
 
         public void SetStrokeLineJoin(LineJoin lineJoin)
         {
-            StrokeStyle.LineJoin = lineJoin switch
-            {
-                LineJoin.MITER => CanvasLineJoin.Miter,
-                LineJoin.ROUND => CanvasLineJoin.Round,
-                LineJoin.BEVEL => CanvasLineJoin.Bevel,
-                _ => throw new ArgumentOutOfRangeException(nameof(lineJoin), lineJoin, null)
-            };
+            StrokeStyle.LineJoin = lineJoin.ToPlatform();
         }
 
         public void SetStrokeMiterLimit(float limit)
@@ -188,7 +176,6 @@ namespace MyScript.InteractiveInk.UI.Commands
 
         public void SetFillRule(FillRule rule)
         {
-            //throw new NotImplementedException();
         }
 
         public void SetFontProperties(string family, float lineHeight, float size, string style, string variant,

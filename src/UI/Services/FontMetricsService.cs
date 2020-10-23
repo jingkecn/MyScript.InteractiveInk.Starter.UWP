@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.IInk.Graphics;
@@ -10,8 +11,12 @@ namespace MyScript.InteractiveInk.UI.Services
 {
     public partial class FontMetricsService
     {
-        public static FontMetricsService Instance { get; } = new FontMetricsService();
-        private static float Dpi => DisplayInformationService.Dpi;
+        public FontMetricsService(Vector2 dpi)
+        {
+            Dpi = dpi;
+        }
+
+        private Vector2 Dpi { get; }
     }
 
     // ReSharper disable once RedundantExtendsListEntry
@@ -66,7 +71,7 @@ namespace MyScript.InteractiveInk.UI.Services
             {
                 var index = span.BeginPosition;
                 var count = span.EndPosition - span.BeginPosition;
-                var format = span.Style.ToCanvasTextFormat(Dpi);
+                var format = span.Style.ToCanvasTextFormat(Dpi.Y);
                 labelLayout.SetTextFormat(index, count, format);
             }
 
@@ -90,8 +95,8 @@ namespace MyScript.InteractiveInk.UI.Services
                 drawBounds.Y -= glyphLayout.LineMetrics.First().Baseline;
                 // Add metrics into the metrics collection.
                 var boundingBox = drawBounds.FromPixelToMillimeter(Dpi).ToNative();
-                var leftSideBearing = -leftSpacing.FromPixelToMillimeter(Dpi);
-                var rightSideBearing = -rightSpacing.FromPixelToMillimeter(Dpi);
+                var leftSideBearing = -leftSpacing.FromPixelToMillimeter(Dpi.X);
+                var rightSideBearing = -rightSpacing.FromPixelToMillimeter(Dpi.X);
                 metrics.Add(new GlyphMetrics(boundingBox, leftSideBearing, rightSideBearing));
             }
 
