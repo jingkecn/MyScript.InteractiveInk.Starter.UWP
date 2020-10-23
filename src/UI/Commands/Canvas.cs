@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -9,6 +10,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.IInk.Graphics;
+using MyScript.InteractiveInk.Common.Extensions;
 using MyScript.InteractiveInk.UI.Extensions;
 using Color = Windows.UI.Color;
 
@@ -26,7 +28,7 @@ namespace MyScript.InteractiveInk.UI.Commands
     [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
     public sealed partial class Canvas : ICanvas
     {
-        private CanvasActiveLayer ActiveLayer { get; set; }
+        private Dictionary<string, CanvasActiveLayer> Layers { get; } = new Dictionary<string, CanvasActiveLayer>();
 
         public void StartGroup(string id, float x, float y, float width, float height, bool clipContent)
         {
@@ -35,13 +37,18 @@ namespace MyScript.InteractiveInk.UI.Commands
                 return;
             }
 
-            ActiveLayer = DrawingSession?.CreateLayer(1, new Rect(x, y, width, height));
+            Layers[id] = DrawingSession?.CreateLayer(1, new Rect(x, y, width, height));
         }
 
         public void EndGroup(string id)
         {
-            DrawingSession?.Flush();
-            ActiveLayer?.Dispose();
+            if (!Layers.ContainsKey(id))
+            {
+                return;
+            }
+
+            Layers.Remove(id, out var layer);
+            layer?.Dispose();
         }
 
         public void StartItem(string id)
@@ -89,8 +96,8 @@ namespace MyScript.InteractiveInk.UI.Commands
 
         public void DrawText(string label, float x, float y, float minX, float minY, float maxX, float maxY)
         {
-            DrawingSession?.DrawText(label, Math.Max(minX, Math.Min(x, maxX)),
-                Math.Max(minY, Math.Min(y, maxY)) - TextBaseLine, FillColor, TextFormat);
+            // TODO: don't rely on the max / min values, issue when moving typeset text.
+            DrawingSession?.DrawText(label, x, y - TextBaseLine, FillColor, TextFormat);
         }
 
         public Transform Transform
@@ -179,8 +186,8 @@ namespace MyScript.InteractiveInk.UI.Commands
             TextFormat.FontWeight =
                 weight >= 700 ? FontWeights.Bold : weight < 400 ? FontWeights.Light : FontWeights.Normal;
             using var layout =
-                new CanvasTextLayout(DrawingSession?.Device, "k", TextFormat, float.MaxValue, float.MaxValue);
-            TextBaseLine = layout.LineMetrics.FirstOrDefault().Baseline;
+                new CanvasTextLayout(DrawingSession.Device, "k", TextFormat, float.MaxValue, float.MaxValue);
+            TextBaseLine = layout.LineMetrics.First().Baseline;
         }
 
         #endregion
@@ -212,7 +219,6 @@ namespace MyScript.InteractiveInk.UI.Commands
         public void EndDraw()
         {
             DrawingSession?.Flush();
-            ActiveLayer?.Dispose();
             DrawingLayer?.Dispose();
         }
 
@@ -234,7 +240,8 @@ namespace MyScript.InteractiveInk.UI.Commands
         public void Dispose()
         {
             DrawingSession?.Flush();
-            ActiveLayer?.Dispose();
+            Layers.Values.Dispose();
+            Layers.Clear();
             DrawingLayer?.Dispose();
             DrawingSession?.Dispose();
         }

@@ -236,8 +236,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
                 }
 
                 var clamped = region.Clamp(sender);
-                using var session = sender.CreateDrawingSession(clamped);
-                using var canvas = new Canvas {DrawingSession = session};
+                using var canvas = new Canvas {DrawingSession = sender.CreateDrawingSession(clamped)};
                 Renderer?.Draw(clamped, layer, canvas);
             }
         }

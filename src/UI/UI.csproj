@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Commands\Canvas.cs" />
     <Compile Include="Commands\Path.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DisplayExtensions.cs" />
     <Compile Include="Extensions\EditorExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
