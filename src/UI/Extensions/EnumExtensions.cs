@@ -26,6 +26,19 @@ namespace MyScript.InteractiveInk.UI.Extensions
 
     public static partial class EnumExtensions
     {
+        public static CanvasFilledRegionDetermination ToPlatform(this FillRule source)
+        {
+            return source switch
+            {
+                FillRule.NONZERO => CanvasFilledRegionDetermination.Winding,
+                FillRule.EVENODD => CanvasFilledRegionDetermination.Alternate,
+                _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+            };
+        }
+    }
+
+    public static partial class EnumExtensions
+    {
         public static CanvasCapStyle ToPlatform(this LineCap source)
         {
             return source switch

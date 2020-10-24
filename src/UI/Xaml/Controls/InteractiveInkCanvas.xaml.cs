@@ -61,48 +61,55 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
     /// </summary>
     public sealed partial class InteractiveInkCanvas : IRenderTarget
     {
-        public void Invalidate(Renderer renderer, int x, int y, int width, int height, LayerType layers)
+        public void Invalidate(Renderer renderer, int x, int y, int width, int height,
+            LayerType layers = LayerType.LayerType_ALL)
         {
-            var region = new Rect(x, y, width, height);
-            if (region.IsEmpty)
+            if (width <= 0 || height <= 0)
             {
                 return;
             }
 
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Invalidate(region.Clamp(this), layers)).AsTask();
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () => Invalidate(new Rect(x, y, width, height), layers)).AsTask();
         }
 
-        public void Invalidate(Renderer renderer, LayerType layers)
+        public void Invalidate(Renderer renderer, LayerType layers = LayerType.LayerType_ALL)
         {
             Invalidate(renderer, 0, 0, (int)ActualWidth, (int)ActualHeight, layers);
         }
 
-        private void Invalidate(Rect region, LayerType layers)
+        private void Invalidate(Rect region, LayerType layers = LayerType.LayerType_ALL)
         {
-            if (region.IsEmpty)
-            {
-                return;
-            }
-
             if (layers.HasFlag(LayerType.BACKGROUND))
             {
-                BackgroundLayer.Invalidate(region.Clamp(BackgroundLayer));
+                Invalidate(BackgroundLayer, region);
             }
 
             if (layers.HasFlag(LayerType.CAPTURE))
             {
-                CaptureLayer.Invalidate(region.Clamp(CaptureLayer));
+                Invalidate(CaptureLayer, region);
             }
 
             if (layers.HasFlag(LayerType.MODEL))
             {
-                ModelLayer.Invalidate(region.Clamp(ModelLayer));
+                Invalidate(ModelLayer, region);
             }
 
             if (layers.HasFlag(LayerType.TEMPORARY))
             {
-                TemporaryLayer.Invalidate(region.Clamp(TemporaryLayer));
+                Invalidate(TemporaryLayer, region);
             }
+        }
+
+        private static void Invalidate([NotNull] CanvasVirtualControl target, Rect region)
+        {
+            var clamped = region.Clamp(target);
+            if (!clamped.IsValid())
+            {
+                return;
+            }
+
+            target.Invalidate(clamped);
         }
     }
 
@@ -235,12 +242,12 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
             foreach (var region in args.InvalidatedRegions)
             {
-                if (region.IsEmpty)
+                var clamped = region.Clamp(sender);
+                if (!clamped.IsValid())
                 {
                     continue;
                 }
 
-                var clamped = region.Clamp(sender);
                 using var canvas = new Canvas {DrawingSession = sender.CreateDrawingSession(clamped)};
                 Renderer?.Draw(clamped, layer, canvas);
             }
@@ -261,6 +268,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             Editor?.SetViewSize((int)e.NewSize.Width, (int)e.NewSize.Height);
+            Invalidate(Renderer);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs _)

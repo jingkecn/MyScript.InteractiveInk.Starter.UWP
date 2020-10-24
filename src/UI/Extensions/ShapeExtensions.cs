@@ -13,6 +13,11 @@ namespace MyScript.InteractiveInk.UI.Extensions
             return RectHelper.Intersect(LayoutInformation.GetLayoutSlot(element), source);
         }
 
+        public static bool IsValid(this Rect source)
+        {
+            return !source.IsEmpty && source.Width != 0 && source.Height != 0;
+        }
+
         [NotNull]
         public static Rectangle ToNative(this Rect source)
         {

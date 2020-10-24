@@ -33,7 +33,6 @@ namespace MyScript.InteractiveInk.UI.Commands
         }
 
         private bool IsInFigure { get; set; }
-        private bool IsInitialized { get; set; }
     }
 
     /// <summary>
@@ -44,14 +43,6 @@ namespace MyScript.InteractiveInk.UI.Commands
     {
         public void MoveTo(float x, float y)
         {
-            if (!IsInitialized)
-            {
-                // Properties cannot be set again after beginning the figure.
-                PathBuilder?.SetFilledRegionDetermination(CanvasFilledRegionDetermination.Winding);
-                PathBuilder?.SetSegmentOptions(CanvasFigureSegmentOptions.None);
-                IsInitialized = true;
-            }
-
             if (IsInFigure)
             {
                 PathBuilder?.EndFigure(CanvasFigureLoop.Open);

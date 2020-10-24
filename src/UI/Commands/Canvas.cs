@@ -63,7 +63,15 @@ namespace MyScript.InteractiveInk.UI.Commands
 
         public IPath CreatePath()
         {
-            return new Path {PathBuilder = new CanvasPathBuilder(DrawingSession?.Device)};
+            if (DrawingSession == null)
+            {
+                return null;
+            }
+
+            var builder = new CanvasPathBuilder(DrawingSession.Device);
+            builder.SetFilledRegionDetermination(FillRule);
+            builder.SetSegmentOptions(CanvasFigureSegmentOptions.None);
+            return new Path {PathBuilder = builder};
         }
 
         public void DrawPath(IPath path)
@@ -72,7 +80,6 @@ namespace MyScript.InteractiveInk.UI.Commands
             {
                 return;
             }
-
 
             DrawingSession?.DrawGeometry(geometry, StrokeColor, StrokeThickness, StrokeStyle);
             DrawingSession?.FillGeometry(geometry, FillColor);
@@ -122,6 +129,7 @@ namespace MyScript.InteractiveInk.UI.Commands
         #region Styles
 
         private Color FillColor { get; set; } = Colors.Black;
+        private CanvasFilledRegionDetermination FillRule { get; set; } = CanvasFilledRegionDetermination.Winding;
         private Color StrokeColor { get; set; } = Colors.Transparent;
         private CanvasStrokeStyle StrokeStyle { get; } = new CanvasStrokeStyle();
         private float StrokeThickness { get; set; } = 1;
@@ -170,6 +178,7 @@ namespace MyScript.InteractiveInk.UI.Commands
 
         public void SetFillRule(FillRule rule)
         {
+            FillRule = rule.ToPlatform();
         }
 
         public void SetFontProperties(string family, float lineHeight, float size, string style, string variant,
