@@ -164,8 +164,13 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
             element.CapturePointer(e.Pointer);
             var point = e.GetCurrentPoint(element);
+            if (PredominantInput != PointerType.ERASER)
+            {
+                PredominantInput = point.PointerDevice.PointerDeviceType.ToNative();
+            }
+
             GestureRecognizer.ProcessDownEvent(point);
-            Editor?.PointerDown(point);
+            Editor?.PointerDown(point, PredominantInput);
             e.Handled = true;
         }
 
@@ -179,7 +184,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
             var point = e.GetCurrentPoint(element);
             var points = e.GetIntermediatePoints(element);
             GestureRecognizer.ProcessMoveEvents(points);
-            Editor?.PointerMove(point);
+            Editor?.PointerMove(point, PredominantInput);
             e.Handled = true;
         }
 
@@ -192,7 +197,7 @@ namespace MyScript.InteractiveInk.UI.Xaml.Controls
 
             var point = e.GetCurrentPoint(element);
             GestureRecognizer.ProcessUpEvent(point);
-            Editor?.PointerUp(point);
+            Editor?.PointerUp(point, PredominantInput);
             element.ReleasePointerCapture(e.Pointer);
             e.Handled = true;
         }
