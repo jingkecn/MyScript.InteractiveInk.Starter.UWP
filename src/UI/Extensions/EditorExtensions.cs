@@ -1,10 +1,12 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.UI.Input;
 using MyScript.IInk;
@@ -115,46 +117,115 @@ namespace MyScript.InteractiveInk.UI.Extensions
     /// </summary>
     public static partial class EditorExtensions
     {
+        private const string ParamFileToken = "FileToken";
+
+        #region Open
+
         public static ContentPackage Open([NotNull] this Editor source, [NotNull] string path)
         {
             return source.Engine?.OpenPackage(path, PackageOpenOption.EXISTING);
         }
 
-        public static async Task OpenAsync([NotNull] this Editor source)
+        public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source)
         {
+            // Picks a file from the file picker.
             var picker = new FileOpenPicker {SuggestedStartLocation = PickerLocationId.DocumentsLibrary};
             picker.FileTypeFilter.Add(".iink");
             if (!(await picker.PickSingleFileAsync() is { } file))
             {
-                return;
+                return null;
             }
 
-            var temp = await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name,
+            return await source.OpenAsync(file.Path);
+        }
+
+        [CanBeNull]
+        [SuppressMessage("ReSharper", "MethodHasAsyncOverload")]
+        public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source, [NotNull] string path)
+        {
+            var file = await StorageFile.GetFileFromPathAsync(path);
+            var token = StorageApplicationPermissions.FutureAccessList.Add(file);
+            // Creates a temporary file and open the content package from the temporary file.
+            var temp = await file.CopyAsync(ApplicationData.Current.LocalCacheFolder, file.Name,
                 NameCollisionOption.ReplaceExisting);
             var package = source.Open(temp.Path);
+            // Updates file access token.
+            Debug.WriteLine($"{nameof(Editor)}.{nameof(OpenAsync)}: {token}");
+            package.SetValue(ParamFileToken, token);
+            // Reads the first content part from the content package.
             if (package.PartCount == 0)
+            {
+                return package;
+            }
+
+            source.Part = package.GetPart(0);
+            return package;
+        }
+
+        #endregion
+
+        #region Save
+
+        public static void Save([NotNull] this Editor source, [CanBeNull] string path = null)
+        {
+            try
+            {
+                var package = source.Part?.Package;
+                if (string.IsNullOrEmpty(path))
+                {
+                    package?.Save();
+                    return;
+                }
+
+                package?.SaveAs(path);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
+        }
+
+        public static async Task SaveAsync([NotNull] this Editor source)
+        {
+            if (!(source.Part?.Package is { } package))
             {
                 return;
             }
 
-            source.Part = package.GetPart(0);
+            var token = package.GetValue(ParamFileToken, string.Empty);
+            Debug.WriteLine($"{nameof(Editor)}.{nameof(SaveAsync)}: {token}");
+            if (string.IsNullOrEmpty(token))
+            {
+                await source.SaveAsAsync();
+                return;
+            }
+
+            var file = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(token);
+            await source.SaveAsync(file.Path);
         }
 
-        public static void Save([NotNull] this Editor source)
+        public static async Task SaveAsync([NotNull] this Editor source, [NotNull] string path)
         {
-            source.Part?.Package?.Save();
-        }
+            if (!(source.Part?.Package is { } package))
+            {
+                return;
+            }
 
-        public static void SaveAs([NotNull] this Editor source, [NotNull] string path)
-        {
-            source.Part?.Package?.SaveAs(path);
+            var file = await StorageFile.GetFileFromPathAsync(path);
+            var token = StorageApplicationPermissions.FutureAccessList.Add(file);
+            Debug.WriteLine($"{nameof(Editor)}.{nameof(SaveAsAsync)}: {token}");
+            package.SetValue(ParamFileToken, token);
+            var tempPath = Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, file.Name);
+            source.Save(tempPath);
+            var temp = await StorageFile.GetFileFromPathAsync(tempPath);
+            await temp.CopyAndReplaceAsync(file);
+            await temp.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            await source.OpenAsync(path);
         }
 
         public static async Task SaveAsAsync([NotNull] this Editor source)
         {
-            var temp =
-                await ApplicationData.Current.LocalCacheFolder.CreateFileAsync($"{Path.GetRandomFileName()}.iink");
-            source.SaveAs(temp.Path);
             var picker = new FileSavePicker
             {
                 SuggestedFileName = "New Document", SuggestedStartLocation = PickerLocationId.DocumentsLibrary
@@ -165,10 +236,10 @@ namespace MyScript.InteractiveInk.UI.Extensions
                 return;
             }
 
-            await temp.CopyAndReplaceAsync(file);
-            await temp.DeleteAsync();
-            Debug.Assert(!File.Exists(temp.Path));
+            await source.SaveAsync(file.Path);
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -233,14 +304,14 @@ namespace MyScript.InteractiveInk.UI.Extensions
             source.Redo();
         }
 
-        public static void WaitForIdleAndSave([NotNull] this Editor source)
+        public static async Task WaitForIdleAndSaveAsync([NotNull] this Editor source)
         {
             if (!source.IsIdle())
             {
                 source.WaitForIdle();
             }
 
-            source.Save();
+            await source.SaveAsync();
         }
 
         public static async Task WaitForIdleAndSaveAsAsync([NotNull] this Editor source)
