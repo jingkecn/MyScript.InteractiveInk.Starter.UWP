@@ -28,6 +28,9 @@
                    Text="Main" />
     </CommandBar.Content>
     <CommandBar.SecondaryCommands>
+        <AppBarButton x:Uid="OpenCommand"
+                      Command="{x:Bind OpenCommand}"
+                      Icon="OpenFile" />
         <AppBarButton x:Uid="SaveCommand"
                       Command="{x:Bind SaveCommand}"
                       Icon="Save" />

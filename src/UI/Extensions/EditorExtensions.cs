@@ -115,6 +115,31 @@ namespace MyScript.InteractiveInk.UI.Extensions
     /// </summary>
     public static partial class EditorExtensions
     {
+        public static ContentPackage Open([NotNull] this Editor source, [NotNull] string path)
+        {
+            return source.Engine?.OpenPackage(path, PackageOpenOption.EXISTING);
+        }
+
+        public static async Task OpenAsync([NotNull] this Editor source)
+        {
+            var picker = new FileOpenPicker {SuggestedStartLocation = PickerLocationId.DocumentsLibrary};
+            picker.FileTypeFilter.Add(".iink");
+            if (!(await picker.PickSingleFileAsync() is { } file))
+            {
+                return;
+            }
+
+            var temp = await file.CopyAsync(ApplicationData.Current.LocalFolder, file.Name,
+                NameCollisionOption.ReplaceExisting);
+            var package = source.Open(temp.Path);
+            if (package.PartCount == 0)
+            {
+                return;
+            }
+
+            source.Part = package.GetPart(0);
+        }
+
         public static void Save([NotNull] this Editor source)
         {
             source.Part?.Package?.Save();
@@ -186,6 +211,16 @@ namespace MyScript.InteractiveInk.UI.Extensions
             }
 
             source.Clear();
+        }
+
+        public static async Task WaitForIdleAndOpenAsync([NotNull] this Editor source)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            await source.OpenAsync();
         }
 
         public static void WaitForIdleAndRedo([NotNull] this Editor source)

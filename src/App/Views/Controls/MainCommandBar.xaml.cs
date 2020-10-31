@@ -25,6 +25,10 @@ namespace MyScript.InteractiveInk.Views.Controls
         private ICommand _undoCommand;
         private ICommand _saveCommand;
         private ICommand _saveAsCommand;
+        private ICommand _openCommand;
+
+        private ICommand OpenCommand =>
+            _openCommand ??= new RelayCommand(async _ => await Editor.WaitForIdleAndOpenAsync());
 
         private ICommand RedoCommand => _redoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndRedo());
         private ICommand SaveCommand => _saveCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndSave());
