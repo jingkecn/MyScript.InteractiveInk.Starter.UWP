@@ -105,6 +105,17 @@ namespace MyScript.InteractiveInk.UI.Extensions
     }
 
     /// <summary>
+    ///     Handles file I/O commands.
+    /// </summary>
+    public static partial class EditorExtensions
+    {
+        public static void Save([NotNull] this Editor source)
+        {
+            source.Part?.Package?.Save();
+        }
+    }
+
+    /// <summary>
     ///     Handles typeset commands.
     /// </summary>
     public static partial class EditorExtensions
@@ -154,6 +165,16 @@ namespace MyScript.InteractiveInk.UI.Extensions
             }
 
             source.Redo();
+        }
+
+        public static void WaitForIdleAndSave([NotNull] this Editor source)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            source.Save();
         }
 
         public static void WaitForIdleAndTypeset([NotNull] this Editor source, [CanBeNull] ContentBlock block = null)

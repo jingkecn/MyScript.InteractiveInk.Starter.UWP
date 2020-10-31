@@ -23,8 +23,10 @@ namespace MyScript.InteractiveInk.Views.Controls
         private ICommand _redoCommand;
         private ICommand _typesetCommand;
         private ICommand _undoCommand;
+        private ICommand _saveCommand;
 
         private ICommand RedoCommand => _redoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndRedo());
+        private ICommand SaveCommand => _saveCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndSave());
         private ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndTypeset());
         private ICommand UndoCommand => _undoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndUndo());
 

@@ -27,4 +27,9 @@
         <TextBlock Style="{StaticResource TitleTextBlockStyle}"
                    Text="Main" />
     </CommandBar.Content>
+    <CommandBar.SecondaryCommands>
+        <AppBarButton x:Uid="SaveCommand"
+                      Command="{x:Bind SaveCommand}"
+                      Icon="Save" />
+    </CommandBar.SecondaryCommands>
 </CommandBar>

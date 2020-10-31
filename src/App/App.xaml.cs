@@ -27,8 +27,7 @@ namespace MyScript.InteractiveInk
             var configuration = engine.Configuration;
             configuration.SetStringArray("configuration-manager.search-path",
                 new[] {Path.Combine(Package.Current.InstalledLocation.Path, "Assets", "conf")});
-            configuration.SetString("content-package.temp-folder",
-                Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, "temp"));
+            configuration.SetString("content-package.temp-folder", ApplicationData.Current.LocalCacheFolder.Path);
 #if DEBUG
             configuration.SetBoolean("renderer.debug.draw-arc-outlines", true);
             configuration.SetBoolean("renderer.debug.draw-object-boxes", true);

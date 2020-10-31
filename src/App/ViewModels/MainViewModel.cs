@@ -64,8 +64,9 @@ namespace MyScript.InteractiveInk.ViewModels
         public void Initialize([NotNull] Editor editor)
         {
             editor.SetFontMetricsProvider(new FontMetricsService(Dpi));
-            var path = Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{Path.GetRandomFileName()}.iink");
-            editor.Part = editor.Engine.CreatePackage(path).CreatePart("Text Document");
+            var path = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Document.iink");
+            var package = editor.Engine.OpenPackage(path, PackageOpenOption.CREATE);
+            editor.Part = package.PartCount == 0 ? package.CreatePart("Text Document") : package.GetPart(0);
             editor.AddListener(this);
         }
     }
