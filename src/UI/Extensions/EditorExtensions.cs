@@ -1,5 +1,11 @@
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Input;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
@@ -113,6 +119,31 @@ namespace MyScript.InteractiveInk.UI.Extensions
         {
             source.Part?.Package?.Save();
         }
+
+        public static void SaveAs([NotNull] this Editor source, [NotNull] string path)
+        {
+            source.Part?.Package?.SaveAs(path);
+        }
+
+        public static async Task SaveAsAsync([NotNull] this Editor source)
+        {
+            var temp =
+                await ApplicationData.Current.LocalCacheFolder.CreateFileAsync($"{Path.GetRandomFileName()}.iink");
+            source.SaveAs(temp.Path);
+            var picker = new FileSavePicker
+            {
+                SuggestedFileName = "New Document", SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+            picker.FileTypeChoices.Add("MyScript Interactive Ink", new[] {".iink"});
+            if (!(await picker.PickSaveFileAsync() is { } file))
+            {
+                return;
+            }
+
+            await temp.CopyAndReplaceAsync(file);
+            await temp.DeleteAsync();
+            Debug.Assert(!File.Exists(temp.Path));
+        }
     }
 
     /// <summary>
@@ -175,6 +206,16 @@ namespace MyScript.InteractiveInk.UI.Extensions
             }
 
             source.Save();
+        }
+
+        public static async Task WaitForIdleAndSaveAsAsync([NotNull] this Editor source)
+        {
+            if (!source.IsIdle())
+            {
+                source.WaitForIdle();
+            }
+
+            await source.SaveAsAsync();
         }
 
         public static void WaitForIdleAndTypeset([NotNull] this Editor source, [CanBeNull] ContentBlock block = null)

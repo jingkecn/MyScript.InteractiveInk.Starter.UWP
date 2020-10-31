@@ -129,6 +129,9 @@
   <data name="RedoCommand.Label" xml:space="preserve">
     <value>Redo</value>
   </data>
+  <data name="SaveAsCommand.Label" xml:space="preserve">
+    <value>Save as</value>
+  </data>
   <data name="SaveCommand.Label" xml:space="preserve">
     <value>Save</value>
   </data>

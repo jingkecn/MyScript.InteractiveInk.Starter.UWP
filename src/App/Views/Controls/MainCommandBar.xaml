@@ -31,5 +31,8 @@
         <AppBarButton x:Uid="SaveCommand"
                       Command="{x:Bind SaveCommand}"
                       Icon="Save" />
+        <AppBarButton x:Uid="SaveAsCommand"
+                      Command="{x:Bind SaveAsCommand}"
+                      Icon="Save" />
     </CommandBar.SecondaryCommands>
 </CommandBar>
