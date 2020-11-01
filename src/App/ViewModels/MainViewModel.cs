@@ -15,7 +15,7 @@ using MyScript.InteractiveInk.UI.Services;
 
 namespace MyScript.InteractiveInk.ViewModels
 {
-    public sealed partial class MainViewModel : Observable
+    public sealed partial class MainViewModel : ObservableAsync
     {
         private bool _canRedo;
         private bool _canUndo;
@@ -38,6 +38,13 @@ namespace MyScript.InteractiveInk.ViewModels
             get => _editor;
             set => Set(ref _editor, value, nameof(Editor));
         }
+
+        public override CoreDispatcher Dispatcher { get; set; }
+
+        public void Initialize([NotNull] CoreDispatcher dispatcher)
+        {
+            Dispatcher = dispatcher;
+        }
     }
 
     public sealed partial class MainViewModel : IDisposable
@@ -48,11 +55,6 @@ namespace MyScript.InteractiveInk.ViewModels
         public void Dispose()
         {
             Editor.Dispose();
-        }
-
-        public void Initialize([NotNull] CoreDispatcher dispatcher)
-        {
-            Dispatcher = dispatcher;
         }
 
         public void Initialize([NotNull] IRenderTarget target)
@@ -75,24 +77,16 @@ namespace MyScript.InteractiveInk.ViewModels
     [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
     public sealed partial class MainViewModel : IEditorListener
     {
-        private CoreDispatcher Dispatcher { get; set; }
-
         public void PartChanged(Editor editor)
         {
-            Dispatcher?.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                CanRedo = Editor.CanRedo();
-                CanUndo = Editor.CanUndo();
-            })?.AsTask();
+            CanRedo = Editor.CanRedo();
+            CanUndo = Editor.CanUndo();
         }
 
         public void ContentChanged(Editor editor, string[] blockIds)
         {
-            Dispatcher?.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                CanRedo = Editor.CanRedo();
-                CanUndo = Editor.CanUndo();
-            })?.AsTask();
+            CanRedo = Editor.CanRedo();
+            CanUndo = Editor.CanUndo();
         }
 
         public void OnError(Editor editor, string blockId, string message)
