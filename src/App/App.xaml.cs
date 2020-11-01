@@ -31,7 +31,8 @@ namespace MyScript.InteractiveInk
 #if DEBUG
             configuration.SetBoolean("renderer.debug.draw-arc-outlines", true);
             configuration.SetBoolean("renderer.debug.draw-object-boxes", true);
-            configuration.SetBoolean("renderer.debug.draw-text-boxes", true);
+            // TODO: fix crash when typesetting with text boxes enabled.
+            //configuration.SetBoolean("renderer.debug.draw-text-boxes", true);
 #endif
             return engine;
         }

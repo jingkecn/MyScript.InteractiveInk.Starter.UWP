@@ -189,11 +189,12 @@ namespace MyScript.InteractiveInk.UI.Commands
                 return;
             }
 
-            TextFormat.FontFamily = family;
+            var fontStyle = Enum.TryParse<FontStyle>(style, true, out var result) ? result : FontStyle.Normal;
+            TextFormat.FontFamily = family.ToPlatformFontFamily(fontStyle);
             TextFormat.FontSize = size;
-            TextFormat.FontStyle = Enum.Parse<FontStyle>(style, true);
-            TextFormat.FontWeight =
-                weight >= 700 ? FontWeights.Bold : weight < 400 ? FontWeights.Light : FontWeights.Normal;
+            TextFormat.FontStyle = fontStyle;
+            TextFormat.FontWeight = weight >= 700 ? FontWeights.Bold :
+                weight < 400 ? FontWeights.Light : FontWeights.Normal;
             using var layout =
                 new CanvasTextLayout(DrawingSession.Device, "k", TextFormat, float.MaxValue, float.MaxValue);
             TextBaseLine = layout.LineMetrics.First().Baseline;

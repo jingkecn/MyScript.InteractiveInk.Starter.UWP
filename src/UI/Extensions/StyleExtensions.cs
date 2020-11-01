@@ -57,17 +57,30 @@ namespace MyScript.InteractiveInk.UI.Extensions
         [NotNull]
         public static CanvasTextFormat ToCanvasTextFormat([NotNull] this Style source, float dpi)
         {
+            var style = Enum.TryParse<FontStyle>(source.FontStyle, true, out var result) ? result : FontStyle.Normal;
             return new CanvasTextFormat
             {
-                FontFamily = source.FontFamily,
+                FontFamily = source.FontFamily.ToPlatformFontFamily(style),
                 FontSize = source.FontSize.FromMillimeterToPixel(dpi),
-                FontStyle = Enum.Parse<FontStyle>(source.FontStyle, true),
+                FontStyle = style,
                 FontWeight = source.FontWeight switch
                 {
                     var value when value >= 700 => FontWeights.Bold,
                     var value when value < 400 => FontWeights.Light,
                     _ => FontWeights.Normal
-                }
+                },
+                Options = CanvasDrawTextOptions.EnableColorFont,
+                WordWrapping = CanvasWordWrapping.NoWrap
+            };
+        }
+
+        public static string ToPlatformFontFamily(this string family, FontStyle style = FontStyle.Normal)
+        {
+            return family switch
+            {
+                "sans-serif" => "Segoe UI",
+                var value when value == "STIXGeneral" && style == FontStyle.Italic => "STIX",
+                _ => family
             };
         }
     }
