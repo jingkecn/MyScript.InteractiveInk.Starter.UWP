@@ -1,12 +1,12 @@
-using MyScript.InteractiveInk.ViewModels;
+﻿using MyScript.InteractiveInk.ViewModels;
 
 namespace MyScript.InteractiveInk.Views.Controls
 {
-    public sealed partial class MainCommandBar
+    public sealed partial class MainMenuBar
     {
         private MainCommandsViewModel _viewModel;
 
-        public MainCommandBar()
+        public MainMenuBar()
         {
             InitializeComponent();
         }

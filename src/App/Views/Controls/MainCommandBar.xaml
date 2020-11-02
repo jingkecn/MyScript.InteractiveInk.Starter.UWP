@@ -4,38 +4,61 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:enum="using:MyScript.InteractiveInk.UI.Enumerations"
     mc:Ignorable="d"
     d:DesignHeight="48"
     d:DesignWidth="320"
     Background="Transparent"
     DefaultLabelPosition="Right">
-    <AppBarButton x:Uid="UndoCommand"
-                  Command="{x:Bind UndoCommand}"
+    <AppBarButton x:Uid="CommandAdd"
+                  Icon="Add">
+        <AppBarButton.Flyout>
+            <MenuFlyout>
+                <MenuFlyoutItem x:Uid="CommandAddDiagram"
+                                Command="{x:Bind ViewModel.AddCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enum:PartType>Diagram</enum:PartType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="CommandAddMath"
+                                Command="{x:Bind ViewModel.AddCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enum:PartType>Math</enum:PartType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="CommandAddRawContent"
+                                Command="{x:Bind ViewModel.AddCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enum:PartType>RawContent</enum:PartType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="CommandAddText"
+                                Command="{x:Bind ViewModel.AddCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enum:PartType>Text</enum:PartType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="CommandAddTextDocument"
+                                Command="{x:Bind ViewModel.AddCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enum:PartType>TextDocument</enum:PartType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+            </MenuFlyout>
+        </AppBarButton.Flyout>
+    </AppBarButton>
+    <AppBarButton x:Uid="CommandUndo"
+                  Command="{x:Bind ViewModel.UndoCommand}"
                   Icon="Undo"
                   IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
-    <AppBarButton x:Uid="RedoCommand"
-                  Command="{x:Bind RedoCommand}"
+    <AppBarButton x:Uid="CommandRedo"
+                  Command="{x:Bind ViewModel.RedoCommand}"
                   Icon="Redo"
                   IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
-    <AppBarButton x:Uid="TypesetCommand"
-                  Command="{x:Bind TypesetCommand}">
+    <AppBarButton x:Uid="CommandTypeset"
+                  Command="{x:Bind ViewModel.TypesetCommand}">
         <AppBarButton.Icon>
             <FontIcon Glyph="{StaticResource FontIconLightBulb}" />
         </AppBarButton.Icon>
     </AppBarButton>
-    <CommandBar.Content>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                   Text="Main" />
-    </CommandBar.Content>
-    <CommandBar.SecondaryCommands>
-        <AppBarButton x:Uid="OpenCommand"
-                      Command="{x:Bind OpenCommand}"
-                      Icon="OpenFile" />
-        <AppBarButton x:Uid="SaveCommand"
-                      Command="{x:Bind SaveCommand}"
-                      Icon="Save" />
-        <AppBarButton x:Uid="SaveAsCommand"
-                      Command="{x:Bind SaveAsCommand}"
-                      Icon="Save" />
-    </CommandBar.SecondaryCommands>
 </CommandBar>

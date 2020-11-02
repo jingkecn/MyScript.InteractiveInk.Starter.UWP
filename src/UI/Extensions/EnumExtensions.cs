@@ -1,9 +1,13 @@
 using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using Windows.Devices.Input;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Graphics.Canvas.Geometry;
 using MyScript.IInk;
 using MyScript.IInk.Graphics;
+using MyScript.InteractiveInk.UI.Enumerations;
 
 namespace MyScript.InteractiveInk.UI.Extensions
 {
@@ -59,6 +63,16 @@ namespace MyScript.InteractiveInk.UI.Extensions
                 LineJoin.BEVEL => CanvasLineJoin.Bevel,
                 _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
             };
+        }
+    }
+
+    public static partial class EnumExtensions
+    {
+        public static string ToNative(this PartType source)
+        {
+            var type = typeof(PartType);
+            var name = Enum.GetName(type, source);
+            return type.GetField(name).GetCustomAttributes<DisplayNameAttribute>().First().DisplayName;
         }
     }
 

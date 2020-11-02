@@ -1,15 +1,12 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Numerics;
 using Windows.Graphics.Display;
-using Windows.Storage;
 using Windows.UI.Core;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
 using MyScript.InteractiveInk.Common.ViewModels;
+using MyScript.InteractiveInk.UI.Enumerations;
 using MyScript.InteractiveInk.UI.Extensions;
 using MyScript.InteractiveInk.UI.Services;
 
@@ -17,20 +14,13 @@ namespace MyScript.InteractiveInk.ViewModels
 {
     public sealed partial class MainViewModel : ObservableAsync
     {
-        private bool _canRedo;
-        private bool _canUndo;
+        private MainCommandsViewModel _commands;
         private Editor _editor;
 
-        public bool CanRedo
+        public MainCommandsViewModel Commands
         {
-            get => _canRedo;
-            set => Set(ref _canRedo, value, nameof(CanRedo));
-        }
-
-        public bool CanUndo
-        {
-            get => _canUndo;
-            set => Set(ref _canUndo, value, nameof(CanUndo));
+            get => _commands;
+            set => Set(ref _commands, value, nameof(Commands));
         }
 
         public Editor Editor
@@ -44,6 +34,7 @@ namespace MyScript.InteractiveInk.ViewModels
         public void Initialize([NotNull] CoreDispatcher dispatcher)
         {
             Dispatcher = dispatcher;
+            Commands = new MainCommandsViewModel {Dispatcher = dispatcher};
         }
     }
 
@@ -54,45 +45,15 @@ namespace MyScript.InteractiveInk.ViewModels
 
         public void Dispose()
         {
-            Editor.Dispose();
+            Editor?.Dispose();
         }
 
         public void Initialize([NotNull] IRenderTarget target)
         {
             var engine = ((App)Application.Current).Engine;
-            Initialize(Editor = engine.CreateEditor(engine.CreateRenderer(Dpi.X, Dpi.Y, target)));
-        }
-
-        public void Initialize([NotNull] Editor editor)
-        {
-            editor.SetFontMetricsProvider(new FontMetricsService(Dpi));
-            var path = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Document.iink");
-            var package = editor.Engine.OpenPackage(path, PackageOpenOption.CREATE);
-            editor.Part = package.PartCount == 0 ? package.CreatePart("Text Document") : package.GetPart(0);
-            editor.AddListener(this);
-        }
-    }
-
-
-    [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
-    public sealed partial class MainViewModel : IEditorListener
-    {
-        public void PartChanged(Editor editor)
-        {
-            CanRedo = Editor.CanRedo();
-            CanUndo = Editor.CanUndo();
-        }
-
-        public void ContentChanged(Editor editor, string[] blockIds)
-        {
-            CanRedo = Editor.CanRedo();
-            CanUndo = Editor.CanUndo();
-        }
-
-        public void OnError(Editor editor, string blockId, string message)
-        {
-            Dispatcher?.RunAsync(CoreDispatcherPriority.Normal,
-                async () => await new MessageDialog(message, blockId).ShowAsync())?.AsTask();
+            Commands.Initialize(Editor = engine.CreateEditor(engine.CreateRenderer(Dpi.X, Dpi.Y, target)));
+            Editor.SetFontMetricsProvider(new FontMetricsService(Dpi));
+            Commands.CreateCommand.Execute(PartType.TextDocument);
         }
     }
 }

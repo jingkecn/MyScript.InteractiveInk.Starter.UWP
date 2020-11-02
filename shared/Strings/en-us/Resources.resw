@@ -123,25 +123,70 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>Interactive Ink Starter</value>
   </data>
-  <data name="ClearAllCommand.Label" xml:space="preserve">
-    <value>Clear all</value>
+  <data name="CommandAdd.Label" xml:space="preserve">
+    <value>Add</value>
   </data>
-  <data name="OpenCommand.Label" xml:space="preserve">
-    <value>Open</value>
+  <data name="CommandAddDiagram.Text" xml:space="preserve">
+    <value>Diagram</value>
   </data>
-  <data name="RedoCommand.Label" xml:space="preserve">
+  <data name="CommandAddMath.Text" xml:space="preserve">
+    <value>Math</value>
+  </data>
+  <data name="CommandAddRawContent.Text" xml:space="preserve">
+    <value>Sketch</value>
+  </data>
+  <data name="CommandAddText.Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="CommandAddTextDocument.Text" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="CommandRedo.Label" xml:space="preserve">
     <value>Redo</value>
   </data>
-  <data name="SaveAsCommand.Label" xml:space="preserve">
-    <value>Save as</value>
-  </data>
-  <data name="SaveCommand.Label" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="TypesetCommand.Label" xml:space="preserve">
+  <data name="CommandTypeset.Label" xml:space="preserve">
     <value>Typeset</value>
   </data>
-  <data name="UndoCommand.Label" xml:space="preserve">
+  <data name="CommandUndo.Label" xml:space="preserve">
     <value>Undo</value>
+  </data>
+  <data name="MenuEdit.Title" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="MenuEditRedo.Text" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MenuEditUndo.Text" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="MenuFile.Title" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="MenuFileNew.Text" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="MenuFileNewDiagram.Text" xml:space="preserve">
+    <value>Diagram File</value>
+  </data>
+  <data name="MenuFileNewMath.Text" xml:space="preserve">
+    <value>Math File</value>
+  </data>
+  <data name="MenuFileNewRawContent.Text" xml:space="preserve">
+    <value>Sketch File</value>
+  </data>
+  <data name="MenuFileNewText.Text" xml:space="preserve">
+    <value>Text File</value>
+  </data>
+  <data name="MenuFileNewTextDocument.Text" xml:space="preserve">
+    <value>Document File</value>
+  </data>
+  <data name="MenuFileOpen.Text" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="MenuFileSave.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="MenuFileSaveAs.Text" xml:space="preserve">
+    <value>Save as</value>
   </data>
 </root>

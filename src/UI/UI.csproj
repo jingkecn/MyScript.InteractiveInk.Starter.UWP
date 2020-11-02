@@ -122,10 +122,13 @@
   <ItemGroup>
     <Compile Include="Commands\Canvas.cs" />
     <Compile Include="Commands\Path.cs" />
+    <Compile Include="Constants\Parameters.cs" />
+    <Compile Include="Enumerations\PartType.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ContentPackageExtensions.cs" />
     <Compile Include="Extensions\DisplayExtensions.cs" />
     <Compile Include="Extensions\EditorExtensions.cs" />
+    <Compile Include="Extensions\EngineExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PrimitiveExtensions.cs" />
     <Compile Include="Extensions\RendererExtensions.cs" />

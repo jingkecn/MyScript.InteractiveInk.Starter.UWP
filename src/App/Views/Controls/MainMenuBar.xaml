@@ -1,0 +1,65 @@
+<muxc:MenuBar
+    x:Class="MyScript.InteractiveInk.Views.Controls.MainMenuBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:enum="using:MyScript.InteractiveInk.UI.Enumerations"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <muxc:MenuBarItem x:Uid="MenuFile">
+        <MenuFlyoutSubItem x:Uid="MenuFileNew">
+            <MenuFlyoutItem x:Uid="MenuFileNewDiagram"
+                            Command="{x:Bind ViewModel.CreateCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>Diagram</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuFileNewMath"
+                            Command="{x:Bind ViewModel.CreateCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>Math</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuFileNewRawContent"
+                            Command="{x:Bind ViewModel.CreateCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>RawContent</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuFileNewText"
+                            Command="{x:Bind ViewModel.CreateCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>Text</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuFileNewTextDocument"
+                            Command="{x:Bind ViewModel.CreateCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>TextDocument</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+        </MenuFlyoutSubItem>
+        <MenuFlyoutItem x:Uid="MenuFileOpen"
+                        Command="{x:Bind ViewModel.OpenCommand}"
+                        Icon="OpenFile" />
+        <MenuFlyoutItem x:Uid="MenuFileSave"
+                        Command="{x:Bind ViewModel.SaveCommand}"
+                        Icon="Save" />
+        <MenuFlyoutItem x:Uid="MenuFileSaveAs"
+                        Command="{x:Bind ViewModel.SaveAsCommand}"
+                        Icon="Save" />
+    </muxc:MenuBarItem>
+    <muxc:MenuBarItem x:Uid="MenuEdit">
+        <MenuFlyoutItem x:Uid="MenuEditUndo"
+                        Command="{x:Bind ViewModel.UndoCommand}"
+                        Icon="Undo"
+                        IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
+        <MenuFlyoutItem x:Uid="MenuEditRedo"
+                        Command="{x:Bind ViewModel.RedoCommand}"
+                        Icon="Redo"
+                        IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
+    </muxc:MenuBarItem>
+</muxc:MenuBar>

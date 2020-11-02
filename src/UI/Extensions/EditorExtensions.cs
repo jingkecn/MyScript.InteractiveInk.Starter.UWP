@@ -1,16 +1,11 @@
-using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
-using Windows.Storage.AccessCache;
-using Windows.Storage.Pickers;
 using Windows.UI.Input;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
+using MyScript.InteractiveInk.UI.Enumerations;
 
 namespace MyScript.InteractiveInk.UI.Extensions
 {
@@ -117,126 +112,45 @@ namespace MyScript.InteractiveInk.UI.Extensions
     /// </summary>
     public static partial class EditorExtensions
     {
-        private const string ParamFileToken = "FileToken";
+        #region Save
 
-        #region Open
-
-        public static ContentPackage Open([NotNull] this Editor source, [NotNull] string path)
+        public static async Task SaveAsync([NotNull] this Editor source, bool saveAsNew = false)
         {
-            return source.Engine?.OpenPackage(path, PackageOpenOption.EXISTING);
-        }
-
-        public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source)
-        {
-            // Picks a file from the file picker.
-            var picker = new FileOpenPicker {SuggestedStartLocation = PickerLocationId.DocumentsLibrary};
-            picker.FileTypeFilter.Add(".iink");
-            if (!(await picker.PickSingleFileAsync() is { } file))
+            if (!(source.Part?.Package is { } package))
             {
-                return null;
+                return;
             }
 
-            return await source.OpenAsync(file.Path);
-        }
-
-        [CanBeNull]
-        [SuppressMessage("ReSharper", "MethodHasAsyncOverload")]
-        public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source, [NotNull] string path)
-        {
-            var file = await StorageFile.GetFileFromPathAsync(path);
-            var token = StorageApplicationPermissions.FutureAccessList.Add(file);
-            // Creates a temporary file and open the content package from the temporary file.
-            var temp = await file.CopyAsync(ApplicationData.Current.LocalCacheFolder, file.Name,
-                NameCollisionOption.ReplaceExisting);
-            var package = source.Open(temp.Path);
-            // Updates file access token.
-            Debug.WriteLine($"{nameof(Editor)}.{nameof(OpenAsync)}: {token}");
-            package.SetValue(ParamFileToken, token);
-            // Reads the first content part from the content package.
-            if (package.PartCount == 0)
-            {
-                return package;
-            }
-
-            source.Part = package.GetPart(0);
-            return package;
+            await package.SaveAsync(saveAsNew, await package.GetAssociatedFile());
+            await source.OpenAsync(await package.GetAssociatedFile());
         }
 
         #endregion
 
-        #region Save
+        #region Open
 
-        public static void Save([NotNull] this Editor source, [CanBeNull] string path = null)
+        public static ContentPackage Open([NotNull] this Editor source, [NotNull] string path,
+            [CanBeNull] PartType? type = null)
         {
-            try
-            {
-                var package = source.Part?.Package;
-                if (string.IsNullOrEmpty(path))
-                {
-                    package?.Save();
-                    return;
-                }
-
-                package?.SaveAs(path);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                throw;
-            }
+            var package = source.Engine.Open(path);
+            source.Part = type.HasValue ? package.CreatePart(type.Value.ToNative()) :
+                package.PartCount != 0 ? package.GetPart(0) : source.Part;
+            return package;
         }
 
-        public static async Task SaveAsync([NotNull] this Editor source)
+        [CanBeNull]
+        public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source,
+            [CanBeNull] StorageFile file = null, [CanBeNull] PartType? type = null)
         {
-            if (!(source.Part?.Package is { } package))
+            var engine = source.Engine;
+            if (!(await engine.OpenAsync(file) is { } package))
             {
-                return;
+                return null;
             }
 
-            var token = package.GetValue(ParamFileToken, string.Empty);
-            Debug.WriteLine($"{nameof(Editor)}.{nameof(SaveAsync)}: {token}");
-            if (string.IsNullOrEmpty(token))
-            {
-                await source.SaveAsAsync();
-                return;
-            }
-
-            var file = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(token);
-            await source.SaveAsync(file.Path);
-        }
-
-        public static async Task SaveAsync([NotNull] this Editor source, [NotNull] string path)
-        {
-            if (!(source.Part?.Package is { } package))
-            {
-                return;
-            }
-
-            var file = await StorageFile.GetFileFromPathAsync(path);
-            var token = StorageApplicationPermissions.FutureAccessList.Add(file);
-            Debug.WriteLine($"{nameof(Editor)}.{nameof(SaveAsAsync)}: {token}");
-            package.SetValue(ParamFileToken, token);
-            var tempPath = Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, file.Name);
-            source.Save(tempPath);
-            var temp = await StorageFile.GetFileFromPathAsync(tempPath);
-            await temp.CopyAndReplaceAsync(file);
-            await temp.DeleteAsync(StorageDeleteOption.PermanentDelete);
-            await source.OpenAsync(path);
-        }
-
-        public static async Task SaveAsAsync([NotNull] this Editor source)
-        {
-            var picker = new FileSavePicker
-            {
-                SuggestedFileName = "New Document", SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-            picker.FileTypeChoices.Add("MyScript Interactive Ink", new[] {".iink"});
-            if (!(await picker.PickSaveFileAsync() is { } file))
-            {
-                return;
-            }
-
-            await source.SaveAsync(file.Path);
+            source.Part = type.HasValue ? package.CreatePart(type.Value.ToNative()) :
+                package.PartCount != 0 ? package.GetPart(0) : source.Part;
+            return package;
         }
 
         #endregion
@@ -284,14 +198,14 @@ namespace MyScript.InteractiveInk.UI.Extensions
             source.Clear();
         }
 
-        public static async Task WaitForIdleAndOpenAsync([NotNull] this Editor source)
+        public static async Task<ContentPackage> WaitForIdleAndOpenAsync([NotNull] this Editor source)
         {
             if (!source.IsIdle())
             {
                 source.WaitForIdle();
             }
 
-            await source.OpenAsync();
+            return await source.OpenAsync();
         }
 
         public static void WaitForIdleAndRedo([NotNull] this Editor source)
@@ -304,24 +218,14 @@ namespace MyScript.InteractiveInk.UI.Extensions
             source.Redo();
         }
 
-        public static async Task WaitForIdleAndSaveAsync([NotNull] this Editor source)
+        public static async Task WaitForIdleAndSaveAsync([NotNull] this Editor source, bool saveAsNew = false)
         {
             if (!source.IsIdle())
             {
                 source.WaitForIdle();
             }
 
-            await source.SaveAsync();
-        }
-
-        public static async Task WaitForIdleAndSaveAsAsync([NotNull] this Editor source)
-        {
-            if (!source.IsIdle())
-            {
-                source.WaitForIdle();
-            }
-
-            await source.SaveAsAsync();
+            await source.SaveAsync(saveAsNew);
         }
 
         public static void WaitForIdleAndTypeset([NotNull] this Editor source, [CanBeNull] ContentBlock block = null)
