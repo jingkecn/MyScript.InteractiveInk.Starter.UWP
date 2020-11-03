@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,6 +12,18 @@ using MyScript.InteractiveInk.UI.Constants;
 
 namespace MyScript.InteractiveInk.UI.Extensions
 {
+    public static partial class ContentPackageExtensions
+    {
+        public static IEnumerable<ContentPart> GetPages([NotNull] this ContentPackage source)
+        {
+            var count = source.PartCount;
+            for (var index = 0; index < count; index++)
+            {
+                yield return source.GetPart(index);
+            }
+        }
+    }
+
     public static partial class ContentPackageExtensions
     {
         #region Getters

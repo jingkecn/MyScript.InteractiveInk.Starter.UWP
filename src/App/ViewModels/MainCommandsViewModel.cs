@@ -18,6 +18,8 @@ namespace MyScript.InteractiveInk.ViewModels
     {
         private bool _canRedo;
         private bool _canUndo;
+        private bool _hasNextPage = true;
+        private bool _hasPreviousPage = true;
 
 
         public bool CanRedo
@@ -31,30 +33,48 @@ namespace MyScript.InteractiveInk.ViewModels
             get => _canUndo;
             set => Set(ref _canUndo, value, nameof(CanUndo));
         }
+
+        public bool HasNextPage
+        {
+            get => _hasNextPage;
+            set => Set(ref _hasNextPage, value, nameof(HasNextPage));
+        }
+
+        public bool HasPreviousPage
+        {
+            get => _hasPreviousPage;
+            set => Set(ref _hasPreviousPage, value, nameof(HasPreviousPage));
+        }
     }
 
 
     public partial class MainCommandsViewModel
     {
-        private ICommand _addCommand;
-
         private ICommand _redoCommand;
-
         private ICommand _typesetCommand;
         private ICommand _undoCommand;
 
-        public ICommand AddCommand => _addCommand ??= new RelayCommand<PartType>(OnAddCommandExecuted);
-
 
         public ICommand RedoCommand => _redoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndRedo());
-
-
         public ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndTypeset());
         public ICommand UndoCommand => _undoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndUndo());
+    }
 
-        private void OnAddCommandExecuted(PartType type)
+    public partial class MainCommandsViewModel
+    {
+        private ICommand _addPageCommand;
+        private ICommand _goToNextPageCommand;
+        private ICommand _goToPreviousPageCommand;
+
+        public ICommand AddPageCommand => _addPageCommand ??= new RelayCommand<PartType>(OnAddPageCommandExecuted);
+        public ICommand GoToNextPageCommand => _goToNextPageCommand ??= new RelayCommand(_ => Editor?.GoToNextPage());
+
+        public ICommand GoToPreviousPageCommand =>
+            _goToPreviousPageCommand ??= new RelayCommand(_ => Editor?.GoToPreviousPage());
+
+        private void OnAddPageCommandExecuted(PartType type)
         {
-            if (!(Editor is { } editor) || !(Package is {} package))
+            if (!(Editor is { } editor) || !(Package is { } package))
             {
                 return;
             }
@@ -109,6 +129,8 @@ namespace MyScript.InteractiveInk.ViewModels
         {
             CanRedo = editor.CanRedo();
             CanUndo = editor.CanUndo();
+            HasNextPage = editor.HasNextPage();
+            HasPreviousPage = editor.HasPreviousPage();
             ApplicationView.GetForCurrentView().Title = string.Empty;
             if (!(editor.Part is { } part) || !(part.Package is {} package) ||
                 !(await package.GetAssociatedFile() is {} file))

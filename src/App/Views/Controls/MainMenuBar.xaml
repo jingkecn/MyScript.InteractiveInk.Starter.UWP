@@ -10,7 +10,8 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     <muxc:MenuBarItem x:Uid="MenuFile">
-        <MenuFlyoutSubItem x:Uid="MenuFileNew">
+        <MenuFlyoutSubItem x:Uid="MenuFileNew"
+                           Icon="Add">
             <MenuFlyoutItem x:Uid="MenuFileNewDiagram"
                             Command="{x:Bind ViewModel.CreateCommand}">
                 <MenuFlyoutItem.CommandParameter>
@@ -53,6 +54,39 @@
                         Icon="Save" />
     </muxc:MenuBarItem>
     <muxc:MenuBarItem x:Uid="MenuEdit">
+        <MenuFlyoutSubItem x:Uid="MenuPageNew"
+                           Icon="Add">
+            <MenuFlyoutItem x:Uid="MenuPageNewDiagram"
+                            Command="{x:Bind ViewModel.AddPageCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>Diagram</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuPageNewMath"
+                            Command="{x:Bind ViewModel.AddPageCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>Math</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuPageNewRawContent"
+                            Command="{x:Bind ViewModel.AddPageCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>RawContent</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuPageNewText"
+                            Command="{x:Bind ViewModel.AddPageCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>Text</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem x:Uid="MenuPageNewTextDocument"
+                            Command="{x:Bind ViewModel.AddPageCommand}">
+                <MenuFlyoutItem.CommandParameter>
+                    <enum:PartType>TextDocument</enum:PartType>
+                </MenuFlyoutItem.CommandParameter>
+            </MenuFlyoutItem>
+        </MenuFlyoutSubItem>
         <MenuFlyoutItem x:Uid="MenuEditUndo"
                         Command="{x:Bind ViewModel.UndoCommand}"
                         Icon="Undo"
@@ -61,5 +95,15 @@
                         Command="{x:Bind ViewModel.RedoCommand}"
                         Icon="Redo"
                         IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
+    </muxc:MenuBarItem>
+    <muxc:MenuBarItem x:Uid="MenuGoTo">
+        <MenuFlyoutItem x:Uid="MenuGoToPreviousPage"
+                        Command="{x:Bind ViewModel.GoToPreviousPageCommand}"
+                        Icon="Back"
+                        IsEnabled="{x:Bind ViewModel.HasPreviousPage, Mode=OneWay}" />
+        <MenuFlyoutItem x:Uid="MenuGoToNextPage"
+                        Command="{x:Bind ViewModel.GoToNextPageCommand}"
+                        Icon="Forward"
+                        IsEnabled="{x:Bind ViewModel.HasNextPage, Mode=OneWay}" />
     </muxc:MenuBarItem>
 </muxc:MenuBar>

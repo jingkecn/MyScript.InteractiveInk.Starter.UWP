@@ -126,6 +126,7 @@
     <Compile Include="Enumerations\PartType.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ContentPackageExtensions.cs" />
+    <Compile Include="Extensions\ContentPartExtensions.cs" />
     <Compile Include="Extensions\DisplayExtensions.cs" />
     <Compile Include="Extensions\EditorExtensions.cs" />
     <Compile Include="Extensions\EngineExtensions.cs" />

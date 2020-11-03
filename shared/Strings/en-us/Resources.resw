@@ -117,38 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppBarButtonRedo.Label" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="AppBarButtonTypeset.Label" xml:space="preserve">
+    <value>Typeset</value>
+  </data>
+  <data name="AppBarButtonUndo.Label" xml:space="preserve">
+    <value>Undo</value>
+  </data>
   <data name="AppDescription" xml:space="preserve">
     <value>A starter for MyScript Interactive Ink.</value>
   </data>
   <data name="AppDisplayName" xml:space="preserve">
     <value>Interactive Ink Starter</value>
-  </data>
-  <data name="CommandAdd.Label" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="CommandAddDiagram.Text" xml:space="preserve">
-    <value>Diagram</value>
-  </data>
-  <data name="CommandAddMath.Text" xml:space="preserve">
-    <value>Math</value>
-  </data>
-  <data name="CommandAddRawContent.Text" xml:space="preserve">
-    <value>Sketch</value>
-  </data>
-  <data name="CommandAddText.Text" xml:space="preserve">
-    <value>Text</value>
-  </data>
-  <data name="CommandAddTextDocument.Text" xml:space="preserve">
-    <value>Document</value>
-  </data>
-  <data name="CommandRedo.Label" xml:space="preserve">
-    <value>Redo</value>
-  </data>
-  <data name="CommandTypeset.Label" xml:space="preserve">
-    <value>Typeset</value>
-  </data>
-  <data name="CommandUndo.Label" xml:space="preserve">
-    <value>Undo</value>
   </data>
   <data name="MenuEdit.Title" xml:space="preserve">
     <value>Edit</value>
@@ -188,5 +170,32 @@
   </data>
   <data name="MenuFileSaveAs.Text" xml:space="preserve">
     <value>Save as</value>
+  </data>
+  <data name="MenuGoTo.Title" xml:space="preserve">
+    <value>Go To</value>
+  </data>
+  <data name="MenuGoToNextPage.Text" xml:space="preserve">
+    <value>Next Page</value>
+  </data>
+  <data name="MenuGoToPreviousPage.Text" xml:space="preserve">
+    <value>Previous Page</value>
+  </data>
+  <data name="MenuPageNew.Text" xml:space="preserve">
+    <value>New Page</value>
+  </data>
+  <data name="MenuPageNewDiagram.Text" xml:space="preserve">
+    <value>Diagram</value>
+  </data>
+  <data name="MenuPageNewMath.Text" xml:space="preserve">
+    <value>Math</value>
+  </data>
+  <data name="MenuPageNewRawContent.Text" xml:space="preserve">
+    <value>Sketch</value>
+  </data>
+  <data name="MenuPageNewText.Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="MenuPageNewTextDocument.Text" xml:space="preserve">
+    <value>Document</value>
   </data>
 </root>

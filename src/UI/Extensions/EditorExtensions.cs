@@ -13,6 +13,19 @@ using MyScript.InteractiveInk.UI.Enumerations;
 
 namespace MyScript.InteractiveInk.UI.Extensions
 {
+    public static partial class EditorExtensions
+    {
+        public static bool HasNextPage([NotNull] this Editor source)
+        {
+            return source.Part?.HasNext() ?? false;
+        }
+
+        public static bool HasPreviousPage([NotNull] this Editor source)
+        {
+            return source.Part?.HasPrevious() ?? false;
+        }
+    }
+
     /// <summary>
     ///     Sends pointer events.
     ///     Please be careful with the timestamp: the editor accepts the pointer timestamp in milliseconds, whereas the UWP
@@ -180,6 +193,19 @@ namespace MyScript.InteractiveInk.UI.Extensions
         }
 
         #endregion
+    }
+
+    public static partial class EditorExtensions
+    {
+        public static void GoToNextPage([NotNull] this Editor source)
+        {
+            source.Part = source.Part?.GetNext() ?? source.Part;
+        }
+
+        public static void GoToPreviousPage([NotNull] this Editor source)
+        {
+            source.Part = source.Part?.GetPrevious() ?? source.Part;
+        }
     }
 
     /// <summary>
