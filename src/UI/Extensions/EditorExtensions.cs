@@ -1,10 +1,14 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.UI.Input;
+using Microsoft.Win32.SafeHandles;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
+using MyScript.InteractiveInk.UI.Constants;
 using MyScript.InteractiveInk.UI.Enumerations;
 
 namespace MyScript.InteractiveInk.UI.Extensions
@@ -112,6 +116,9 @@ namespace MyScript.InteractiveInk.UI.Extensions
     /// </summary>
     public static partial class EditorExtensions
     {
+        private static Dictionary<string, SafeFileHandle> SafeFileHandles { get; } =
+            new Dictionary<string, SafeFileHandle>();
+
         #region Save
 
         public static async Task SaveAsync([NotNull] this Editor source, bool saveAsNew = false)
@@ -119,6 +126,13 @@ namespace MyScript.InteractiveInk.UI.Extensions
             if (!(source.Part?.Package is { } package))
             {
                 return;
+            }
+
+            // Unlock the target file if any.
+            var token = package.GetValue(Parameters.ParamFileToken, string.Empty);
+            if (SafeFileHandles.TryGetValue(token, out var handle))
+            {
+                handle.Close();
             }
 
             await package.SaveAsync(saveAsNew, await package.GetAssociatedFile());
@@ -142,6 +156,8 @@ namespace MyScript.InteractiveInk.UI.Extensions
         public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source,
             [CanBeNull] StorageFile file = null, [CanBeNull] PartType? type = null)
         {
+            // Unlock the target file if any.
+            file?.CreateSafeFileHandle()?.Close();
             var engine = source.Engine;
             if (!(await engine.OpenAsync(file) is { } package))
             {
@@ -150,6 +166,16 @@ namespace MyScript.InteractiveInk.UI.Extensions
 
             source.Part = type.HasValue ? package.CreatePart(type.Value.ToNative()) :
                 package.PartCount != 0 ? package.GetPart(0) : source.Part;
+            file = await package.GetAssociatedFile();
+            // Unlock the previous file if any.
+            var token = package.GetValue(Parameters.ParamFileToken, string.Empty);
+            if (SafeFileHandles.TryGetValue(token, out var handle))
+            {
+                handle.Close();
+            }
+
+            // Re-lock the target file.
+            SafeFileHandles[token] = file.CreateSafeFileHandle(share: FileShare.None);
             return package;
         }
 
