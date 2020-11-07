@@ -123,7 +123,7 @@
     <Compile Include="Commands\Canvas.cs" />
     <Compile Include="Commands\Path.cs" />
     <Compile Include="Constants\Parameters.cs" />
-    <Compile Include="Enumerations\PartType.cs" />
+    <Compile Include="Enumerations\ContentType.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\ContentPackageExtensions.cs" />
     <Compile Include="Extensions\ContentPartExtensions.cs" />

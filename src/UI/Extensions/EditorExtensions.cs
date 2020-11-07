@@ -157,7 +157,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
         #region Open
 
         public static ContentPackage Open([NotNull] this Editor source, [NotNull] string path,
-            [CanBeNull] PartType? type = null)
+            [CanBeNull] ContentType? type = null)
         {
             var package = source.Engine.Open(path);
             source.Part = type.HasValue ? package.CreatePart(type.Value.ToNative()) :
@@ -167,7 +167,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
 
         [CanBeNull]
         public static async Task<ContentPackage> OpenAsync([NotNull] this Editor source,
-            [CanBeNull] StorageFile file = null, [CanBeNull] PartType? type = null)
+            [CanBeNull] StorageFile file = null, [CanBeNull] ContentType? type = null)
         {
             // Unlock the target file if any.
             file?.CreateSafeFileHandle()?.Close();

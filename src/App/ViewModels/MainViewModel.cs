@@ -53,7 +53,7 @@ namespace MyScript.InteractiveInk.ViewModels
             var engine = ((App)Application.Current).Engine;
             Commands.Initialize(Editor = engine.CreateEditor(engine.CreateRenderer(Dpi.X, Dpi.Y, target)));
             Editor.SetFontMetricsProvider(new FontMetricsService(Dpi));
-            Commands.CreateCommand.Execute(PartType.TextDocument);
+            Commands.CreateCommand.Execute(ContentType.TextDocument);
         }
     }
 }

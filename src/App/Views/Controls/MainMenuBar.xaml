@@ -15,31 +15,31 @@
             <MenuFlyoutItem x:Uid="MenuFileNewDiagram"
                             Command="{x:Bind ViewModel.CreateCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>Diagram</enum:PartType>
+                    <enum:ContentType>Diagram</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewMath"
                             Command="{x:Bind ViewModel.CreateCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>Math</enum:PartType>
+                    <enum:ContentType>Math</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewRawContent"
                             Command="{x:Bind ViewModel.CreateCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>RawContent</enum:PartType>
+                    <enum:ContentType>RawContent</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewText"
                             Command="{x:Bind ViewModel.CreateCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>Text</enum:PartType>
+                    <enum:ContentType>Text</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewTextDocument"
                             Command="{x:Bind ViewModel.CreateCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>TextDocument</enum:PartType>
+                    <enum:ContentType>TextDocument</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
         </MenuFlyoutSubItem>
@@ -59,31 +59,31 @@
             <MenuFlyoutItem x:Uid="MenuPageNewDiagram"
                             Command="{x:Bind ViewModel.AddPageCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>Diagram</enum:PartType>
+                    <enum:ContentType>Diagram</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewMath"
                             Command="{x:Bind ViewModel.AddPageCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>Math</enum:PartType>
+                    <enum:ContentType>Math</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewRawContent"
                             Command="{x:Bind ViewModel.AddPageCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>RawContent</enum:PartType>
+                    <enum:ContentType>RawContent</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewText"
                             Command="{x:Bind ViewModel.AddPageCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>Text</enum:PartType>
+                    <enum:ContentType>Text</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewTextDocument"
                             Command="{x:Bind ViewModel.AddPageCommand}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:PartType>TextDocument</enum:PartType>
+                    <enum:ContentType>TextDocument</enum:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
         </MenuFlyoutSubItem>

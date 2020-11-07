@@ -66,13 +66,13 @@ namespace MyScript.InteractiveInk.ViewModels
         private ICommand _goToNextPageCommand;
         private ICommand _goToPreviousPageCommand;
 
-        public ICommand AddPageCommand => _addPageCommand ??= new RelayCommand<PartType>(OnAddPageCommandExecuted);
+        public ICommand AddPageCommand => _addPageCommand ??= new RelayCommand<ContentType>(OnAddPageCommandExecuted);
         public ICommand GoToNextPageCommand => _goToNextPageCommand ??= new RelayCommand(_ => Editor?.GoToNextPage());
 
         public ICommand GoToPreviousPageCommand =>
             _goToPreviousPageCommand ??= new RelayCommand(_ => Editor?.GoToPreviousPage());
 
-        private void OnAddPageCommandExecuted(PartType type)
+        private void OnAddPageCommandExecuted(ContentType type)
         {
             if (!(Editor is { } editor) || !(Package is { } package))
             {
@@ -90,7 +90,7 @@ namespace MyScript.InteractiveInk.ViewModels
         private ICommand _saveAsCommand;
         private ICommand _saveCommand;
 
-        public ICommand CreateCommand => _createCommand ??= new RelayCommand<PartType>(OnCreateCommandExecuted);
+        public ICommand CreateCommand => _createCommand ??= new RelayCommand<ContentType>(OnCreateCommandExecuted);
 
         public ICommand OpenCommand =>
             _openCommand ??= new RelayCommand(async _ => Package = await Editor.WaitForIdleAndOpenAsync());
@@ -101,7 +101,7 @@ namespace MyScript.InteractiveInk.ViewModels
         public ICommand SaveAsCommand =>
             _saveAsCommand ??= new RelayCommand(async _ => await Editor.WaitForIdleAndSaveAsync(true));
 
-        private void OnCreateCommandExecuted(PartType type)
+        private void OnCreateCommandExecuted(ContentType type)
         {
             var folder = ApplicationData.Current.LocalCacheFolder;
             var name = $"{Path.GetRandomFileName()}.iink";

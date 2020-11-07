@@ -68,9 +68,9 @@ namespace MyScript.InteractiveInk.UI.Extensions
 
     public static partial class EnumExtensions
     {
-        public static string ToNative(this PartType source)
+        public static string ToNative(this ContentType source)
         {
-            var type = typeof(PartType);
+            var type = typeof(ContentType);
             var name = Enum.GetName(type, source);
             return type.GetField(name).GetCustomAttributes<DisplayNameAttribute>().First().DisplayName;
         }
