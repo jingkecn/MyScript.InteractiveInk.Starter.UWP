@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace MyScript.InteractiveInk.UI.Enumerations
+namespace MyScript.InteractiveInk.Common.Enumerations
 {
     /// <summary>
     ///     Supported content types of iink SDK.

@@ -225,4 +225,7 @@
   <data name="MenuPageNewTextDocument.Text" xml:space="preserve">
     <value>Document</value>
   </data>
+  <data name="MenuPageRemove.Text" xml:space="preserve">
+    <value>Remove Page</value>
+  </data>
 </root>

@@ -3,7 +3,7 @@ using System.Numerics;
 using Windows.Graphics.Display;
 using MyScript.InteractiveInk.Annotations;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static class DisplayExtensions
     {

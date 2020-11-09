@@ -1,4 +1,4 @@
-namespace MyScript.InteractiveInk.UI.Constants
+namespace MyScript.InteractiveInk.Common.Constants
 {
     public static class Parameters
     {

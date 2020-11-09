@@ -6,8 +6,16 @@ using MyScript.IInk.Graphics;
 using MyScript.InteractiveInk.Annotations;
 using Point = MyScript.IInk.Graphics.Point;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
+    public static partial class RendererExtensions
+    {
+        public static Vector2 GetDpi([NotNull] this Renderer source)
+        {
+            return new Vector2(source.DpiX, source.DpiY);
+        }
+    }
+
     public static partial class RendererExtensions
     {
         public static void Draw([NotNull] this Renderer source, Rect rect, LayerType layers, [NotNull] ICanvas canvas)

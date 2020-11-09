@@ -3,16 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.UI.Input;
 using Microsoft.Win32.SafeHandles;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
-using MyScript.InteractiveInk.UI.Constants;
-using MyScript.InteractiveInk.UI.Enumerations;
+using MyScript.InteractiveInk.Common.Constants;
+using MyScript.InteractiveInk.Common.Enumerations;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static partial class EditorExtensions
     {
@@ -38,13 +37,13 @@ namespace MyScript.InteractiveInk.UI.Extensions
         public static void AppendBlock([NotNull] this Editor source, ContentType type, bool autoScroll = true,
             [CanBeNull] IRenderTarget target = null)
         {
-            if (!source.CanAddBlock(type))
+            if (!source.CanAddBlock(type) || !(source.Renderer is {} renderer))
             {
                 return;
             }
 
             var block = source.GetRootBlock();
-            var dpi = DisplayInformation.GetForCurrentView().GetDpi();
+            var dpi = renderer.GetDpi();
             var box = block.Box.ToPlatform().FromMillimeterToPixel(dpi);
             var lineHeight = default(float);
             var styles = source.ListStyleClasses(_ => true);
@@ -60,7 +59,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
                 return;
             }
 
-            source.Renderer?.ScrollTo(new IInk.Graphics.Point((float)x, (float)y), target, source.ClampViewOffset);
+            renderer.ScrollTo(new IInk.Graphics.Point((float)x, (float)y), target, source.ClampViewOffset);
         }
 
         public static bool CanAddBlock([NotNull] this Editor source, ContentType type, bool defaultValue = default)
@@ -83,7 +82,7 @@ namespace MyScript.InteractiveInk.UI.Extensions
             }
 
             source.RemoveBlock(block);
-            block?.Dispose();
+            block.Dispose();
         }
     }
 

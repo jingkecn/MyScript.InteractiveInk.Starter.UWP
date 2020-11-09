@@ -122,21 +122,6 @@
   <ItemGroup>
     <Compile Include="Commands\Canvas.cs" />
     <Compile Include="Commands\Path.cs" />
-    <Compile Include="Constants\Parameters.cs" />
-    <Compile Include="Enumerations\ContentType.cs" />
-    <Compile Include="Extensions\CollectionExtensions.cs" />
-    <Compile Include="Extensions\ContentBlockExtensions.cs" />
-    <Compile Include="Extensions\ContentPackageExtensions.cs" />
-    <Compile Include="Extensions\ContentPartExtensions.cs" />
-    <Compile Include="Extensions\DisplayExtensions.cs" />
-    <Compile Include="Extensions\EditorExtensions.cs" />
-    <Compile Include="Extensions\EngineExtensions.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="Extensions\PrimitiveExtensions.cs" />
-    <Compile Include="Extensions\RendererExtensions.cs" />
-    <Compile Include="Extensions\ShapeExtensions.cs" />
-    <Compile Include="Extensions\StructExtensions.cs" />
-    <Compile Include="Extensions\StyleExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FontMetricsService.cs" />
     <Compile Include="Xaml\Controls\InteractiveInkCanvas.xaml.cs">
@@ -198,6 +183,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{e7a6d473-cf65-4044-b795-809a4bce6cbc}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{4ecaa22b-3c09-4a1e-a361-64f8d5d0bbed}</Project>
+      <Name>Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

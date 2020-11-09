@@ -8,7 +8,7 @@
     xmlns:winui="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:iink="using:MyScript.InteractiveInk.UI.Xaml.Controls"
     xmlns:controls="using:MyScript.InteractiveInk.Views.Controls"
-    xmlns:enumerations="using:MyScript.InteractiveInk.UI.Enumerations"
+    xmlns:enumerations="using:MyScript.InteractiveInk.Common.Enumerations"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -41,29 +41,29 @@
                 <iink:InteractiveInkCanvas.ContextFlyout>
                     <MenuFlyout>
                         <MenuFlyoutSubItem x:Uid="ContextMenuAdd"
-                                           IsEnabled="{x:Bind ViewModel.Commands.CanAddBlock, Mode=OneWay}">
+                                           IsEnabled="{x:Bind ViewModel.Commands.ContentCommands.CanAddBlock, Mode=OneWay}">
                             <MenuFlyoutItem x:Uid="ContextMenuAddDiagram"
-                                            Command="{x:Bind ViewModel.Commands.AddBlockCommand}">
+                                            Command="{x:Bind ViewModel.Commands.ContentCommands.CommandAddContent}">
                                 <MenuFlyoutItem.CommandParameter>
                                     <enumerations:ContentType>Diagram</enumerations:ContentType>
                                 </MenuFlyoutItem.CommandParameter>
                             </MenuFlyoutItem>
                             <MenuFlyoutItem x:Uid="ContextMenuAddMath"
-                                            Command="{x:Bind ViewModel.Commands.AddBlockCommand}">
+                                            Command="{x:Bind ViewModel.Commands.ContentCommands.CommandAddContent}">
                                 <MenuFlyoutItem.CommandParameter>
                                     <enumerations:ContentType>Math</enumerations:ContentType>
                                 </MenuFlyoutItem.CommandParameter>
                             </MenuFlyoutItem>
                             <MenuFlyoutItem x:Uid="ContextMenuAddRawContent"
-                                            Command="{x:Bind ViewModel.Commands.AddBlockCommand}">
+                                            Command="{x:Bind ViewModel.Commands.ContentCommands.CommandAddContent}">
                                 <MenuFlyoutItem.CommandParameter>
                                     <enumerations:ContentType>RawContent</enumerations:ContentType>
                                 </MenuFlyoutItem.CommandParameter>
                             </MenuFlyoutItem>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutItem x:Uid="ContextMenuRemove"
-                                        Command="{x:Bind ViewModel.Commands.RemoveBlockCommand}"
-                                        IsEnabled="{x:Bind ViewModel.Commands.CanRemoveBlock, Mode=OneWay}" />
+                                        Command="{x:Bind ViewModel.Commands.ContentCommands.CommandRemoveContent}"
+                                        IsEnabled="{x:Bind ViewModel.Commands.ContentCommands.CanRemoveBlock, Mode=OneWay}" />
                     </MenuFlyout>
                 </iink:InteractiveInkCanvas.ContextFlyout>
             </iink:InteractiveInkCanvas>

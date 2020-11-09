@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using MyScript.InteractiveInk.Annotations;
 
-namespace MyScript.InteractiveInk.Common.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static class CollectionExtensions
     {

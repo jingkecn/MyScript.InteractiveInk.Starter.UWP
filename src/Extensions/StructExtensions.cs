@@ -1,6 +1,6 @@
 using Windows.Foundation;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static class StructExtensions
     {

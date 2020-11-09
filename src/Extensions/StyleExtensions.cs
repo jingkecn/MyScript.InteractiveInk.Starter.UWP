@@ -5,7 +5,7 @@ using MyScript.IInk.Graphics;
 using MyScript.InteractiveInk.Annotations;
 using Color = Windows.UI.Color;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static partial class StyleExtensions
     {

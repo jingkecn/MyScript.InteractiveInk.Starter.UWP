@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:enumerations="using:MyScript.InteractiveInk.UI.Enumerations"
+    xmlns:enumerations="using:MyScript.InteractiveInk.Common.Enumerations"
     mc:Ignorable="d"
     d:DesignHeight="48"
     d:DesignWidth="320"
@@ -12,23 +12,23 @@
     DefaultLabelPosition="Right">
     <AppBarButton x:Uid="AppBarButtonNew"
                   Icon="Add"
-                  IsEnabled="{x:Bind ViewModel.IsDocumentPage, Mode = OneWay}">
+                  IsEnabled="{x:Bind ViewModel.ContentCommands.CanAppendBlock, Mode = OneWay}">
         <AppBarButton.Flyout>
             <MenuFlyout>
                 <MenuFlyoutItem x:Uid="AppBarButtonNewDiagram"
-                                Command="{x:Bind ViewModel.AppendBlockCommand}">
+                                Command="{x:Bind ViewModel.ContentCommands.CommandAppendContent}">
                     <MenuFlyoutItem.CommandParameter>
                         <enumerations:ContentType>Diagram</enumerations:ContentType>
                     </MenuFlyoutItem.CommandParameter>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="AppBarButtonNewMath"
-                                Command="{x:Bind ViewModel.AppendBlockCommand}">
+                                Command="{x:Bind ViewModel.ContentCommands.CommandAppendContent}">
                     <MenuFlyoutItem.CommandParameter>
                         <enumerations:ContentType>Math</enumerations:ContentType>
                     </MenuFlyoutItem.CommandParameter>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="AppBarButtonNewRawContent"
-                                Command="{x:Bind ViewModel.AppendBlockCommand}">
+                                Command="{x:Bind ViewModel.ContentCommands.CommandAppendContent}">
                     <MenuFlyoutItem.CommandParameter>
                         <enumerations:ContentType>RawContent</enumerations:ContentType>
                     </MenuFlyoutItem.CommandParameter>
@@ -37,15 +37,15 @@
         </AppBarButton.Flyout>
     </AppBarButton>
     <AppBarButton x:Uid="AppBarButtonUndo"
-                  Command="{x:Bind ViewModel.UndoCommand}"
+                  Command="{x:Bind ViewModel.EditingCommands.CommandUndo}"
                   Icon="Undo"
-                  IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
+                  IsEnabled="{x:Bind ViewModel.EditingCommands.CanUndo, Mode=OneWay}" />
     <AppBarButton x:Uid="AppBarButtonRedo"
-                  Command="{x:Bind ViewModel.RedoCommand}"
+                  Command="{x:Bind ViewModel.EditingCommands.CommandRedo}"
                   Icon="Redo"
-                  IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
+                  IsEnabled="{x:Bind ViewModel.EditingCommands.CanRedo, Mode=OneWay}" />
     <AppBarButton x:Uid="AppBarButtonTypeset"
-                  Command="{x:Bind ViewModel.TypesetCommand}">
+                  Command="{x:Bind ViewModel.EditingCommands.CommandTypeset}">
         <AppBarButton.Icon>
             <FontIcon Glyph="{StaticResource FontIconLightBulb}" />
         </AppBarButton.Icon>

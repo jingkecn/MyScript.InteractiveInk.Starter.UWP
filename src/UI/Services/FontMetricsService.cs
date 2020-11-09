@@ -5,7 +5,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.IInk.Graphics;
 using MyScript.IInk.Text;
-using MyScript.InteractiveInk.UI.Extensions;
+using MyScript.InteractiveInk.Extensions;
 
 namespace MyScript.InteractiveInk.UI.Services
 {

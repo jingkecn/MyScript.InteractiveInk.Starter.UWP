@@ -7,9 +7,10 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Graphics.Canvas.Geometry;
 using MyScript.IInk;
 using MyScript.IInk.Graphics;
-using MyScript.InteractiveInk.UI.Enumerations;
+using MyScript.InteractiveInk.Annotations;
+using MyScript.InteractiveInk.Common.Enumerations;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static partial class EnumExtensions
     {
@@ -73,6 +74,36 @@ namespace MyScript.InteractiveInk.UI.Extensions
             var type = typeof(ContentType);
             var name = Enum.GetName(type, source);
             return type.GetField(name).GetCustomAttributes<DisplayNameAttribute>().First().DisplayName;
+        }
+
+        public static ContentType ToPlatformContentType([NotNull] this string source)
+        {
+            if (source == ContentType.Diagram.ToNative())
+            {
+                return ContentType.Diagram;
+            }
+
+            if (source == ContentType.Math.ToNative())
+            {
+                return ContentType.Math;
+            }
+
+            if (source == ContentType.RawContent.ToNative())
+            {
+                return ContentType.RawContent;
+            }
+
+            if (source == ContentType.Text.ToNative())
+            {
+                return ContentType.Text;
+            }
+
+            if (source == ContentType.TextDocument.ToNative())
+            {
+                return ContentType.TextDocument;
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(source), source, null);
         }
     }
 

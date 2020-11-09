@@ -2,7 +2,7 @@ using System;
 using System.Windows.Input;
 using MyScript.InteractiveInk.Annotations;
 
-namespace MyScript.InteractiveInk.Common.Helpers
+namespace MyScript.InteractiveInk.Common.Commands
 {
     /// <summary>
     ///     A command whose sole purpose is to relay its functionality

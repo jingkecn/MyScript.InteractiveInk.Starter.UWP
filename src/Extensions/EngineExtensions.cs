@@ -6,9 +6,9 @@ using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
-using MyScript.InteractiveInk.UI.Constants;
+using MyScript.InteractiveInk.Common.Constants;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static class EngineExtensions
     {

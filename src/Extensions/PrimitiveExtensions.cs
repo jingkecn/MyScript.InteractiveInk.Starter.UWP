@@ -1,7 +1,7 @@
 using System.Numerics;
 using Windows.Foundation;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static partial class PrimitiveExtensions
     {

@@ -10,8 +10,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.IInk.Graphics;
-using MyScript.InteractiveInk.Common.Extensions;
-using MyScript.InteractiveInk.UI.Extensions;
+using MyScript.InteractiveInk.Extensions;
 using Color = Windows.UI.Color;
 
 namespace MyScript.InteractiveInk.UI.Commands

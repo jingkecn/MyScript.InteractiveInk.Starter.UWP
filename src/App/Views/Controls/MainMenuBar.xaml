@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:enum="using:MyScript.InteractiveInk.UI.Enumerations"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:enumerations="using:MyScript.InteractiveInk.Common.Enumerations"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -13,97 +13,109 @@
         <MenuFlyoutSubItem x:Uid="MenuFileNew"
                            Icon="Add">
             <MenuFlyoutItem x:Uid="MenuFileNewDiagram"
-                            Command="{x:Bind ViewModel.CreateCommand}">
+                            Command="{x:Bind ViewModel.CommandCreatePackage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>Diagram</enum:ContentType>
+                    <enumerations:ContentType>Diagram</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewMath"
-                            Command="{x:Bind ViewModel.CreateCommand}">
+                            Command="{x:Bind ViewModel.CommandCreatePackage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>Math</enum:ContentType>
+                    <enumerations:ContentType>Math</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewRawContent"
-                            Command="{x:Bind ViewModel.CreateCommand}">
+                            Command="{x:Bind ViewModel.CommandCreatePackage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>RawContent</enum:ContentType>
+                    <enumerations:ContentType>RawContent</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewText"
-                            Command="{x:Bind ViewModel.CreateCommand}">
+                            Command="{x:Bind ViewModel.CommandCreatePackage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>Text</enum:ContentType>
+                    <enumerations:ContentType>Text</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuFileNewTextDocument"
-                            Command="{x:Bind ViewModel.CreateCommand}">
+                            Command="{x:Bind ViewModel.CommandCreatePackage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>TextDocument</enum:ContentType>
+                    <enumerations:ContentType>TextDocument</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
         </MenuFlyoutSubItem>
         <MenuFlyoutItem x:Uid="MenuFileOpen"
-                        Command="{x:Bind ViewModel.OpenCommand}"
+                        Command="{x:Bind ViewModel.CommandOpenPackage}"
                         Icon="OpenFile" />
         <MenuFlyoutItem x:Uid="MenuFileSave"
-                        Command="{x:Bind ViewModel.SaveCommand}"
-                        Icon="Save" />
+                        Command="{x:Bind ViewModel.CommandSavePackage}"
+                        Icon="Save">
+            <MenuFlyoutItem.CommandParameter>
+                <x:Boolean>False</x:Boolean>
+            </MenuFlyoutItem.CommandParameter>
+        </MenuFlyoutItem>
         <MenuFlyoutItem x:Uid="MenuFileSaveAs"
-                        Command="{x:Bind ViewModel.SaveAsCommand}"
-                        Icon="Save" />
+                        Command="{x:Bind ViewModel.CommandSavePackage}"
+                        Icon="Save">
+            <MenuFlyoutItem.CommandParameter>
+                <x:Boolean>True</x:Boolean>
+            </MenuFlyoutItem.CommandParameter>
+        </MenuFlyoutItem>
     </muxc:MenuBarItem>
     <muxc:MenuBarItem x:Uid="MenuEdit">
+        <MenuFlyoutItem x:Uid="MenuEditUndo"
+                        Command="{x:Bind ViewModel.EditingCommands.CommandUndo}"
+                        Icon="Undo"
+                        IsEnabled="{x:Bind ViewModel.EditingCommands.CanUndo, Mode=OneWay}" />
+        <MenuFlyoutItem x:Uid="MenuEditRedo"
+                        Command="{x:Bind ViewModel.EditingCommands.CommandRedo}"
+                        Icon="Redo"
+                        IsEnabled="{x:Bind ViewModel.EditingCommands.CanRedo, Mode=OneWay}" />
+        <MenuFlyoutSeparator />
         <MenuFlyoutSubItem x:Uid="MenuPageNew"
                            Icon="Add">
             <MenuFlyoutItem x:Uid="MenuPageNewDiagram"
-                            Command="{x:Bind ViewModel.AddPageCommand}">
+                            Command="{x:Bind ViewModel.PageCommands.CommandAddPage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>Diagram</enum:ContentType>
+                    <enumerations:ContentType>Diagram</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewMath"
-                            Command="{x:Bind ViewModel.AddPageCommand}">
+                            Command="{x:Bind ViewModel.PageCommands.CommandAddPage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>Math</enum:ContentType>
+                    <enumerations:ContentType>Math</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewRawContent"
-                            Command="{x:Bind ViewModel.AddPageCommand}">
+                            Command="{x:Bind ViewModel.PageCommands.CommandAddPage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>RawContent</enum:ContentType>
+                    <enumerations:ContentType>RawContent</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewText"
-                            Command="{x:Bind ViewModel.AddPageCommand}">
+                            Command="{x:Bind ViewModel.PageCommands.CommandAddPage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>Text</enum:ContentType>
+                    <enumerations:ContentType>Text</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
             <MenuFlyoutItem x:Uid="MenuPageNewTextDocument"
-                            Command="{x:Bind ViewModel.AddPageCommand}">
+                            Command="{x:Bind ViewModel.PageCommands.CommandAddPage}">
                 <MenuFlyoutItem.CommandParameter>
-                    <enum:ContentType>TextDocument</enum:ContentType>
+                    <enumerations:ContentType>TextDocument</enumerations:ContentType>
                 </MenuFlyoutItem.CommandParameter>
             </MenuFlyoutItem>
         </MenuFlyoutSubItem>
-        <MenuFlyoutItem x:Uid="MenuEditUndo"
-                        Command="{x:Bind ViewModel.UndoCommand}"
-                        Icon="Undo"
-                        IsEnabled="{x:Bind ViewModel.CanUndo, Mode=OneWay}" />
-        <MenuFlyoutItem x:Uid="MenuEditRedo"
-                        Command="{x:Bind ViewModel.RedoCommand}"
-                        Icon="Redo"
-                        IsEnabled="{x:Bind ViewModel.CanRedo, Mode=OneWay}" />
+        <MenuFlyoutItem x:Uid="MenuPageRemove"
+                        Command="{x:Bind ViewModel.PageCommands.CommandRemovePage}"
+                        Icon="Delete" />
     </muxc:MenuBarItem>
     <muxc:MenuBarItem x:Uid="MenuGoTo">
         <MenuFlyoutItem x:Uid="MenuGoToPreviousPage"
-                        Command="{x:Bind ViewModel.GoToPreviousPageCommand}"
+                        Command="{x:Bind ViewModel.PageCommands.CommandGoToPreviousPage}"
                         Icon="Back"
-                        IsEnabled="{x:Bind ViewModel.HasPreviousPage, Mode=OneWay}" />
+                        IsEnabled="{x:Bind ViewModel.PageCommands.HasPreviousPage, Mode=OneWay}" />
         <MenuFlyoutItem x:Uid="MenuGoToNextPage"
-                        Command="{x:Bind ViewModel.GoToNextPageCommand}"
+                        Command="{x:Bind ViewModel.PageCommands.CommandGoToNextPage}"
                         Icon="Forward"
-                        IsEnabled="{x:Bind ViewModel.HasNextPage, Mode=OneWay}" />
+                        IsEnabled="{x:Bind ViewModel.PageCommands.HasNextPage, Mode=OneWay}" />
     </muxc:MenuBarItem>
 </muxc:MenuBar>

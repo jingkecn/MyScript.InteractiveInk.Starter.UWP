@@ -9,8 +9,8 @@ using Windows.UI.Xaml.Input;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
+using MyScript.InteractiveInk.Extensions;
 using MyScript.InteractiveInk.UI.Commands;
-using MyScript.InteractiveInk.UI.Extensions;
 
 namespace MyScript.InteractiveInk.UI.Xaml.Controls
 {

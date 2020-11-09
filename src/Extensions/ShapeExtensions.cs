@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using MyScript.IInk.Graphics;
 using MyScript.InteractiveInk.Annotations;
 
-namespace MyScript.InteractiveInk.UI.Extensions
+namespace MyScript.InteractiveInk.Extensions
 {
     public static class ShapeExtensions
     {

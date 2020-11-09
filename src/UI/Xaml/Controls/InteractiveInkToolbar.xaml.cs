@@ -2,7 +2,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using MyScript.IInk;
 using MyScript.InteractiveInk.Annotations;
-using MyScript.InteractiveInk.UI.Extensions;
+using MyScript.InteractiveInk.Extensions;
 
 namespace MyScript.InteractiveInk.UI.Xaml.Controls
 {
