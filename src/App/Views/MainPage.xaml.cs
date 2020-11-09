@@ -1,3 +1,5 @@
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
 namespace MyScript.InteractiveInk.Views
@@ -23,6 +25,11 @@ namespace MyScript.InteractiveInk.Views
             base.OnNavigatedTo(e);
             ViewModel.Initialize(Dispatcher);
             ViewModel.Initialize(InteractiveInkCanvas);
+        }
+
+        private void OnHolding(object sender, HoldingRoutedEventArgs e)
+        {
+            ViewModel.Commands.Initialize(e.GetPosition(sender as UIElement));
         }
     }
 }

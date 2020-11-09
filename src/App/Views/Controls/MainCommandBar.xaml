@@ -4,11 +4,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:enumerations="using:MyScript.InteractiveInk.UI.Enumerations"
     mc:Ignorable="d"
     d:DesignHeight="48"
     d:DesignWidth="320"
     Background="Transparent"
     DefaultLabelPosition="Right">
+    <AppBarButton x:Uid="AppBarButtonNew"
+                  Icon="Add"
+                  IsEnabled="{x:Bind ViewModel.IsDocumentPage, Mode = OneWay}">
+        <AppBarButton.Flyout>
+            <MenuFlyout>
+                <MenuFlyoutItem x:Uid="AppBarButtonNewDiagram"
+                                Command="{x:Bind ViewModel.AppendBlockCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enumerations:ContentType>Diagram</enumerations:ContentType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="AppBarButtonNewMath"
+                                Command="{x:Bind ViewModel.AppendBlockCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enumerations:ContentType>Math</enumerations:ContentType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="AppBarButtonNewRawContent"
+                                Command="{x:Bind ViewModel.AppendBlockCommand}">
+                    <MenuFlyoutItem.CommandParameter>
+                        <enumerations:ContentType>RawContent</enumerations:ContentType>
+                    </MenuFlyoutItem.CommandParameter>
+                </MenuFlyoutItem>
+            </MenuFlyout>
+        </AppBarButton.Flyout>
+    </AppBarButton>
     <AppBarButton x:Uid="AppBarButtonUndo"
                   Command="{x:Bind ViewModel.UndoCommand}"
                   Icon="Undo"

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.UI.Input;
 using Microsoft.Win32.SafeHandles;
@@ -13,6 +14,79 @@ using MyScript.InteractiveInk.UI.Enumerations;
 
 namespace MyScript.InteractiveInk.UI.Extensions
 {
+    public static partial class EditorExtensions
+    {
+        public static void AddBlockAt([NotNull] this Editor source, Point position, ContentType type)
+        {
+            source.AddBlock((float)position.X, (float)position.Y, type.ToNative());
+        }
+
+        /// <summary>
+        ///     Append a <see cref="ContentBlock" /> to the end of a document.
+        /// </summary>
+        /// <param name="source">The source <see cref="Editor" />.</param>
+        /// <param name="type">
+        ///     <inheritdoc cref="ContentType" />
+        /// </param>
+        /// <param name="autoScroll">
+        ///     Set <code>true</code> to auto scroll to the new <see cref="ContentBlock" />, otherwise
+        ///     <code>false</code>. The default value is <code>true</code>.
+        /// </param>
+        /// <param name="target">
+        ///     <inheritdoc cref="IRenderTarget" />
+        /// </param>
+        public static void AppendBlock([NotNull] this Editor source, ContentType type, bool autoScroll = true,
+            [CanBeNull] IRenderTarget target = null)
+        {
+            if (!source.CanAddBlock(type))
+            {
+                return;
+            }
+
+            var block = source.GetRootBlock();
+            var dpi = DisplayInformation.GetForCurrentView().GetDpi();
+            var box = block.Box.ToPlatform().FromMillimeterToPixel(dpi);
+            var lineHeight = default(float);
+            var styles = source.ListStyleClasses(_ => true);
+            if (styles.TryGetValue("guide", out var style))
+            {
+                lineHeight = style.FontLineHeight.FromMillimeterToPixel(dpi.Y);
+            }
+
+            var (x, y) = (box.Left, box.Bottom);
+            source.AddBlock((float)x, (float)y + lineHeight, type.ToNative());
+            if (!autoScroll)
+            {
+                return;
+            }
+
+            source.Renderer?.ScrollTo(new IInk.Graphics.Point((float)x, (float)y), target, source.ClampViewOffset);
+        }
+
+        public static bool CanAddBlock([NotNull] this Editor source, ContentType type, bool defaultValue = default)
+        {
+            return source.SupportedAddBlockTypes?.Contains(type.ToNative()) ?? defaultValue;
+        }
+
+        [CanBeNull]
+        public static ContentBlock GetBlockAt([NotNull] this Editor source, Point position)
+        {
+            return source.HitBlock((float)position.X, (float)position.Y);
+        }
+
+        public static void RemoveBlockAt([NotNull] this Editor source, Point position)
+        {
+            var block = source.HitBlock((float)position.X, (float)position.Y);
+            if (block?.IsContainer() ?? true)
+            {
+                return;
+            }
+
+            source.RemoveBlock(block);
+            block?.Dispose();
+        }
+    }
+
     public static partial class EditorExtensions
     {
         public static bool HasNextPage([NotNull] this Editor source)

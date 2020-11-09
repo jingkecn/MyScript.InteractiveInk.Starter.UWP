@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
+using Windows.Foundation;
 using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -18,9 +22,6 @@ namespace MyScript.InteractiveInk.ViewModels
     {
         private bool _canRedo;
         private bool _canUndo;
-        private bool _hasNextPage = true;
-        private bool _hasPreviousPage = true;
-
 
         public bool CanRedo
         {
@@ -33,6 +34,31 @@ namespace MyScript.InteractiveInk.ViewModels
             get => _canUndo;
             set => Set(ref _canUndo, value, nameof(CanUndo));
         }
+    }
+
+    public partial class MainCommandsViewModel
+    {
+        private bool _canAddBlock;
+        private bool _canRemoveBlock;
+
+        public bool CanAddBlock
+        {
+            get => _canAddBlock;
+            set => Set(ref _canAddBlock, value, nameof(CanAddBlock));
+        }
+
+        public bool CanRemoveBlock
+        {
+            get => _canRemoveBlock;
+            set => Set(ref _canRemoveBlock, value, nameof(CanRemoveBlock));
+        }
+    }
+
+    public partial class MainCommandsViewModel
+    {
+        private bool _hasNextPage = true;
+        private bool _hasPreviousPage = true;
+        private bool _isDocumentPage;
 
         public bool HasNextPage
         {
@@ -45,8 +71,13 @@ namespace MyScript.InteractiveInk.ViewModels
             get => _hasPreviousPage;
             set => Set(ref _hasPreviousPage, value, nameof(HasPreviousPage));
         }
-    }
 
+        public bool IsDocumentPage
+        {
+            get => _isDocumentPage;
+            set => Set(ref _isDocumentPage, value, nameof(IsDocumentPage));
+        }
+    }
 
     public partial class MainCommandsViewModel
     {
@@ -54,10 +85,25 @@ namespace MyScript.InteractiveInk.ViewModels
         private ICommand _typesetCommand;
         private ICommand _undoCommand;
 
-
         public ICommand RedoCommand => _redoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndRedo());
         public ICommand TypesetCommand => _typesetCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndTypeset());
         public ICommand UndoCommand => _undoCommand ??= new RelayCommand(_ => Editor.WaitForIdleAndUndo());
+    }
+
+    public partial class MainCommandsViewModel
+    {
+        private ICommand _addBlockCommand;
+        private ICommand _appendBlockCommand;
+        private ICommand _removeBlockCommand;
+
+        public ICommand AddBlockCommand => _addBlockCommand ??=
+            new RelayCommand<ContentType>(type => Editor?.AddBlockAt(ContextPosition, type));
+
+        public ICommand AppendBlockCommand => _appendBlockCommand ??=
+            new RelayCommand<ContentType>(type => Editor?.AppendBlock(type, target: RenderTarget));
+
+        public ICommand RemoveBlockCommand =>
+            _removeBlockCommand ??= new RelayCommand(_ => Editor?.RemoveBlockAt(ContextPosition));
     }
 
     public partial class MainCommandsViewModel
@@ -112,25 +158,43 @@ namespace MyScript.InteractiveInk.ViewModels
 
     public partial class MainCommandsViewModel : ObservableAsync
     {
+        public Point ContextPosition { get; set; }
         [CanBeNull] public override CoreDispatcher Dispatcher { get; set; }
         [CanBeNull] public Editor Editor { get; set; }
         [CanBeNull] public ContentPackage Package { get; set; }
+        [CanBeNull] public IRenderTarget RenderTarget { get; set; }
 
         public void Initialize([NotNull] Editor editor)
         {
             Editor = editor;
             Editor.AddListener(this);
         }
+
+        public void Initialize([NotNull] IRenderTarget target)
+        {
+            RenderTarget = target;
+        }
+
+        public void Initialize(Point position)
+        {
+            ContextPosition = position;
+            var block = Editor?.GetBlockAt(position);
+            CanAddBlock = block == null || block.IsContainer();
+            CanRemoveBlock = block != null && Selections != null && Selections.Contains(block.Id);
+        }
     }
 
+    [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
     public partial class MainCommandsViewModel : IEditorListener
     {
         public async void PartChanged(Editor editor)
         {
+            CanAddBlock = editor.SupportedAddBlockTypes?.Any() ?? false;
             CanRedo = editor.CanRedo();
             CanUndo = editor.CanUndo();
             HasNextPage = editor.HasNextPage();
             HasPreviousPage = editor.HasPreviousPage();
+            IsDocumentPage = editor.Part?.Type == ContentType.TextDocument.ToNative();
             ApplicationView.GetForCurrentView().Title = string.Empty;
             if (!(editor.Part is { } part) || !(part.Package is {} package) ||
                 !(await package.GetAssociatedFile() is {} file))
@@ -151,6 +215,20 @@ namespace MyScript.InteractiveInk.ViewModels
         {
             Dispatcher?.RunAsync(CoreDispatcherPriority.Normal,
                 async () => await new MessageDialog(message, blockId).ShowAsync())?.AsTask();
+        }
+    }
+
+    public partial class MainCommandsViewModel : IEditorListener2
+    {
+        private IEnumerable<string> Selections { get; set; }
+
+        public void SelectionChanged(Editor editor, string[] blockIds)
+        {
+            Selections = blockIds;
+        }
+
+        public void ActiveBlockChanged(Editor editor, string blockId)
+        {
         }
     }
 }
