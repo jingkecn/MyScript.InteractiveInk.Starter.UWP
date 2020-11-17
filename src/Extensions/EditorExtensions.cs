@@ -372,14 +372,15 @@ namespace MyScript.InteractiveInk.Extensions
             source.Clear();
         }
 
-        public static async Task<ContentPackage> WaitForIdleAndOpenAsync([NotNull] this Editor source)
+        public static async Task<ContentPackage> WaitForIdleAndOpenAsync([NotNull] this Editor source,
+            [CanBeNull] StorageFile file = null, [CanBeNull] ContentType? type = null)
         {
             if (!source.IsIdle())
             {
                 source.WaitForIdle();
             }
 
-            return await source.OpenAsync();
+            return await source.OpenAsync(file, type);
         }
 
         public static void WaitForIdleAndRedo([NotNull] this Editor source)

@@ -49,8 +49,8 @@ namespace MyScript.InteractiveInk.ViewModels
         public ICommand CommandCreatePackage =>
             _commandCreatePackage ??= new RelayCommand<ContentType>(OnCreatePackage);
 
-        public ICommand CommandOpenPackage =>
-            _commandOpenPackage ??= new RelayCommand(async _ => Package = await Editor.WaitForIdleAndOpenAsync());
+        public ICommand CommandOpenPackage => _commandOpenPackage ??=
+            new RelayCommand<StorageFile>(async file => Initialize(await Editor.WaitForIdleAndOpenAsync(file)));
 
         public ICommand CommandSavePackage => _commandSavePackage ??=
             new RelayCommand<bool>(async saveAsNew => await Editor.WaitForIdleAndSaveAsync(saveAsNew));
@@ -60,7 +60,7 @@ namespace MyScript.InteractiveInk.ViewModels
             var folder = ApplicationData.Current.LocalCacheFolder;
             var name = $"{Path.GetRandomFileName()}.iink";
             var path = Path.Combine(folder.Path, name);
-            PageCommands.Initialize(Package = Editor.Open(path, type));
+            Initialize(Editor.Open(path, type));
         }
     }
 
@@ -68,7 +68,6 @@ namespace MyScript.InteractiveInk.ViewModels
     {
         [CanBeNull] public override CoreDispatcher Dispatcher { get; set; }
         [CanBeNull] public Editor Editor { get; set; }
-        [CanBeNull] public ContentPackage Package { get; set; }
 
         public void Initialize([NotNull] Editor editor)
         {
@@ -78,6 +77,11 @@ namespace MyScript.InteractiveInk.ViewModels
             ContentCommands?.Initialize(Editor);
             EditingCommands?.Initialize(Editor);
             PageCommands?.Initialize(Editor);
+        }
+
+        private void Initialize([NotNull] ContentPackage package)
+        {
+            PageCommands?.Initialize(package);
         }
 
         public void Initialize(Point position)
