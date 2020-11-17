@@ -68,11 +68,19 @@ namespace MyScript.InteractiveInk.ViewModels
     public partial class ContentCommandsViewModel : IContentCommands
     {
         private ICommand _commandAddContent;
+        private ICommand _commandAddImage;
         private ICommand _commandAppendContent;
+        private ICommand _commandAppendImage;
         private ICommand _commandRemoveContent;
+
+        public ICommand CommandAppendImage =>
+            _commandAppendImage ??= new RelayCommand(async _ => await Editor.AppendImageAsync(target: RenderTarget));
 
         public ICommand CommandAddContent => _commandAddContent ??=
             new RelayCommand<ContentType>(type => Editor?.AddBlockAt(ContextPosition, type));
+
+        public ICommand CommandAddImage =>
+            _commandAddImage ??= new RelayCommand(async _ => await Editor.AddImageAtAsync(ContextPosition));
 
         public ICommand CommandAppendContent => _commandAppendContent ??=
             new RelayCommand<ContentType>(type => Editor?.AppendBlock(type, target: RenderTarget));

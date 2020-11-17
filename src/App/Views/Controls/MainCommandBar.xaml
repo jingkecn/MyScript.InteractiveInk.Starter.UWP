@@ -21,6 +21,8 @@
                         <enumerations:ContentType>Diagram</enumerations:ContentType>
                     </MenuFlyoutItem.CommandParameter>
                 </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="AppBarButtonNewImage"
+                                Command="{x:Bind ViewModel.ContentCommands.CommandAppendImage}" />
                 <MenuFlyoutItem x:Uid="AppBarButtonNewMath"
                                 Command="{x:Bind ViewModel.ContentCommands.CommandAppendContent}">
                     <MenuFlyoutItem.CommandParameter>

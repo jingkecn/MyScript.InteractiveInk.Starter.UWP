@@ -8,6 +8,7 @@ using Microsoft.Graphics.Canvas.Geometry;
 using MyScript.IInk;
 using MyScript.IInk.Graphics;
 using MyScript.InteractiveInk.Annotations;
+using MyScript.InteractiveInk.Common.Constants;
 using MyScript.InteractiveInk.Common.Enumerations;
 
 namespace MyScript.InteractiveInk.Extensions
@@ -104,6 +105,51 @@ namespace MyScript.InteractiveInk.Extensions
             }
 
             throw new ArgumentOutOfRangeException(nameof(source), source, null);
+        }
+    }
+
+    public static partial class EnumExtensions
+    {
+        public static string ToFileType(this MimeType source, [CanBeNull] string fallback = null)
+        {
+            return source switch
+            {
+                MimeType.TEXT => FileTypes.Text,
+                MimeType.HTML => FileTypes.Html,
+                MimeType.MATHML => fallback,
+                MimeType.LATEX => FileTypes.LaTex,
+                MimeType.GRAPHML => fallback,
+                MimeType.MUSICXML => fallback,
+                MimeType.SVG => FileTypes.Svg,
+                MimeType.JIIX => FileTypes.Jiix,
+                MimeType.JPEG => FileTypes.Jpg,
+                MimeType.PNG => FileTypes.Png,
+                MimeType.GIF => FileTypes.Gif,
+                MimeType.PDF => FileTypes.Pdf,
+                MimeType.DOCX => FileTypes.Docx,
+                MimeType.PPTX => FileTypes.Pptx,
+                MimeType.OFFICE_CLIPBOARD => fallback,
+                _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+            };
+        }
+
+        public static MimeType ToMimeType([NotNull] this string source)
+        {
+            return source switch
+            {
+                FileTypes.Docx => MimeType.DOCX,
+                FileTypes.Gif => MimeType.GIF,
+                FileTypes.Html => MimeType.HTML,
+                FileTypes.Jiix => MimeType.JIIX,
+                FileTypes.Jpg => MimeType.JPEG,
+                FileTypes.LaTex => MimeType.LATEX,
+                FileTypes.Pdf => MimeType.PDF,
+                FileTypes.Png => MimeType.PNG,
+                FileTypes.Pptx => MimeType.PPTX,
+                FileTypes.Svg => MimeType.SVG,
+                FileTypes.Text => MimeType.TEXT,
+                _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+            };
         }
     }
 

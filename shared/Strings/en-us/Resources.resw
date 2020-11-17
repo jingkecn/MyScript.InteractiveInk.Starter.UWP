@@ -123,6 +123,9 @@
   <data name="AppBarButtonNewDiagram.Text" xml:space="preserve">
     <value>Diagram</value>
   </data>
+  <data name="AppBarButtonNewImage.Text" xml:space="preserve">
+    <value>Image</value>
+  </data>
   <data name="AppBarButtonNewMath.Text" xml:space="preserve">
     <value>Math</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="ContextMenuAddDiagram.Text" xml:space="preserve">
     <value>Diagram</value>
+  </data>
+  <data name="ContextMenuAddImage.Text" xml:space="preserve">
+    <value>Image</value>
   </data>
   <data name="ContextMenuAddMath.Text" xml:space="preserve">
     <value>Math</value>

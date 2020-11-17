@@ -48,6 +48,8 @@
                                     <enumerations:ContentType>Diagram</enumerations:ContentType>
                                 </MenuFlyoutItem.CommandParameter>
                             </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="ContextMenuAddImage"
+                                            Command="{x:Bind ViewModel.Commands.ContentCommands.CommandAddImage}" />
                             <MenuFlyoutItem x:Uid="ContextMenuAddMath"
                                             Command="{x:Bind ViewModel.Commands.ContentCommands.CommandAddContent}">
                                 <MenuFlyoutItem.CommandParameter>

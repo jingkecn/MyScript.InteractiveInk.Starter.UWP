@@ -124,6 +124,7 @@
     <Compile Include="Commands\IEditingCommands.cs" />
     <Compile Include="Commands\IPackageCommands.cs" />
     <Compile Include="Commands\IPageCommands.cs" />
+    <Compile Include="Constants\FileTypes.cs" />
     <Compile Include="Constants\Parameters.cs" />
     <Compile Include="Enumerations\ContentType.cs" />
     <Compile Include="Commands\RelayCommand.cs" />

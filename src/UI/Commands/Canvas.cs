@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using Windows.Foundation;
@@ -10,6 +11,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.Text;
 using MyScript.IInk.Graphics;
+using MyScript.InteractiveInk.Annotations;
 using MyScript.InteractiveInk.Extensions;
 using Color = Windows.UI.Color;
 
@@ -17,7 +19,7 @@ namespace MyScript.InteractiveInk.UI.Commands
 {
     public sealed partial class Canvas
     {
-        public CanvasDrawingSession DrawingSession { get; set; }
+        [CanBeNull] public CanvasDrawingSession DrawingSession { get; set; }
     }
 
     /// <summary>
@@ -97,7 +99,14 @@ namespace MyScript.InteractiveInk.UI.Commands
 
         public void DrawObject(string url, string mimeType, float x, float y, float width, float height)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(url))
+            {
+                return;
+            }
+
+            var device = DrawingSession?.Device ?? CanvasDevice.GetSharedDevice();
+            using var image = CanvasBitmap.LoadAsync(device, url).GetAwaiter().GetResult();
+            DrawingSession?.DrawImage(image, new Rect(x, y, width, height), image.Bounds);
         }
 
         public void DrawText(string label, float x, float y, float minX, float minY, float maxX, float maxY)

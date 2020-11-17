@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Input;
 using Microsoft.Win32.SafeHandles;
 using MyScript.IInk;
@@ -60,6 +62,53 @@ namespace MyScript.InteractiveInk.Extensions
             }
 
             renderer.ScrollTo(new IInk.Graphics.Point((float)x, (float)y), target, source.ClampViewOffset);
+        }
+
+        public static async Task AddImageAtAsync([NotNull] this Editor source, Point position)
+        {
+            // Picks a file from the file picker.
+            var picker = new FileOpenPicker {SuggestedStartLocation = PickerLocationId.PicturesLibrary};
+            picker.FileTypeFilter.Add(MimeType.GIF.ToFileType());
+            picker.FileTypeFilter.Add(MimeType.JPEG.ToFileType());
+            picker.FileTypeFilter.Add(MimeType.PNG.ToFileType());
+            picker.FileTypeFilter.Add(MimeType.SVG.ToFileType());
+            if (!(await picker.PickSingleFileAsync() is { } picked))
+            {
+                return;
+            }
+
+            var folder = ApplicationData.Current.LocalCacheFolder;
+            var file = await picked.CopyAsync(folder, picked.Name, NameCollisionOption.GenerateUniqueName);
+            var (x, y) = ((float)position.X, (float)position.Y);
+            source.AddImage(x, y, file.Path, file.FileType.ToMimeType());
+        }
+
+        public static async Task AppendImageAsync([NotNull] this Editor source, bool autoScroll = true,
+            [CanBeNull] IRenderTarget target = null)
+        {
+            if (!(source.Renderer is { } renderer))
+            {
+                return;
+            }
+
+            var block = source.GetRootBlock();
+            var dpi = renderer.GetDpi();
+            var box = block.Box.ToPlatform().FromMillimeterToPixel(dpi);
+            var lineHeight = default(float);
+            var styles = source.ListStyleClasses(_ => true);
+            if (styles.TryGetValue("guide", out var style))
+            {
+                lineHeight = style.FontLineHeight.FromMillimeterToPixel(dpi.Y);
+            }
+
+            var (x, y) = ((float)box.Left, (float)box.Bottom);
+            await source.AddImageAtAsync(new Point(x, y + lineHeight));
+            if (!autoScroll)
+            {
+                return;
+            }
+
+            renderer.ScrollTo(new IInk.Graphics.Point(x, y), target, source.ClampViewOffset);
         }
 
         public static bool CanAddBlock([NotNull] this Editor source, ContentType type, bool defaultValue = default)
