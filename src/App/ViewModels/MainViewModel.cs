@@ -9,7 +9,7 @@ using MyScript.InteractiveInk.Annotations;
 using MyScript.InteractiveInk.Common.Enumerations;
 using MyScript.InteractiveInk.Common.ViewModels;
 using MyScript.InteractiveInk.Extensions;
-using MyScript.InteractiveInk.UI.Services;
+using MyScript.InteractiveInk.UI.Implementations;
 
 namespace MyScript.InteractiveInk.ViewModels
 {
@@ -61,7 +61,7 @@ namespace MyScript.InteractiveInk.ViewModels
             Editor?.RemoveListener(this);
             var engine = ((App)Application.Current).Engine;
             Commands.Initialize(Editor = engine.CreateEditor(engine.CreateRenderer(Dpi.X, Dpi.Y, target)));
-            Editor.SetFontMetricsProvider(new FontMetricsService(Dpi));
+            Editor.SetFontMetricsProvider(new FontMetricsProvider(Dpi.X, Dpi.Y));
             Commands.Initialize(target);
             Commands.CommandCreatePackage.Execute(ContentType.TextDocument);
             Editor.AddListener(this);
